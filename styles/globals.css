@@ -1,0 +1,123 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --bone: #F5F2EC;
+    --ink: #0E1310;
+    --forest: #3B4A2E;
+    --terra: #B45D3C;
+    --divider: #C9CFC8;
+    --gold: #E8B254;
+    --dark: #0E1310;
+    --max: 1320px;
+  }
+
+  html {
+    scroll-behavior: smooth;
+  }
+
+  body {
+    @apply bg-bone text-ink text-base leading-6 overflow-x-hidden;
+    font-family: var(--font-inter), sans-serif;
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    @apply font-fraunces font-semibold;
+  }
+}
+
+@layer components {
+  .container-content {
+    @apply max-w-content mx-auto px-10;
+  }
+
+  /* ─── Buttons ─── */
+  .btn-primary {
+    @apply bg-terra text-white border-none px-6 py-3 rounded-card font-inter text-sm font-semibold
+           cursor-pointer no-underline inline-flex items-center gap-2 transition-opacity duration-200
+           hover:opacity-90 active:opacity-80;
+  }
+
+  .btn-ghost {
+    @apply bg-transparent text-white border border-white/35 px-5 py-3 rounded-card
+           font-inter text-sm font-medium cursor-pointer no-underline inline-flex items-center gap-2
+           transition-all duration-200 hover:border-white/65 hover:bg-white/6;
+  }
+
+  .btn-ghost-dark {
+    @apply bg-transparent text-ink border-2 border-ink px-5 py-3 rounded-card
+           font-inter text-sm font-medium cursor-pointer no-underline inline-flex items-center gap-2
+           transition-all duration-200 hover:bg-ink hover:text-bone;
+  }
+
+  /* ─── Cards ─── */
+  .card-bordered {
+    @apply border-2 border-divider rounded-card bg-bone;
+  }
+
+  /* ─── Difficulty dots ─── */
+  .difficulty-dot {
+    @apply w-2.5 h-2.5 rounded-full border-2 border-forest;
+  }
+  .difficulty-dot-filled {
+    @apply bg-forest;
+  }
+
+  /* ─── Section spacing ─── */
+  .section {
+    @apply py-24;
+  }
+
+  .section-dark {
+    @apply py-24 bg-dark text-white;
+  }
+
+  /* ─── Gold badge (urgency) ─── */
+  .badge-gold {
+    @apply bg-gold text-ink font-mono text-xs font-medium px-2 py-0.5 rounded-md;
+  }
+
+  .badge-neutral {
+    @apply bg-divider text-ink font-mono text-xs font-medium px-2 py-0.5 rounded-md;
+  }
+
+  /* ─── Topographic overlay (dark sections) ─── */
+  .topo-section {
+    @apply relative;
+  }
+  .topo-section::before {
+    content: '';
+    @apply absolute inset-0 opacity-[0.03] pointer-events-none;
+    background-image: url('/images/topo-overlay.svg');
+    background-size: cover;
+  }
+}
+
+@layer utilities {
+  /* Marquee pause on hover */
+  .pause-on-hover:hover {
+    animation-play-state: paused;
+  }
+
+  /* Fraunces drop-cap */
+  .drop-cap::first-letter {
+    font-family: 'Fraunces', serif;
+    font-size: 4.5rem;
+    line-height: 0.8;
+    float: left;
+    margin-right: 0.08em;
+    margin-top: 0.05em;
+    color: var(--terra);
+    font-weight: 700;
+  }
+
+  /* Lucide icon sizing */
+  .icon-sm { @apply w-4 h-4; }
+  .icon-md { @apply w-5 h-5; }
+  .icon-lg { @apply w-6 h-6; }
+
+  /* Stroke 1.5 everywhere */
+  svg { stroke-width: 1.5; }
+}
