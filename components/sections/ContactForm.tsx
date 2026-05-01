@@ -15,6 +15,7 @@ const subjects = [
 
 export function ContactForm() {
   const [submitted, setSubmitted] = useState(false);
+  const [serverError, setServerError] = useState(false);
 
   const {
     register,
@@ -24,9 +25,18 @@ export function ContactForm() {
     resolver: zodResolver(contactSchema),
   });
 
-  const onSubmit = async () => {
-    await new Promise((r) => setTimeout(r, 800));
-    setSubmitted(true);
+  const onSubmit = async (data: ContactFormData) => {
+    setServerError(false);
+    const res = await fetch("/api/contact", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(data),
+    });
+    if (res.ok) {
+      setSubmitted(true);
+    } else {
+      setServerError(true);
+    }
   };
 
   if (submitted) {
@@ -99,6 +109,11 @@ export function ContactForm() {
         {errors.message && <p className="text-xs text-red-600 mt-1">{errors.message.message}</p>}
       </div>
 
+      {serverError && (
+        <p className="text-sm text-red-600 bg-red-50 border border-red-200 rounded-lg px-4 py-3">
+          Something went wrong. Please try again or message us on WhatsApp.
+        </p>
+      )}
       <button
         type="submit"
         disabled={isSubmitting}

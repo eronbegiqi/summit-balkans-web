@@ -28,6 +28,8 @@ interface FormState {
 export function PrivateTripsForm() {
   const [step, setStep] = useState(0);
   const [submitted, setSubmitted] = useState(false);
+  const [submitting, setSubmitting] = useState(false);
+  const [submitError, setSubmitError] = useState(false);
   const [form, setForm] = useState<FormState>({
     destinations: [],
     dateOption: "",
@@ -309,11 +311,28 @@ export function PrivateTripsForm() {
                 </button>
               ) : (
                 <button
-                  onClick={() => setSubmitted(true)}
-                  className="bg-terra text-white px-6 py-3 rounded-xl text-sm font-semibold border-none cursor-pointer hover:opacity-90"
+                  onClick={async () => {
+                    setSubmitting(true);
+                    setSubmitError(false);
+                    try {
+                      const res = await fetch("/api/private-trip", {
+                        method: "POST",
+                        headers: { "Content-Type": "application/json" },
+                        body: JSON.stringify(form),
+                      });
+                      if (res.ok) { setSubmitted(true); }
+                      else { setSubmitError(true); }
+                    } catch { setSubmitError(true); }
+                    finally { setSubmitting(false); }
+                  }}
+                  disabled={submitting}
+                  className="bg-terra text-white px-6 py-3 rounded-xl text-sm font-semibold border-none cursor-pointer hover:opacity-90 disabled:opacity-60"
                 >
-                  Send Enquiry
+                  {submitting ? "Sending…" : "Send Enquiry"}
                 </button>
+              )}
+              {submitError && (
+                <p className="text-xs text-red-600 mt-3">Something went wrong. Please try again or WhatsApp us.</p>
               )}
             </div>
           </div>

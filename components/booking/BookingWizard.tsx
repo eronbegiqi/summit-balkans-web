@@ -44,6 +44,8 @@ function formatShortDate(d: string) {
 export function BookingWizard() {
   const [step, setStep] = useState(0);
   const [confirmed, setConfirmed] = useState(false);
+  const [bookingError, setBookingError] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const [state, setState] = useState<BookingState>({
     departureId: null,
     adults: 1,
@@ -71,7 +73,52 @@ export function BookingWizard() {
     });
   };
 
-  const bookingRef = `SB-${Date.now().toString(36).toUpperCase()}`;
+  const [bookingRef, setBookingRef] = useState("");
+
+  const submitBooking = async () => {
+    if (!state.agreeTerms || !selectedDep) return;
+    setIsSubmitting(true);
+    setBookingError(false);
+    const addOnLabels: Record<string, string> = {
+      gear: "Gear Rental Pack", transfer: "Airport Transfer", single: "Single Supplement",
+    };
+    try {
+      const res = await fetch("/api/book", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          departureId: selectedDep.id,
+          departureDate: formatShortDate(selectedDep.date),
+          returnDate: formatShortDate(selectedDep.endDate),
+          guide: selectedDep.guide,
+          tourName: "Peaks of the Balkans",
+          adults: state.adults,
+          children: state.children,
+          addOns: Array.from(state.addOns).map((id) => addOnLabels[id] ?? id),
+          totalPrice: grandTotal,
+          firstName: state.firstName,
+          lastName: state.lastName,
+          email: state.email,
+          phone: state.phone,
+          dietary: state.dietary,
+          fitness: state.fitness,
+          emergencyName: state.emergencyName,
+          emergencyPhone: state.emergencyPhone,
+        }),
+      });
+      const data = await res.json();
+      if (res.ok && data.bookingRef) {
+        setBookingRef(data.bookingRef);
+        setConfirmed(true);
+      } else {
+        setBookingError(true);
+      }
+    } catch {
+      setBookingError(true);
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
 
   if (confirmed) {
     return (
@@ -389,16 +436,21 @@ export function BookingWizard() {
               </span>
             </label>
 
+            {bookingError && (
+              <p className="text-sm text-red-600 bg-red-50 border border-red-200 rounded-lg px-4 py-3 mb-4">
+                Something went wrong processing your booking. Please try again or message us on WhatsApp.
+              </p>
+            )}
             <button
-              onClick={() => { if (state.agreeTerms) setConfirmed(true); }}
-              disabled={!state.agreeTerms}
+              onClick={submitBooking}
+              disabled={!state.agreeTerms || isSubmitting}
               className={`w-full py-4 rounded-xl font-bold text-[15px] border-none cursor-pointer transition-opacity ${
-                state.agreeTerms
+                state.agreeTerms && !isSubmitting
                   ? "bg-terra text-white hover:opacity-90"
                   : "bg-terra/40 text-white cursor-not-allowed"
               }`}
             >
-              Pay {formatPrice(grandTotal)} with Stripe
+              {isSubmitting ? "Confirming booking…" : `Pay ${formatPrice(grandTotal)} with Stripe`}
             </button>
             <div className="flex items-center justify-center gap-1.5 mt-3 text-xs text-ink/35">
               <Lock className="w-3 h-3" strokeWidth={1.5} />
