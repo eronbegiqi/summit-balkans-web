@@ -120,7 +120,7 @@ export default function PeaksOfTheBalkanosPage() {
                 Book This Trip
               </Link>
               <a
-                href="https://wa.me/38349123456"
+                href="https://wa.me/38349279136"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="flex items-center justify-center gap-2 w-full border-2 border-divider text-ink py-[13px] rounded-xl text-sm font-medium no-underline hover:border-ink transition-colors"

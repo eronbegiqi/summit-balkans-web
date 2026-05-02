@@ -21,8 +21,8 @@ const privateTripSchema = z.object({
 
 export async function POST(req: NextRequest) {
   const resend = new Resend(process.env.RESEND_API_KEY);
-  const FROM = process.env.RESEND_FROM ?? "Summit Balkans <hello@summitbalkans.com>";
-  const ADMIN = process.env.ADMIN_EMAIL ?? "hello@summitbalkans.com";
+  const FROM = process.env.RESEND_FROM ?? "Summit Balkans <info@summitbalkans.com>";
+  const ADMIN = process.env.ADMIN_EMAIL ?? "info@summitbalkans.com";
   try {
     const body = await req.json();
     const result = privateTripSchema.safeParse(body);

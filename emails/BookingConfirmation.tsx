@@ -37,7 +37,7 @@ export function BookingConfirmation({
   children,
   addOns,
   totalPrice,
-  adminWhatsApp = "38349123456",
+  adminWhatsApp = "38349279136",
 }: BookingConfirmationProps) {
   const previewText = `Booking confirmed — ${tourName} · Ref ${bookingRef}`;
 
@@ -183,7 +183,7 @@ export function BookingConfirmation({
           {/* Footer */}
           <Section style={{ backgroundColor: brand.ink, padding: "28px 40px", borderRadius: "0 0 0 0" }}>
             <Text style={{ color: "#ffffff55", fontSize: "12px", fontFamily: "monospace", margin: 0, lineHeight: "1.6" }}>
-              Summit Balkans · Prishtina, Kosovo · hello@summitbalkans.com
+              Summit Balkans · Evlia Qelebia, Mitrovica e Veriut 40000, Kosovo · info@summitbalkans.com
             </Text>
             <Text style={{ color: "#ffffff33", fontSize: "11px", margin: "8px 0 0" }}>
               You received this because you made a booking on summitbalkans.com

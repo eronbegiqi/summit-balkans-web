@@ -140,7 +140,7 @@ export function BookingWizard() {
               Back to Summit Balkans
             </Link>
             <a
-              href="https://wa.me/38349123456"
+              href="https://wa.me/38349279136"
               target="_blank"
               rel="noopener noreferrer"
               className="border-2 border-divider text-ink px-6 py-3.5 rounded-xl font-medium no-underline text-center hover:border-ink transition-colors"

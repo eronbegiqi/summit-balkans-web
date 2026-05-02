@@ -68,7 +68,7 @@ export default function GearPage() {
                 <ArrowRight className="w-4 h-4" strokeWidth={1.5} />
               </a>
               <a
-                href="https://wa.me/38349123456"
+                href="https://wa.me/38349279136"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="inline-flex items-center gap-2 border-2 border-white/30 text-white px-6 py-[13px] rounded-xl font-inter text-sm font-medium no-underline hover:border-white/65 transition-colors"
@@ -219,7 +219,7 @@ export default function GearPage() {
                 <ArrowRight className="w-4 h-4" strokeWidth={1.5} />
               </Link>
               <a
-                href="https://wa.me/38349123456"
+                href="https://wa.me/38349279136"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="text-sm text-white/55 no-underline hover:text-white transition-colors"

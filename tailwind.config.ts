@@ -6,12 +6,40 @@ const config: Config = {
     "./pages/**/*.{js,ts,jsx,tsx,mdx}",
     "./components/**/*.{js,ts,jsx,tsx,mdx}",
     "./app/**/*.{js,ts,jsx,tsx,mdx}",
+    "./emails/**/*.{js,ts,jsx,tsx}",
   ],
   theme: {
     extend: {
       colors: {
+        // ─── New brand system ───────────────────────────────────────────────
+        brand: {
+          DEFAULT: "#2e8a57",
+          50: "#E8F5EE",
+          100: "#C5E5D2",
+          500: "#2e8a57",
+          700: "#1F6741",
+          900: "#0F3322",
+        },
+        accent: {
+          DEFAULT: "#D4A574",
+          50: "#FAF3E9",
+          100: "#F0E0C9",
+          500: "#D4A574",
+          700: "#B0824F",
+        },
+        difficulty: {
+          1: "#65B741",
+          2: "#A4C639",
+          3: "#F4A03E",
+          4: "#E66B3D",
+          5: "#D43A3A",
+        },
+        // ─── Core neutrals ─────────────────────────────────────────────────
         bone: "#F5F2EC",
         ink: "#0E1310",
+        mist: "#C9CFC8",
+        warning: "#E8B254",
+        // ─── Legacy aliases (keep for existing components) ──────────────────
         forest: "#3B4A2E",
         terra: "#B45D3C",
         divider: "#C9CFC8",
@@ -35,9 +63,6 @@ const config: Config = {
         card: "12px",
         "card-hero": "24px",
       },
-      backgroundImage: {
-        "topo-overlay": "url('/images/topo-overlay.svg')",
-      },
       keyframes: {
         marquee: {
           "0%": { transform: "translateX(0)" },
@@ -54,10 +79,6 @@ const config: Config = {
         "slide-up": {
           "0%": { transform: "translateY(100%)", opacity: "0" },
           "100%": { transform: "translateY(0)", opacity: "1" },
-        },
-        "counter-tick": {
-          "0%": { opacity: "0", transform: "translateY(8px)" },
-          "100%": { opacity: "1", transform: "translateY(0)" },
         },
       },
       animation: {
