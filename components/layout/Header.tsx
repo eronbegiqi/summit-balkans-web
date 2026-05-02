@@ -17,7 +17,7 @@ const navLinks = [
 ];
 
 // Pages where a full-bleed dark hero sits directly under the header
-const HERO_PAGES = ["/", "/tours/peaks-of-the-balkans", "/private-trips", "/about"];
+const HERO_PAGES = ["/", "/peaks-of-the-balkans", "/private-trips", "/about"];
 
 function LogoMark({ dark }: { dark: boolean }) {
   return (
