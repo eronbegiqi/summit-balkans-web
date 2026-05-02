@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { Check, ChevronRight, ChevronLeft } from "lucide-react";
+import Link from "next/link";
 import { SectionLabel } from "@/components/ui/SectionLabel";
 
 const destinations = ["Albania", "Montenegro", "Kosovo", "Flexible"];
@@ -23,6 +24,7 @@ interface FormState {
   email: string;
   phone: string;
   notes: string;
+  agreePrivacy: boolean;
 }
 
 export function PrivateTripsForm() {
@@ -41,6 +43,7 @@ export function PrivateTripsForm() {
     email: "",
     phone: "",
     notes: "",
+    agreePrivacy: false,
   });
 
   const toggleDest = (d: string) => {
@@ -288,6 +291,23 @@ export function PrivateTripsForm() {
                     />
                   </div>
                 </div>
+
+                <label className="flex items-start gap-3 cursor-pointer mt-2">
+                  <input
+                    type="checkbox"
+                    required
+                    checked={form.agreePrivacy}
+                    onChange={(e) => setForm((p) => ({ ...p, agreePrivacy: e.target.checked }))}
+                    className="mt-1 w-4 h-4 accent-brand flex-shrink-0"
+                  />
+                  <span className="text-sm text-ink">
+                    I agree to the{" "}
+                    <Link href="/legal/privacy-policy" target="_blank" className="text-brand underline underline-offset-2">
+                      Privacy Policy
+                    </Link>
+                    {" "}and consent to Summit Balkans contacting me about my inquiry.
+                  </span>
+                </label>
               </div>
             )}
 
@@ -325,8 +345,8 @@ export function PrivateTripsForm() {
                     } catch { setSubmitError(true); }
                     finally { setSubmitting(false); }
                   }}
-                  disabled={submitting}
-                  className="bg-terra text-white px-6 py-3 rounded-xl text-sm font-semibold border-none cursor-pointer hover:opacity-90 disabled:opacity-60"
+                  disabled={submitting || !form.agreePrivacy}
+                  className="bg-terra text-white px-6 py-3 rounded-xl text-sm font-semibold border-none cursor-pointer hover:opacity-90 disabled:opacity-60 disabled:cursor-not-allowed"
                 >
                   {submitting ? "Sending…" : "Send Enquiry"}
                 </button>

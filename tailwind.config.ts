@@ -87,9 +87,44 @@ const config: Config = {
         "fade-up": "fade-up 0.6s ease forwards",
         "slide-up": "slide-up 0.4s ease forwards",
       },
+      typography: () => ({
+        DEFAULT: {
+          css: {
+            "--tw-prose-body": "#0E1310",
+            "--tw-prose-headings": "#0E1310",
+            "--tw-prose-links": "#2e8a57",
+            "--tw-prose-bold": "#0E1310",
+            "--tw-prose-bullets": "#2e8a57",
+            "--tw-prose-hr": "#C9CFC8",
+            "h2": {
+              fontFamily: "var(--font-fraunces), serif",
+              fontSize: "1.75rem",
+              marginTop: "2.5rem",
+              fontWeight: "700",
+              letterSpacing: "-0.02em",
+            },
+            "h3": {
+              fontFamily: "var(--font-fraunces), serif",
+              fontSize: "1.25rem",
+              fontWeight: "700",
+            },
+            "a": { textDecoration: "underline", textUnderlineOffset: "2px" },
+            "strong": { color: "#0E1310" },
+          },
+        },
+      }),
     },
   },
-  plugins: [require("@tailwindcss/typography")],
+  plugins: [
+    // eslint-disable-next-line @typescript-eslint/no-require-imports
+    require("@tailwindcss/typography"),
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    function ({ addBase }: { addBase: (styles: Record<string, any>) => void }) {
+      addBase({
+        "h2[id], h3[id]": { "scroll-margin-top": "96px" },
+      });
+    },
+  ],
 };
 
 export default config;

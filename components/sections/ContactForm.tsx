@@ -4,6 +4,7 @@ import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Check } from "lucide-react";
+import Link from "next/link";
 import { contactSchema, type ContactFormData } from "@/lib/schemas";
 
 const subjects = [
@@ -16,6 +17,7 @@ const subjects = [
 export function ContactForm() {
   const [submitted, setSubmitted] = useState(false);
   const [serverError, setServerError] = useState(false);
+  const [agreePrivacy, setAgreePrivacy] = useState(false);
 
   const {
     register,
@@ -109,6 +111,23 @@ export function ContactForm() {
         {errors.message && <p className="text-xs text-red-600 mt-1">{errors.message.message}</p>}
       </div>
 
+      <label className="flex items-start gap-3 cursor-pointer">
+        <input
+          type="checkbox"
+          required
+          checked={agreePrivacy}
+          onChange={(e) => setAgreePrivacy(e.target.checked)}
+          className="mt-1 w-4 h-4 accent-brand flex-shrink-0"
+        />
+        <span className="text-sm text-ink">
+          I agree to the{" "}
+          <Link href="/legal/privacy-policy" target="_blank" className="text-brand underline underline-offset-2">
+            Privacy Policy
+          </Link>
+          {" "}and consent to Summit Balkans contacting me about my inquiry.
+        </span>
+      </label>
+
       {serverError && (
         <p className="text-sm text-red-600 bg-red-50 border border-red-200 rounded-lg px-4 py-3">
           Something went wrong. Please try again or message us on WhatsApp.
@@ -116,7 +135,7 @@ export function ContactForm() {
       )}
       <button
         type="submit"
-        disabled={isSubmitting}
+        disabled={isSubmitting || !agreePrivacy}
         className="bg-terra text-white px-8 py-4 rounded-xl font-semibold text-[15px] border-none cursor-pointer hover:opacity-90 transition-opacity disabled:opacity-60 disabled:cursor-not-allowed"
       >
         {isSubmitting ? "Sending…" : "Send Message"}

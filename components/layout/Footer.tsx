@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { MapPin, Phone, Mail, Navigation, Instagram, Facebook, Youtube } from "lucide-react";
 import { CONTACT } from "@/lib/constants";
+import { CookieSettingsButton } from "@/components/layout/CookieSettingsButton";
 
 const exploreLinks = [
   { label: "All Tours", href: "/tours" },
@@ -132,16 +133,17 @@ export function Footer() {
             <p className="text-xs text-white/25 font-mono order-2 sm:order-1">
               © {new Date().getFullYear()} Summit Balkans. All rights reserved.
             </p>
-            <div className="flex gap-5 order-1 sm:order-2">
-              {[
-                { label: "Privacy", href: "/privacy" },
-                { label: "Terms", href: "/terms" },
-                { label: "Cookies", href: "/cookies" },
-              ].map((link) => (
-                <Link key={link.href} href={link.href} className="text-xs text-white/25 no-underline hover:text-white/55 transition-colors font-mono">
-                  {link.label}
-                </Link>
-              ))}
+            <div className="flex flex-wrap gap-4 order-1 sm:order-2 items-center">
+              <Link href="/legal/booking-terms" className="text-xs text-white/25 no-underline hover:text-white/55 transition-colors font-mono">
+                Booking Terms
+              </Link>
+              <Link href="/legal/privacy-policy" className="text-xs text-white/25 no-underline hover:text-white/55 transition-colors font-mono">
+                Privacy Policy
+              </Link>
+              <Link href="/legal/cookie-policy" className="text-xs text-white/25 no-underline hover:text-white/55 transition-colors font-mono">
+                Cookie Policy
+              </Link>
+              <CookieSettingsButton />
             </div>
           </div>
         </div>

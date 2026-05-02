@@ -4,6 +4,8 @@ import { useState } from "react";
 import Link from "next/link";
 import { Check, ChevronLeft, ChevronRight, Lock, Backpack, Car, BedDouble } from "lucide-react";
 import { formatPrice } from "@/lib/utils";
+import { BookingPolicySummary } from "./BookingPolicySummary";
+import { CancellationTimeline } from "./CancellationTimeline";
 
 
 const availableDates = [
@@ -35,6 +37,7 @@ interface BookingState {
   emergencyPhone: string;
   fitness: string;
   agreeTerms: boolean;
+  agreeHealth: boolean;
 }
 
 function formatShortDate(d: string) {
@@ -54,6 +57,7 @@ export function BookingWizard() {
     firstName: "", lastName: "", email: "", phone: "",
     dietary: "", emergencyName: "", emergencyPhone: "", fitness: "",
     agreeTerms: false,
+    agreeHealth: false,
   });
 
   const selectedDep = availableDates.find((d) => d.id === state.departureId) ?? null;
@@ -378,6 +382,8 @@ export function BookingWizard() {
             <h2 className="font-fraunces text-3xl font-bold tracking-tight mb-1.5">Review &amp; Pay</h2>
             <p className="text-[15px] text-ink/55 mb-9">Check your booking details before payment.</p>
 
+            <BookingPolicySummary />
+
             <div className="bg-white border-2 border-divider rounded-xl overflow-hidden mb-6">
               <div className="px-6 py-5 border-b border-divider">
                 <div className="font-fraunces text-xl font-bold">Peaks of the Balkans</div>
@@ -422,19 +428,43 @@ export function BookingWizard() {
               </div>
             </div>
 
-            <label className="flex items-start gap-3 cursor-pointer mb-6">
-              <input
-                type="checkbox"
-                checked={state.agreeTerms}
-                onChange={(e) => setState((p) => ({ ...p, agreeTerms: e.target.checked }))}
-                className="mt-0.5 w-4 h-4 accent-forest flex-shrink-0"
-              />
-              <span className="text-sm text-ink/65 leading-relaxed">
-                I agree to the{" "}
-                <Link href="/terms" className="text-terra no-underline hover:underline">terms & conditions</Link>
-                {" "}and understand the cancellation policy. I confirm travel insurance with trip cancellation cover is mandatory.
-              </span>
-            </label>
+            <CancellationTimeline departureDate={selectedDep?.date} />
+
+            <div className="border-t border-mist pt-6 space-y-3 mb-6">
+              <label className="flex items-start gap-3 cursor-pointer">
+                <input
+                  type="checkbox"
+                  required
+                  checked={state.agreeTerms}
+                  onChange={(e) => setState((p) => ({ ...p, agreeTerms: e.target.checked }))}
+                  className="mt-1 w-5 h-5 accent-brand flex-shrink-0"
+                />
+                <span className="text-sm text-ink leading-relaxed">
+                  I have read and agree to the{" "}
+                  <Link href="/legal/booking-terms" target="_blank" className="text-brand underline underline-offset-2">
+                    Booking Terms &amp; Conditions
+                  </Link>
+                  {" "}and the{" "}
+                  <Link href="/legal/privacy-policy" target="_blank" className="text-brand underline underline-offset-2">
+                    Privacy Policy
+                  </Link>
+                  . I understand the cancellation policy and the inherent risks of adventure travel.
+                </span>
+              </label>
+
+              <label className="flex items-start gap-3 cursor-pointer">
+                <input
+                  type="checkbox"
+                  checked={state.agreeHealth}
+                  onChange={(e) => setState((p) => ({ ...p, agreeHealth: e.target.checked }))}
+                  className="mt-1 w-5 h-5 accent-brand flex-shrink-0"
+                />
+                <span className="text-sm text-ink leading-relaxed">
+                  I confirm I am physically and medically fit to participate, and I have disclosed any
+                  relevant medical conditions or dietary requirements.
+                </span>
+              </label>
+            </div>
 
             {bookingError && (
               <p className="text-sm text-red-600 bg-red-50 border border-red-200 rounded-lg px-4 py-3 mb-4">

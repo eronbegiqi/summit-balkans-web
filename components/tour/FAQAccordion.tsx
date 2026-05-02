@@ -2,9 +2,106 @@
 
 import { useState } from "react";
 import { ChevronDown } from "lucide-react";
+import Link from "next/link";
 import { cn } from "@/lib/utils";
+import { CancellationTimeline } from "@/components/booking/CancellationTimeline";
 
-const faqItems = [
+interface FAQItem {
+  q: string;
+  a: React.ReactNode;
+  defaultOpen?: boolean;
+}
+
+const faqItems: FAQItem[] = [
+  {
+    q: "What's the deposit and payment schedule?",
+    a: (
+      <span>
+        A non-refundable deposit of 20% confirms your booking. The remaining 80% is due 30 days
+        before departure. Bookings within 30 days of departure require full payment within 48 hours.{" "}
+        <Link
+          href="/legal/booking-terms#4-deposit--payment"
+          target="_blank"
+          className="text-brand underline underline-offset-2"
+        >
+          Read full payment terms →
+        </Link>
+      </span>
+    ),
+  },
+  {
+    q: "What is the cancellation policy?",
+    a: (
+      <div>
+        <CancellationTimeline />
+        <p className="mt-2 text-[15px] leading-[1.75] text-ink/65">
+          For full details, see our{" "}
+          <Link
+            href="/legal/booking-terms#5-cancellation-by-traveler"
+            target="_blank"
+            className="text-brand underline underline-offset-2"
+          >
+            Booking Terms
+          </Link>
+          .
+        </p>
+      </div>
+    ),
+    defaultOpen: true,
+  },
+  {
+    q: "What happens if Summit Balkans cancels the tour?",
+    a: (
+      <span>
+        If we need to cancel due to insufficient numbers, weather, or safety concerns, you&apos;ll
+        be offered an alternative tour, a different departure date, or a full refund. We are not
+        responsible for your flights or other arrangements.{" "}
+        <Link
+          href="/legal/booking-terms#7-cancellation-or-changes-by-summit-balkans"
+          target="_blank"
+          className="text-brand underline underline-offset-2"
+        >
+          Full cancellation terms →
+        </Link>
+      </span>
+    ),
+  },
+  {
+    q: "Do I need travel insurance?",
+    a: (
+      <span>
+        We strongly recommend comprehensive travel insurance covering medical emergencies, trip
+        cancellation, and personal belongings. While not mandatory, it protects you against
+        unexpected costs — especially important for mountain travel with limited infrastructure
+        nearby.{" "}
+        <Link
+          href="/legal/booking-terms#12-travel-insurance"
+          target="_blank"
+          className="text-brand underline underline-offset-2"
+        >
+          See insurance guidance →
+        </Link>
+      </span>
+    ),
+  },
+  {
+    q: "What about my fitness level and medical conditions?",
+    a: (
+      <span>
+        You&apos;re responsible for ensuring you&apos;re fit to participate. Hiking tours involve
+        long distances (18–24km/day), significant elevation gain, and remote terrain. Please
+        disclose any pre-existing medical conditions, allergies, or dietary needs at booking. We
+        reserve the right to decline participation where safety is a concern.{" "}
+        <Link
+          href="/legal/booking-terms#10-health-fitness--medical-conditions"
+          target="_blank"
+          className="text-brand underline underline-offset-2"
+        >
+          Health &amp; fitness terms →
+        </Link>
+      </span>
+    ),
+  },
   {
     q: "Do I need a visa to cross the borders?",
     a: "For most nationalities (EU, US, UK, Canada, Australia) no visa is required for Albania, Montenegro or Kosovo. Summit Balkans handles all border crossing paperwork for the group. We advise on your specific nationality during pre-trip onboarding.",
@@ -25,14 +122,12 @@ const faqItems = [
     q: "Can you accommodate dietary requirements?",
     a: "We can accommodate vegetarian diets well — guesthouse food is plant-forward by tradition. Vegan and gluten-free diets are harder to guarantee fully in remote mountain villages, but we communicate all requirements to every host in advance.",
   },
-  {
-    q: "What's the cancellation policy?",
-    a: "Cancellations more than 60 days before departure receive a full refund minus a €75 admin fee. 30–60 days: 50% refund. Under 30 days: no refund. We strongly recommend travel insurance with trip cancellation cover.",
-  },
 ];
 
 export function FAQAccordion() {
-  const [open, setOpen] = useState<number | null>(null);
+  const [open, setOpen] = useState<number | null>(
+    faqItems.findIndex((item) => item.defaultOpen)
+  );
 
   return (
     <div>
