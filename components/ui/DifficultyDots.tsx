@@ -16,7 +16,7 @@ export function DifficultyDots({ level, label, className }: DifficultyDotsProps)
           <span
             key={i}
             className={cn(
-              "w-[9px] h-[9px] rounded-full",
+              "w-[10px] h-[10px] rounded-full",
               i < level ? "bg-forest" : "bg-divider"
             )}
           />

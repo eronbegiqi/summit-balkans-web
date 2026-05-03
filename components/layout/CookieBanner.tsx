@@ -75,7 +75,7 @@ export function CookieBanner() {
   };
 
   return (
-    <div className="cookie-banner fixed bottom-0 left-0 right-0 z-[300] bg-dark/98 backdrop-blur-sm border-t border-white/8">
+    <div className="cookie-banner fixed bottom-0 left-0 right-0 z-[300] bg-black backdrop-blur-sm border-t border-zinc-700">
       {!showCustomize ? (
         /* Default banner */
         <div className="max-w-content mx-auto px-5 md:px-10 py-4 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
@@ -139,10 +139,10 @@ export function CookieBanner() {
             onChange={setMarketing}
           />
 
-          <div className="flex gap-2.5 justify-end mt-5 pt-4 border-t border-white/8">
+          <div className="flex gap-2.5 justify-end mt-5 pt-4 border-t border-zinc-700">
             <button
               onClick={handleEssentialOnly}
-              className="text-sm text-white/45 hover:text-white transition-colors bg-transparent border border-white/15 px-4 py-2 rounded-lg cursor-pointer"
+              className="text-sm text-white/45 hover:text-white transition-colors bg-transparent border border-zinc-700 px-4 py-2 rounded-lg cursor-pointer"
             >
               Essential Only
             </button>
