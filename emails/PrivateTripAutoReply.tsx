@@ -1,6 +1,6 @@
 import { Body, Container, Head, Heading, Hr, Html, Link, Preview, Section, Text } from "@react-email/components";
 
-const brand = { bone: "#F5F2EC", ink: "#0E1310", terra: "#B45D3C", forest: "#3B4A2E", divider: "#C9CFC8" };
+const brand = { bone: "#F5F2EC", ink: "#0E1310", terra: "#2e8a57", forest: "#3B4A2E", divider: "#C9CFC8" };
 
 interface PrivateTripAutoReplyProps {
   name: string;

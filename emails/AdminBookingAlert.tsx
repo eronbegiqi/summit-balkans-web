@@ -4,7 +4,7 @@ import {
 } from "@react-email/components";
 import type { BookingConfirmationProps } from "./BookingConfirmation";
 
-const brand = { bone: "#F5F2EC", ink: "#0E1310", terra: "#B45D3C", forest: "#3B4A2E", divider: "#C9CFC8", gold: "#E8B254" };
+const brand = { bone: "#F5F2EC", ink: "#0E1310", terra: "#2e8a57", forest: "#3B4A2E", divider: "#C9CFC8", gold: "#E8B254" };
 
 interface AdminBookingAlertProps extends BookingConfirmationProps {
   email: string;

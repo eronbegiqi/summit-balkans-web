@@ -6,7 +6,7 @@ import {
 const brand = {
   bone: "#F5F2EC",
   ink: "#0E1310",
-  terra: "#B45D3C",
+  terra: "#2e8a57",
   forest: "#3B4A2E",
   gold: "#E8B254",
   divider: "#C9CFC8",
