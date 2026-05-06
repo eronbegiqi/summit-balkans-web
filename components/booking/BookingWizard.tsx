@@ -1,19 +1,21 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Link from "next/link";
 import { Check, ChevronLeft, ChevronRight, Lock, Backpack, Car, BedDouble } from "lucide-react";
 import { formatPrice } from "@/lib/utils";
 import { BookingPolicySummary } from "./BookingPolicySummary";
 import { CancellationTimeline } from "./CancellationTimeline";
 
-
-const availableDates = [
+// Fallback departures shown while DB loads or if DB is unavailable
+const FALLBACK_DATES = [
   { id: "dep-002", date: "2026-05-12", endDate: "2026-05-21", guide: "Blerim H.", spots: 3, total: 12, price: 1290, low: true },
   { id: "dep-003", date: "2026-06-09", endDate: "2026-06-18", guide: "Artan K.", spots: 8, total: 12, price: 1290, low: false },
   { id: "dep-004", date: "2026-07-07", endDate: "2026-07-16", guide: "Dragan M.", spots: 12, total: 12, price: 1290, low: false },
   { id: "dep-005", date: "2026-08-04", endDate: "2026-08-13", guide: "Blerim H.", spots: 5, total: 12, price: 1290, low: false },
 ];
+
+type Departure = { id: string; date: string; endDate: string; guide: string; spots: number; total: number; price: number; low: boolean };
 
 const addOns = [
   { id: "gear", icon: Backpack, title: "Gear Rental Pack", desc: "Trekking poles, sleeping bag, daypack & headlamp for your whole trip.", price: 45, unit: "/day" },
@@ -44,11 +46,40 @@ function formatShortDate(d: string) {
   return new Date(d).toLocaleDateString("en-GB", { day: "numeric", month: "short", year: "numeric" });
 }
 
-export function BookingWizard() {
+export function BookingWizard({ tourSlug = "peaks-of-the-balkans" }: { tourSlug?: string }) {
   const [step, setStep] = useState(0);
   const [confirmed, setConfirmed] = useState(false);
   const [bookingError, setBookingError] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [availableDates, setAvailableDates] = useState<Departure[]>(FALLBACK_DATES);
+
+  // Fetch real departures from DB on mount; keep fallback if unavailable
+  useEffect(() => {
+    fetch(`/api/public/tours/${tourSlug}`)
+      .then((r) => r.json())
+      .then((data) => {
+        if (Array.isArray(data.departures) && data.departures.length > 0) {
+          setAvailableDates(
+            data.departures.map((d: {
+              id: number; startDate: string; endDate: string;
+              guideName?: string; spotsLeft: number; capacity: number;
+              pricePerPersonEur?: string;
+            }) => ({
+              id: String(d.id),
+              date: d.startDate,
+              endDate: d.endDate,
+              guide: d.guideName ?? "TBC",
+              spots: d.spotsLeft,
+              total: d.capacity,
+              price: d.pricePerPersonEur ? parseFloat(d.pricePerPersonEur) : 1290,
+              low: d.spotsLeft <= 3,
+            }))
+          );
+        }
+      })
+      .catch(() => {}); // silently keep fallback
+  }, [tourSlug]);
+
   const [state, setState] = useState<BookingState>({
     departureId: null,
     adults: 1,
