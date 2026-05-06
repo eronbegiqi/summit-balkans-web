@@ -3,7 +3,7 @@ import { verifySession } from '@/lib/auth/session';
 
 const COOKIE_NAME = 'summit_admin_session';
 
-export async function middleware(request: NextRequest) {
+export async function proxy(request: NextRequest) {
   const { pathname } = request.nextUrl;
 
   // Let the login page through
