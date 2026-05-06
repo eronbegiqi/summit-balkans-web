@@ -2,6 +2,9 @@ import { AdminSidebar } from '@/components/admin/sidebar';
 import { AdminTopbar } from '@/components/admin/topbar';
 import { getNewBookingsCount, getNewInquiriesCount } from '@/lib/db/queries/dashboard';
 
+// Admin routes must never be statically prerendered — they require auth + live DB
+export const dynamic = 'force-dynamic';
+
 export default async function AdminLayout({ children }: { children: React.ReactNode }) {
   const [newBookingsCount, newInquiriesCount] = await Promise.all([
     getNewBookingsCount(),
