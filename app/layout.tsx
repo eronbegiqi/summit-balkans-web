@@ -3,10 +3,6 @@ import { Fraunces, Inter, JetBrains_Mono } from "next/font/google";
 import "leaflet/dist/leaflet.css";
 import "@/styles/globals.css";
 import Script from "next/script";
-import { Header } from "@/components/layout/Header";
-import { Footer } from "@/components/layout/Footer";
-import { WhatsAppFAB } from "@/components/layout/WhatsAppFAB";
-import { CookieBanner } from "@/components/layout/CookieBanner";
 
 const fraunces = Fraunces({
   subsets: ["latin"],
@@ -45,11 +41,7 @@ export const metadata: Metadata = {
   },
 };
 
-export default function RootLayout({
-  children,
-}: {
-  children: React.ReactNode;
-}) {
+export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html
       lang="en"
@@ -68,13 +60,7 @@ export default function RootLayout({
           gtag('config', 'G-MCDEJ36XL7');`}
         </Script>
       </head>
-      <body>
-        <Header />
-        <main>{children}</main>
-        <Footer />
-        <WhatsAppFAB />
-        <CookieBanner />
-      </body>
+      <body>{children}</body>
     </html>
   );
 }
