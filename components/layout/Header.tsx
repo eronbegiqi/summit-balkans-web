@@ -352,7 +352,7 @@ export function Header() {
         )}
       >
         {/* Top bar */}
-        <div className="flex items-center justify-between px-5 py-4 border-b border-white/8 shrink-0">
+        <div className="flex items-center justify-between px-5 py-4 border-b border-white/20 shrink-0">
           <Link href="/" onClick={() => setMobileOpen(false)} aria-label="Summit Balkans home">
             <LogoMark dark={false} />
           </Link>
@@ -372,7 +372,7 @@ export function Header() {
             const hasSubmenu = !!item.submenu;
 
             return (
-              <div key={item.label} className="border-b border-white/8">
+              <div key={item.label} className="border-b border-white/20">
                 <div
                   className={cn(
                     "flex items-center justify-between py-4 gap-3",
@@ -415,10 +415,10 @@ export function Header() {
                 {/* Accordion sub-links */}
                 {hasSubmenu && isExpanded && (
                   <div className="pb-4 pl-2 space-y-0.5">
-                    {item.submenu!.columns.flatMap((col) =>
-                      col.links.map((link) => (
+                    {item.submenu!.columns.flatMap((col, colIndex) =>
+                      col.links.map((link, linkIndex) => (
                         <Link
-                          key={link.href + link.label}
+                          key={`${item.label}-${colIndex}-${link.label}-${link.href}-${linkIndex}`}
                           href={link.href}
                           onClick={() => setMobileOpen(false)}
                           className={cn(
@@ -439,7 +439,7 @@ export function Header() {
         </nav>
 
         {/* Bottom strip */}
-        <div className="px-5 pb-8 pt-4 border-t border-white/8 shrink-0 space-y-4">
+        <div className="px-5 pb-8 pt-4 border-t border-white/20 shrink-0 space-y-4">
           <div className="flex gap-3">
             <Link
               href="/tours"

@@ -53,7 +53,7 @@
 
   /* ─── Buttons ─── */
   .btn-primary {
-    @apply bg-terra text-white border-none px-6 py-3 rounded-card font-inter text-sm font-semibold
+    @apply bg-brand text-white border-none px-6 py-3 rounded-card font-inter text-sm font-semibold
            cursor-pointer no-underline inline-flex items-center gap-2 transition-opacity duration-200
            hover:opacity-90 active:opacity-80;
   }
@@ -101,6 +101,11 @@
     @apply bg-divider text-ink font-mono text-xs font-medium px-2 py-0.5 rounded-md;
   }
 
+  .wa-fab-link {
+    animation: wa-pulse 8s ease-in-out infinite;
+    box-shadow: 0 4px 24px rgba(37, 211, 102, 0.35);
+  }
+
   /* ─── Topographic overlay (dark sections) ─── */
   .topo-section {
     @apply relative;
@@ -110,6 +115,15 @@
     @apply absolute inset-0 opacity-[0.03] pointer-events-none;
     background-image: url('/images/topo-overlay.svg');
     background-size: cover;
+  }
+}
+
+@keyframes wa-pulse {
+  0%, 100% {
+    box-shadow: 0 4px 24px rgba(37, 211, 102, 0.30);
+  }
+  50% {
+    box-shadow: 0 4px 32px rgba(37, 211, 102, 0.55), 0 0 0 8px rgba(37, 211, 102, 0.08);
   }
 }
 

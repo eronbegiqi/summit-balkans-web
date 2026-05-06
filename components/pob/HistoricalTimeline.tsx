@@ -39,10 +39,11 @@ const eras = [
 
 export function HistoricalTimeline() {
   const sectionRef = useRef<HTMLElement>(null);
+  const pinRef = useRef<HTMLDivElement>(null);
   const trackRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    if (!sectionRef.current || !trackRef.current) return;
+    if (!sectionRef.current || !pinRef.current || !trackRef.current) return;
 
     const mm = gsap.matchMedia();
 
@@ -54,7 +55,7 @@ export function HistoricalTimeline() {
           trigger: sectionRef.current,
           start: "top top",
           end: `+=${totalScroll}`,
-          pin: true,
+          pin: pinRef.current,
           scrub: 1,
           anticipatePin: 1,
         },
@@ -78,7 +79,7 @@ export function HistoricalTimeline() {
           "url(\"data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M30 0 L60 30 L30 60 L0 30Z' fill='none' stroke='%23ffffff' stroke-width='0.3' opacity='0.04'/%3E%3C/svg%3E\")",
       }}
     >
-      <div className="py-20 md:py-28">
+      <div ref={pinRef} className="py-20 md:py-28">
         <div className="max-w-content mx-auto px-5 md:px-10 mb-12">
           <div className="font-mono text-[11px] font-medium tracking-[0.14em] uppercase text-terra mb-3">
             The Story

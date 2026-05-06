@@ -30,27 +30,29 @@ export default function ToursPage() {
       </section>
 
       <section className="py-24">
-        <div className="max-w-content mx-auto px-10 flex flex-col gap-12">
+        <div className="max-w-content mx-auto px-6 md:px-10 flex flex-col gap-12">
           {tours.map((tour, i) => (
             <Link
               key={tour.slug}
               href={`/tours/${tour.slug}`}
-              className="grid grid-cols-[400px_1fr] gap-10 border-2 border-divider rounded-card-hero overflow-hidden bg-white no-underline hover:border-terra hover:-translate-y-0.5 transition-all duration-200 group"
+              // CHANGED: grid-cols-1 for mobile, md:grid-cols-[400px_1fr] for desktop
+              className="grid grid-cols-1 md:grid-cols-[400px_1fr] md:gap-10 border-2 border-divider rounded-card-hero overflow-hidden bg-white no-underline hover:border-terra hover:-translate-y-0.5 transition-all duration-200 group"
             >
               {/* eslint-disable-next-line @next/next/no-img-element */}
               <img
                 src={`${tour.coverImage}&w=600`}
                 alt={tour.name}
-                className="w-full h-full object-cover block"
-                style={{ maxHeight: 280 }}
+                // CHANGED: Replaced inline style with responsive Tailwind height classes
+                className="w-full h-[240px] md:h-[280px] object-cover block"
                 loading={i === 0 ? "eager" : "lazy"}
               />
-              <div className="py-8 pr-8 flex flex-col justify-center">
+              {/* CHANGED: Added all-around padding for mobile (p-6), adjusted for desktop */}
+              <div className="p-6 md:py-8 md:pr-8 md:pl-0 flex flex-col justify-center">
                 <DifficultyDots level={tour.difficulty} className="mb-4" />
-                <h2 className="font-fraunces text-4xl font-bold tracking-tight mb-3">{tour.name}</h2>
+                <h2 className="font-fraunces text-3xl md:text-4xl font-bold tracking-tight mb-3">{tour.name}</h2>
                 <p className="text-base text-ink/60 leading-relaxed mb-6 max-w-[520px]">{tour.tagline}</p>
 
-                <div className="flex gap-6 mb-6 text-sm text-ink/50">
+                <div className="flex flex-wrap gap-4 md:gap-6 mb-6 text-sm text-ink/50">
                   <div className="flex items-center gap-1.5">
                     <Clock className="w-4 h-4" strokeWidth={1.5} />
                     {tour.duration} days
@@ -59,10 +61,10 @@ export default function ToursPage() {
                   <div className="font-mono text-xs">Max {tour.spotsTotal} travellers</div>
                 </div>
 
-                <div className="flex items-center gap-5">
-                  <div className="font-fraunces text-3xl font-bold">
+                <div className="flex flex-wrap items-center justify-between md:justify-start gap-4 md:gap-5 mt-auto md:mt-0">
+                  <div className="font-fraunces text-2xl md:text-3xl font-bold">
                     {formatPrice(tour.priceFrom)}
-                    <span className="font-inter text-sm font-normal text-ink/45"> from / person</span>
+                    <span className="font-inter text-xs md:text-sm font-normal text-ink/45"> from / person</span>
                   </div>
                   <span className="inline-flex items-center gap-1.5 text-terra font-semibold text-sm group-hover:gap-2.5 transition-all">
                     View Tour <ArrowRight className="w-3.5 h-3.5" strokeWidth={2} />
@@ -73,9 +75,9 @@ export default function ToursPage() {
           ))}
 
           {/* Private trips teaser */}
-          <div className="border-2 border-divider rounded-card-hero overflow-hidden bg-dark p-12 text-center">
+          <div className="border-2 border-divider rounded-card-hero overflow-hidden bg-dark p-8 md:p-12 text-center">
             <div className="font-mono text-[11px] text-gold tracking-[0.12em] uppercase mb-4">Don&apos;t see the right trip?</div>
-            <h2 className="font-fraunces text-4xl font-bold text-white tracking-tight mb-4">Design your own.</h2>
+            <h2 className="font-fraunces text-3xl md:text-4xl font-bold text-white tracking-tight mb-4">Design your own.</h2>
             <p className="text-base text-white/55 max-w-md mx-auto mb-8">
               Private trips from 2 people, any duration, any destination in the region. We reply within 24 hours.
             </p>

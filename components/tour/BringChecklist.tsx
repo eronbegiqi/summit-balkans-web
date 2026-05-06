@@ -55,7 +55,7 @@ export function BringChecklist() {
         </button>
       </div>
 
-      <div className="grid grid-cols-3 gap-6 mt-6">
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mt-6">
         {Object.entries(categories).map(([title, items]) => (
           <div key={title} className="bg-white border-2 border-divider rounded-card p-6">
             <div className="font-fraunces text-[17px] font-bold mb-4">{title}</div>

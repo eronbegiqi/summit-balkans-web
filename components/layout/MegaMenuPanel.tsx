@@ -39,27 +39,27 @@ interface MegaMenuPanelProps {
 export function MegaMenuPanel({ data, visible }: MegaMenuPanelProps) {
   return (
     <div
-      className={`absolute top-full left-0 right-0 bg-bone border-b-2 border-divider shadow-lg transition-all duration-200 origin-top ${
+      className={`absolute w-fit top-full left-0 right-0 bg-bone border-b-2 border-divider shadow-lg transition-all duration-200 origin-top ${
         visible
           ? "opacity-100 translate-y-0 pointer-events-auto"
           : "opacity-0 -translate-y-2 pointer-events-none"
       }`}
       aria-hidden={!visible}
     >
-      <div className="max-w-content mx-auto px-5 md:px-10 py-8">
+      <div className=" mx-auto px-5 md:px-10 py-8">
         <div className={`grid gap-8 ${data.featured ? "grid-cols-[1fr_260px_160px]" : data.stats ? "grid-cols-[1fr_160px]" : "grid-cols-1 sm:grid-cols-2 lg:grid-cols-4"}`}>
           {/* Columns */}
           <div className="flex gap-8">
-            {data.columns.map((col, i) => (
-              <div key={i} className="min-w-[140px]">
+            {data.columns.map((col, colIndex) => (
+              <div key={`${col.heading ?? "column"}-${colIndex}`} className="min-w-[140px]">
                 {col.heading && (
                   <div className="font-mono text-[10px] uppercase tracking-[0.14em] text-ink/35 mb-3">
                     {col.heading}
                   </div>
                 )}
                 <ul className="space-y-0.5">
-                  {col.links.map((link) => (
-                    <li key={link.href}>
+                  {col.links.map((link, linkIndex) => (
+                    <li key={`${colIndex}-${link.label}-${link.href}-${linkIndex}`}>
                       <Link
                         href={link.href}
                         role="menuitem"

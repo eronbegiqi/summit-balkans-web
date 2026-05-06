@@ -58,7 +58,12 @@ export function RouteMap() {
   useEffect(() => {
     if (!mapRef.current || mapInstanceRef.current) return;
 
+    let cancelled = false;
+    const mapElement = mapRef.current;
+
     import("leaflet").then((L) => {
+      if (cancelled || !mapElement) return;
+
       // Fix default icon paths for Next.js
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
       delete (L.Icon.Default.prototype as any)._getIconUrl;
@@ -68,7 +73,12 @@ export function RouteMap() {
         shadowUrl: "https://unpkg.com/leaflet@1.9.4/dist/images/marker-shadow.png",
       });
 
-      const map = L.map(mapRef.current!, {
+      // Leaflet stores an internal id on the DOM node. Fast Refresh can keep the
+      // node while remounting this component, so clear stale state before init.
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      delete (mapElement as any)._leaflet_id;
+
+      const map = L.map(mapElement, {
         center: [42.55, 20.05],
         zoom: 9,
         zoomControl: false,
@@ -123,6 +133,8 @@ export function RouteMap() {
     });
 
     return () => {
+      cancelled = true;
+      markersRef.current = [];
       if (mapInstanceRef.current) {
         mapInstanceRef.current.remove();
         mapInstanceRef.current = null;
@@ -180,11 +192,6 @@ export function RouteMap() {
 
         {/* Map container */}
         <div className="relative rounded-card-hero overflow-hidden border-2 border-divider">
-          {/* Leaflet CSS */}
-          <link
-            rel="stylesheet"
-            href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
-          />
           <div ref={mapRef} className="w-full h-[480px] md:h-[560px]" />
           {!loaded && (
             <div className="absolute inset-0 bg-bone flex items-center justify-center">
@@ -233,4 +240,3 @@ export function RouteMap() {
     </section>
   );
 }
-

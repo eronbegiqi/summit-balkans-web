@@ -182,7 +182,7 @@ export default function GearPage() {
           {/* FAQ grid */}
           <div className="grid grid-cols-2 gap-4">
             {howFAQ.map((item) => (
-              <div key={item.q} className="bg-white/4 border border-white/8 rounded-xl px-[22px] py-5">
+              <div key={item.q} className="bg-white/4 border border-white/20 rounded-xl px-[22px] py-5">
                 <div className="text-sm font-semibold text-white/85 mb-2">{item.q}</div>
                 <div className="text-[13px] leading-[1.65] text-white/45">{item.a}</div>
               </div>

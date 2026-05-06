@@ -14,8 +14,9 @@ export function HomeHero() {
         className="absolute inset-0 bg-cover bg-center"
         style={{ backgroundImage: "url('https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?w=1920&q=85')" }}
       />
-      {/* Overlay */}
-      <div className="absolute inset-0 bg-gradient-to-br from-dark/72 via-dark/48 to-dark/65" />
+      
+      {/* Overlay - Changed to 20% black */}
+      <div className="absolute inset-0 bg-black/40" />
 
       {/* Content */}
       <div className="relative z-10 max-w-content mx-auto px-10 pt-[72px] w-full">
@@ -31,14 +32,14 @@ export function HomeHero() {
           Walk the Balkans with people who live here.
         </h1>
 
-        <p className="text-xl text-white/78 mb-10 tracking-[0.01em]">
+        <p className="text-xl text-white/80 mb-10 tracking-[0.01em]">
           Small groups. Local guides. Real trails.
         </p>
 
         <div className="flex gap-3.5 flex-wrap mb-10">
           <Link
             href="/tours"
-            className="flex items-center gap-2 bg-terra text-white border-2 border-terra px-7 py-4 rounded-xl font-semibold text-[15px] no-underline hover:opacity-90 hover:-translate-y-0.5 transition-all"
+            className="flex items-center gap-2 bg-brand text-white px-7 py-4 rounded-xl font-semibold text-[15px] no-underline hover:opacity-90 hover:-translate-y-0.5 transition-all"
           >
             View Upcoming Tours
             <ArrowRight className="w-4 h-4" strokeWidth={1.5} />

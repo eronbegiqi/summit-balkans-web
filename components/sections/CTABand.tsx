@@ -24,7 +24,7 @@ export function CTABand() {
         <div className="flex gap-3.5 justify-center flex-wrap">
           <Link
             href="/private-trips"
-            className="bg-terra text-white border-2 border-terra px-7 py-4 rounded-xl font-semibold text-[15px] no-underline hover:opacity-90 transition-opacity"
+            className="bg-brand text-white px-7 py-4 rounded-xl font-semibold text-[15px] no-underline hover:opacity-90 transition-opacity"
           >
             Request a Private Trip
           </Link>

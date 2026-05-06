@@ -67,7 +67,7 @@ function StatCounter({ value, suffix, label, decimals }: typeof stats[0]) {
         style={{ fontSize: "clamp(48px, 8vw, 64px)", fontVariationSettings: "'opsz' 60" }}
       >
         {count.toFixed(decimals)}
-        <sup className="text-[0.4em]">{suffix}</sup>
+        <sup className="text-[0.4em] ml-3">{suffix}</sup>
       </div>
       <div className="font-mono text-xs text-white/40 tracking-[0.1em] uppercase">{label}</div>
     </div>

@@ -136,7 +136,7 @@ export function ContactForm() {
       <button
         type="submit"
         disabled={isSubmitting || !agreePrivacy}
-        className="bg-terra text-white px-8 py-4 rounded-xl font-semibold text-[15px] border-none cursor-pointer hover:opacity-90 transition-opacity disabled:opacity-60 disabled:cursor-not-allowed"
+        className="bg-brand text-white px-8 py-4 rounded-xl font-semibold text-[15px] border-none cursor-pointer hover:opacity-90 transition-opacity disabled:opacity-60 disabled:cursor-not-allowed"
       >
         {isSubmitting ? "Sending…" : "Send Message"}
       </button>

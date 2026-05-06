@@ -22,16 +22,16 @@ export function Footer() {
   return (
     <>
       {/* Parallax photo strip */}
-      <div className="h-[200px] overflow-hidden relative">
+      {/* <div className="h-[200px] overflow-hidden relative"> */}
         {/* eslint-disable-next-line @next/next/no-img-element */}
-        <img
+        {/* <img
           src="https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=1920&q=70"
           alt=""
           className="w-full h-[300px] object-cover block -mt-[50px] brightness-50"
           loading="lazy"
           aria-hidden="true"
-        />
-      </div>
+        /> */}
+      {/* </div> */}
 
       <footer className="bg-ink text-white relative overflow-hidden" aria-label="Site footer">
         {/* Topo overlay */}
@@ -129,7 +129,7 @@ export function Footer() {
           </div>
 
           {/* Bottom bar */}
-          <div className="border-t border-white/8 pt-6 flex flex-col sm:flex-row items-center justify-between gap-3">
+          <div className="border-t border-white/20 pt-6 flex flex-col sm:flex-row items-center justify-between gap-3">
             <p className="text-xs text-white/25 font-mono order-2 sm:order-1">
               © {new Date().getFullYear()} Summit Balkans. All rights reserved.
             </p>
