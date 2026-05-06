@@ -2,7 +2,9 @@ import { NextRequest, NextResponse } from "next/server";
 import { Resend } from "resend";
 import { render } from "@react-email/render";
 import { z } from "zod";
-import { saveSubmission } from "@/lib/airtable";
+import { db } from "@/lib/db/client";
+import { bookings, customers } from "@/lib/db/schema";
+import { eq } from "drizzle-orm";
 import { BookingConfirmation } from "@/emails/BookingConfirmation";
 import { AdminBookingAlert } from "@/emails/AdminBookingAlert";
 
@@ -33,10 +35,11 @@ function generateRef(): string {
   return ref;
 }
 
+const resend = new Resend(process.env.RESEND_API_KEY);
+const FROM = process.env.RESEND_FROM ?? "Summit Balkans <info@summitbalkans.com>";
+const ADMIN = process.env.ADMIN_EMAIL ?? "info@summitbalkans.com";
+
 export async function POST(req: NextRequest) {
-  const resend = new Resend(process.env.RESEND_API_KEY);
-  const FROM = process.env.RESEND_FROM ?? "Summit Balkans <info@summitbalkans.com>";
-  const ADMIN = process.env.ADMIN_EMAIL ?? "info@summitbalkans.com";
   try {
     const body = await req.json();
     const result = bookingSchema.safeParse(body);
@@ -47,6 +50,41 @@ export async function POST(req: NextRequest) {
     const data = result.data;
     const bookingRef = generateRef();
     const fullName = `${data.firstName} ${data.lastName}`;
+
+    // Upsert customer
+    let [customer] = await db.select().from(customers).where(eq(customers.email, data.email)).limit(1);
+    if (!customer) {
+      await db.insert(customers).values({
+        email: data.email,
+        firstName: data.firstName,
+        lastName: data.lastName,
+        phone: data.phone ?? undefined,
+        dietaryRequirements: data.dietary ?? undefined,
+        emergencyContactName: data.emergencyName ?? undefined,
+        emergencyContactPhone: data.emergencyPhone ?? undefined,
+      });
+      [customer] = await db.select().from(customers).where(eq(customers.email, data.email)).limit(1);
+    }
+
+    // Save booking to DB — tourId 1 as placeholder (wizard doesn't pass DB tour ID yet)
+    await db.insert(bookings).values({
+      bookingReference: bookingRef,
+      customerId: customer.id,
+      tourId: 1,
+      numAdults: data.adults,
+      numChildren: data.children,
+      travelersData: [{ firstName: data.firstName, lastName: data.lastName, email: data.email, phone: data.phone }],
+      basePriceEur: String(data.totalPrice),
+      totalEur: String(data.totalPrice),
+      paymentType: "DEPOSIT",
+      depositAmountEur: String(Math.ceil(data.totalPrice * 0.2)),
+      paidAmountEur: "0",
+      paymentStatus: "PENDING",
+      bookingSource: "DIRECT",
+      status: "NEW",
+      internalNotes: `Add-ons: ${data.addOns.join(", ")} | Dep: ${data.departureId} | Guide: ${data.guide}`,
+      termsAcceptedAt: new Date(),
+    });
 
     await Promise.all([
       resend.emails.send({
@@ -89,14 +127,6 @@ export async function POST(req: NextRequest) {
           emergencyName: data.emergencyName,
           emergencyPhone: data.emergencyPhone,
         })),
-      }),
-      saveSubmission("booking", {
-        Name: fullName,
-        Email: data.email,
-        Phone: data.phone ?? "",
-        Subject: data.tourName,
-        Message: `Ref: ${bookingRef} | ${data.departureDate} | ${data.adults}A ${data.children}C | €${data.totalPrice}`,
-        BookingRef: bookingRef,
       }),
     ]);
 

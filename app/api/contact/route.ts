@@ -2,14 +2,16 @@ import { NextRequest, NextResponse } from "next/server";
 import { Resend } from "resend";
 import { render } from "@react-email/render";
 import { contactSchema } from "@/lib/schemas";
-import { saveSubmission } from "@/lib/airtable";
+import { db } from "@/lib/db/client";
+import { inquiries } from "@/lib/db/schema";
 import { ContactAutoReply } from "@/emails/ContactAutoReply";
 import { AdminContactAlert } from "@/emails/AdminContactAlert";
 
+const resend = new Resend(process.env.RESEND_API_KEY);
+const FROM = process.env.RESEND_FROM ?? "Summit Balkans <info@summitbalkans.com>";
+const ADMIN = process.env.ADMIN_EMAIL ?? "info@summitbalkans.com";
+
 export async function POST(req: NextRequest) {
-  const resend = new Resend(process.env.RESEND_API_KEY);
-  const FROM = process.env.RESEND_FROM ?? "Summit Balkans <info@summitbalkans.com>";
-  const ADMIN = process.env.ADMIN_EMAIL ?? "info@summitbalkans.com";
   try {
     const body = await req.json();
     const result = contactSchema.safeParse(body);
@@ -19,8 +21,20 @@ export async function POST(req: NextRequest) {
 
     const { name, email, phone, subject, message } = result.data;
 
-    // Run email sends + Airtable write in parallel
     await Promise.all([
+      // Save to DB
+      db.insert(inquiries).values({
+        type: "CONTACT",
+        name,
+        email,
+        phone: phone ?? undefined,
+        subject,
+        message,
+        sourcePage: req.headers.get("referer") ?? undefined,
+        ipAddress: req.headers.get("x-forwarded-for")?.split(",")[0] ?? undefined,
+        status: "NEW",
+      }),
+      // Emails
       resend.emails.send({
         from: FROM,
         to: email,
@@ -33,13 +47,6 @@ export async function POST(req: NextRequest) {
         replyTo: email,
         subject: `New contact: ${name} — ${subject}`,
         html: await render(AdminContactAlert({ name, email, phone, subject, message })),
-      }),
-      saveSubmission("contact", {
-        Name: name,
-        Email: email,
-        Phone: phone ?? "",
-        Subject: subject,
-        Message: message,
       }),
     ]);
 

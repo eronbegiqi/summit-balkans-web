@@ -2,7 +2,8 @@ import { NextRequest, NextResponse } from "next/server";
 import { Resend } from "resend";
 import { render } from "@react-email/render";
 import { z } from "zod";
-import { saveSubmission } from "@/lib/airtable";
+import { db } from "@/lib/db/client";
+import { inquiries } from "@/lib/db/schema";
 import { PrivateTripAutoReply } from "@/emails/PrivateTripAutoReply";
 import { AdminPrivateTripAlert } from "@/emails/AdminPrivateTripAlert";
 
@@ -19,10 +20,11 @@ const privateTripSchema = z.object({
   customTo: z.string().optional(),
 });
 
+const resend = new Resend(process.env.RESEND_API_KEY);
+const FROM = process.env.RESEND_FROM ?? "Summit Balkans <info@summitbalkans.com>";
+const ADMIN = process.env.ADMIN_EMAIL ?? "info@summitbalkans.com";
+
 export async function POST(req: NextRequest) {
-  const resend = new Resend(process.env.RESEND_API_KEY);
-  const FROM = process.env.RESEND_FROM ?? "Summit Balkans <info@summitbalkans.com>";
-  const ADMIN = process.env.ADMIN_EMAIL ?? "info@summitbalkans.com";
   try {
     const body = await req.json();
     const result = privateTripSchema.safeParse(body);
@@ -32,7 +34,31 @@ export async function POST(req: NextRequest) {
 
     const data = result.data;
 
+    const message = [
+      `Destinations: ${data.destinations.join(", ")}`,
+      `Group: ${data.groupSize} people`,
+      `When: ${data.dateOption}`,
+      `Experience: ${data.experiences.join(", ")}`,
+      data.notes ? `Notes: ${data.notes}` : "",
+    ].filter(Boolean).join("\n");
+
     await Promise.all([
+      // Save to DB
+      db.insert(inquiries).values({
+        type: "PRIVATE_TRIP",
+        name: data.name,
+        email: data.email,
+        phone: data.phone ?? undefined,
+        subject: `Private: ${data.destinations.join(", ")} · ${data.groupSize}p`,
+        message,
+        groupSize: data.groupSize,
+        countriesOfInterest: data.destinations,
+        preferredDatesStart: data.customFrom ? new Date(data.customFrom) : undefined,
+        preferredDatesEnd: data.customTo ? new Date(data.customTo) : undefined,
+        sourcePage: req.headers.get("referer") ?? undefined,
+        status: "NEW",
+      }),
+      // Emails
       resend.emails.send({
         from: FROM,
         to: data.email,
@@ -62,19 +88,6 @@ export async function POST(req: NextRequest) {
           customFrom: data.customFrom,
           customTo: data.customTo,
         })),
-      }),
-      saveSubmission("private-trip", {
-        Name: data.name,
-        Email: data.email,
-        Phone: data.phone ?? "",
-        Subject: `Private: ${data.destinations.join(", ")} · ${data.groupSize}p`,
-        Message: [
-          `Destinations: ${data.destinations.join(", ")}`,
-          `Group: ${data.groupSize} people`,
-          `When: ${data.dateOption}`,
-          `Experience: ${data.experiences.join(", ")}`,
-          data.notes ? `Notes: ${data.notes}` : "",
-        ].filter(Boolean).join("\n"),
       }),
     ]);
 
