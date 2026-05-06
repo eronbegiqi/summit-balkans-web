@@ -11,6 +11,10 @@ const nextConfig: NextConfig = {
         protocol: "https",
         hostname: "summitbalkans.com",
       },
+      {
+        protocol: "https",
+        hostname: "media.summitbalkans.com",
+      },
     ],
   },
   experimental: {
