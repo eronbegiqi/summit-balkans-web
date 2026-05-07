@@ -3,6 +3,9 @@ import Link from 'next/link';
 import { ArrowLeft } from 'lucide-react';
 import { redirect } from 'next/navigation';
 
+export const dynamic = 'force-dynamic';
+export const revalidate = 0;
+
 export default function NewGuidePage() {
   const inputCls = 'w-full rounded-lg border border-gray-200 px-3.5 py-2.5 text-sm outline-none focus:ring-2 focus:ring-emerald-500';
   const labelCls = 'mb-1.5 block text-sm font-medium text-gray-700';

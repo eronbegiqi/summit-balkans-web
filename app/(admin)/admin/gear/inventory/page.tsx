@@ -11,6 +11,9 @@ import { UnitStatusSelect } from '@/components/admin/inventory/unit-status-selec
 import { GearCalendarView } from '@/components/admin/inventory/calendar-view';
 import { Backpack, AlertTriangle } from 'lucide-react';
 
+export const dynamic = 'force-dynamic';
+export const revalidate = 0;
+
 type Props = {
   searchParams: Promise<{ view?: string; item?: string }>;
 };

@@ -4,6 +4,9 @@ import Link from 'next/link';
 import { ArrowLeft } from 'lucide-react';
 import { redirect } from 'next/navigation';
 
+export const dynamic = 'force-dynamic';
+export const revalidate = 0;
+
 export default async function NewReviewPage() {
   const tours = await getTours();
   const inputCls = 'w-full rounded-lg border border-gray-200 px-3.5 py-2.5 text-sm outline-none focus:ring-2 focus:ring-emerald-500';

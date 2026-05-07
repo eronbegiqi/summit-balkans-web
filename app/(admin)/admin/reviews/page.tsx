@@ -4,6 +4,9 @@ import { toggleReviewFeatured, toggleReviewPublished } from '@/lib/actions/conte
 import { EmptyState } from '@/components/admin/empty-state';
 import { Star, Plus } from 'lucide-react';
 
+export const dynamic = 'force-dynamic';
+export const revalidate = 0;
+
 export default async function ReviewsPage() {
   const reviews = await getReviews();
 

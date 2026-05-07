@@ -5,6 +5,9 @@ import { StatusBadge } from '@/components/admin/status-badge';
 import { InquiryControls } from '@/components/admin/inquiry/reply-modal';
 import { ArrowLeft } from 'lucide-react';
 
+export const dynamic = 'force-dynamic';
+export const revalidate = 0;
+
 type Props = { params: Promise<{ id: string }> };
 
 const TYPE_LABELS: Record<string, string> = {

@@ -4,6 +4,9 @@ import { toggleTourPublished, deleteTour } from '@/lib/actions/tours';
 import { EmptyState } from '@/components/admin/empty-state';
 import { Mountain, Plus, Star } from 'lucide-react';
 
+export const dynamic = 'force-dynamic';
+export const revalidate = 0;
+
 const DIFFICULTY_LABELS = ['', 'Easy', 'Moderate', 'Challenging', 'Hard', 'Expert'];
 const DIFFICULTY_COLORS = ['', 'text-green-600', 'text-yellow-600', 'text-orange-500', 'text-red-500', 'text-red-700'];
 
