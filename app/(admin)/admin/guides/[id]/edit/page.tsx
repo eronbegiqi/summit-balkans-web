@@ -1,9 +1,13 @@
 import { notFound } from 'next/navigation';
 import { getGuideById } from '@/lib/db/queries/guides';
 import { saveGuide, toggleGuidePublished } from '@/lib/actions/content';
+import { parseJsonField } from '@/lib/db/utils';
 import { PublishToggle } from '@/components/admin/publish-toggle';
 import Link from 'next/link';
 import { ArrowLeft } from 'lucide-react';
+
+export const dynamic = 'force-dynamic';
+export const revalidate = 0;
 
 type Props = { params: Promise<{ id: string }> };
 
@@ -61,8 +65,8 @@ export default async function GuideEditPage({ params }: Props) {
             <div><label className={labelCls}>Email</label><input name="contactEmail" defaultValue={guide.contactEmail ?? ''} className={inputCls} /></div>
             <div><label className={labelCls}>Phone</label><input name="contactPhone" defaultValue={guide.contactPhone ?? ''} className={inputCls} /></div>
           </div>
-          <div><label className={labelCls}>Languages (comma-separated)</label><input name="languages" defaultValue={((guide.languages ?? []) as string[]).join(', ')} className={inputCls} placeholder="English, Albanian, Shqip" /></div>
-          <div><label className={labelCls}>Specialties (comma-separated)</label><input name="specialties" defaultValue={((guide.specialties ?? []) as string[]).join(', ')} className={inputCls} placeholder="Alpine trekking, Photography" /></div>
+          <div><label className={labelCls}>Languages (comma-separated)</label><input name="languages" defaultValue={parseJsonField<string[]>(guide.languages, []).join(', ')} className={inputCls} placeholder="English, Albanian, Shqip" /></div>
+          <div><label className={labelCls}>Specialties (comma-separated)</label><input name="specialties" defaultValue={parseJsonField<string[]>(guide.specialties, []).join(', ')} className={inputCls} placeholder="Alpine trekking, Photography" /></div>
         </div>
 
         <div className="space-y-4">
