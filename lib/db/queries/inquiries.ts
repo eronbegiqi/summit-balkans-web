@@ -27,15 +27,8 @@ export async function getInquiries(filters: InquiryFilters = {}) {
   const whereClause = conditions.length ? and(...conditions) : undefined;
 
   const [items, countRows] = await Promise.all([
-    db.query.inquiries.findMany({
-      where: whereClause,
-      orderBy: [desc(inquiries.createdAt)],
-      limit: pageSize,
-      offset,
-    }),
-    db.select({ count: sql<number>`count(*)` })
-      .from(inquiries)
-      .where(whereClause),
+    db.select().from(inquiries).where(whereClause).orderBy(desc(inquiries.createdAt)).limit(pageSize).offset(offset),
+    db.select({ count: sql<number>`count(*)` }).from(inquiries).where(whereClause),
   ]);
 
   const total = Number(countRows[0]?.count ?? 0);
@@ -43,11 +36,14 @@ export async function getInquiries(filters: InquiryFilters = {}) {
 }
 
 export async function getInquiryById(id: number): Promise<InquiryDetail | null> {
-  const result = await db.query.inquiries.findFirst({
-    where: eq(inquiries.id, id),
-    with: { assignedTo: true },
-  });
-  return result as InquiryDetail | null;
+  const [row] = await db.select().from(inquiries).where(eq(inquiries.id, id));
+  if (!row) return null;
+
+  const assignedTo = row.assignedToId
+    ? ((await db.select().from(adminUsers).where(eq(adminUsers.id, row.assignedToId)))[0] ?? null)
+    : null;
+
+  return { ...row, assignedTo };
 }
 
 export async function getInquiryCountsByType() {

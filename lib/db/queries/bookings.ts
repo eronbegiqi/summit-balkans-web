@@ -1,6 +1,6 @@
 import { db } from '@/lib/db/client';
 import { bookings, customers, tours, departures, gearRentals, gearUnits, gearItems, paymentTransactions } from '@/lib/db/schema';
-import { and, desc, eq, ilike, inArray, or, sql } from 'drizzle-orm';
+import { desc, eq, inArray, sql } from 'drizzle-orm';
 
 export type BookingListItem = {
   id: number;
@@ -82,23 +82,51 @@ export async function getBookings(filters: BookingFilters = {}) {
 }
 
 export async function getBookingById(id: number): Promise<BookingDetail | null> {
-  const result = await db.query.bookings.findFirst({
-    where: eq(bookings.id, id),
-    with: {
-      customer: true,
-      tour: true,
-      departure: true,
-      gearRentals: {
-        with: {
-          gearUnit: {
-            with: { gearItem: true },
-          },
-        },
+  const [booking] = await db.select().from(bookings).where(eq(bookings.id, id));
+  if (!booking) return null;
+
+  const [customerData] = await db.select().from(customers).where(eq(customers.id, booking.customerId));
+  const [tourData] = await db.select().from(tours).where(eq(tours.id, booking.tourId));
+  const departureData = booking.departureId
+    ? ((await db.select().from(departures).where(eq(departures.id, booking.departureId)))[0] ?? null)
+    : null;
+
+  const rentalRows = await db.select().from(gearRentals).where(eq(gearRentals.bookingId, id));
+
+  const unitIds = [...new Set(rentalRows.map((r) => r.gearUnitId))];
+  const unitRows = unitIds.length
+    ? await db.select().from(gearUnits).where(inArray(gearUnits.id, unitIds))
+    : [];
+
+  const itemIds = [...new Set(unitRows.map((u) => u.gearItemId))];
+  const itemRows = itemIds.length
+    ? await db.select().from(gearItems).where(inArray(gearItems.id, itemIds))
+    : [];
+
+  const unitsMap = Object.fromEntries(unitRows.map((u) => [u.id, u]));
+  const itemsMap = Object.fromEntries(itemRows.map((i) => [i.id, i]));
+
+  const gearRentalsWithNested = rentalRows.map((r) => {
+    const unit = unitsMap[r.gearUnitId];
+    return {
+      ...r,
+      gearUnit: {
+        ...unit,
+        gearItem: itemsMap[unit?.gearItemId],
       },
-      paymentTransactions: true,
-    },
+    };
   });
-  return result as BookingDetail | null;
+
+  const txRows = await db.select().from(paymentTransactions).where(eq(paymentTransactions.bookingId, id)).orderBy(desc(paymentTransactions.createdAt));
+
+  return {
+    ...booking,
+    customer: customerData,
+    tour: tourData,
+    departure: departureData,
+    gearRentals: gearRentalsWithNested as BookingDetail['gearRentals'],
+    paymentTransactions: txRows,
+  };
 }
 
 export async function getNewBookingCount(): Promise<number> {

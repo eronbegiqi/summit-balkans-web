@@ -1,6 +1,6 @@
 import { db } from '@/lib/db/client';
-import { tours, guides, departures } from '@/lib/db/schema';
-import { and, asc, desc, eq, sql } from 'drizzle-orm';
+import { tours, guides } from '@/lib/db/schema';
+import { eq, sql } from 'drizzle-orm';
 
 export type TourListItem = {
   id: number;
@@ -51,17 +51,23 @@ export async function getTours(): Promise<TourListItem[]> {
 }
 
 export async function getTourById(id: number): Promise<TourWithGuide | null> {
-  const result = await db.query.tours.findFirst({
-    where: eq(tours.id, id),
-    with: { guide: true },
-  });
-  return result as TourWithGuide | null;
+  const [tour] = await db.select().from(tours).where(eq(tours.id, id));
+  if (!tour) return null;
+
+  const guide = tour.assignedGuideId
+    ? ((await db.select().from(guides).where(eq(guides.id, tour.assignedGuideId)))[0] ?? null)
+    : null;
+
+  return { ...tour, guide };
 }
 
 export async function getTourBySlug(slug: string): Promise<TourWithGuide | null> {
-  const result = await db.query.tours.findFirst({
-    where: eq(tours.slug, slug),
-    with: { guide: true },
-  });
-  return result as TourWithGuide | null;
+  const [tour] = await db.select().from(tours).where(eq(tours.slug, slug));
+  if (!tour) return null;
+
+  const guide = tour.assignedGuideId
+    ? ((await db.select().from(guides).where(eq(guides.id, tour.assignedGuideId)))[0] ?? null)
+    : null;
+
+  return { ...tour, guide };
 }
