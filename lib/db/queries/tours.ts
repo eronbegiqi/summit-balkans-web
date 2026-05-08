@@ -1,6 +1,6 @@
 import { db } from '@/lib/db/client';
-import { tours, guides, departures } from '@/lib/db/schema';
-import { and, asc, desc, eq, sql } from 'drizzle-orm';
+import { tours, guides } from '@/lib/db/schema';
+import { eq, sql } from 'drizzle-orm';
 
 export type TourListItem = {
   id: number;
@@ -22,7 +22,7 @@ export type TourWithGuide = typeof tours.$inferSelect & {
 };
 
 export async function getTours(): Promise<TourListItem[]> {
-  const rows = await db.execute(sql`
+  const [rows] = await db.execute(sql`
     SELECT
       t.id, t.slug, t.title, t.country, t.duration_days, t.difficulty,
       t.price_per_person_eur, t.is_flagship, t.published, t.display_order,
@@ -50,18 +50,21 @@ export async function getTours(): Promise<TourListItem[]> {
   }));
 }
 
+async function attachGuide(tour: typeof tours.$inferSelect): Promise<TourWithGuide> {
+  const guide = tour.assignedGuideId
+    ? ((await db.select().from(guides).where(eq(guides.id, tour.assignedGuideId)).limit(1))[0] ?? null)
+    : null;
+  return { ...tour, guide };
+}
+
 export async function getTourById(id: number): Promise<TourWithGuide | null> {
-  const result = await db.query.tours.findFirst({
-    where: eq(tours.id, id),
-    with: { guide: true },
-  });
-  return result as TourWithGuide | null;
+  const [tour] = await db.select().from(tours).where(eq(tours.id, id)).limit(1);
+  if (!tour) return null;
+  return attachGuide(tour);
 }
 
 export async function getTourBySlug(slug: string): Promise<TourWithGuide | null> {
-  const result = await db.query.tours.findFirst({
-    where: eq(tours.slug, slug),
-    with: { guide: true },
-  });
-  return result as TourWithGuide | null;
+  const [tour] = await db.select().from(tours).where(eq(tours.slug, slug)).limit(1);
+  if (!tour) return null;
+  return attachGuide(tour);
 }

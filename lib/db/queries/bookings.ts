@@ -82,23 +82,43 @@ export async function getBookings(filters: BookingFilters = {}) {
 }
 
 export async function getBookingById(id: number): Promise<BookingDetail | null> {
-  const result = await db.query.bookings.findFirst({
-    where: eq(bookings.id, id),
-    with: {
-      customer: true,
-      tour: true,
-      departure: true,
-      gearRentals: {
-        with: {
-          gearUnit: {
-            with: { gearItem: true },
-          },
-        },
-      },
-      paymentTransactions: true,
-    },
-  });
-  return result as BookingDetail | null;
+  const [booking] = await db.select().from(bookings).where(eq(bookings.id, id)).limit(1);
+  if (!booking) return null;
+
+  const [customer] = await db.select().from(customers).where(eq(customers.id, booking.customerId)).limit(1);
+  const [tour] = await db.select().from(tours).where(eq(tours.id, booking.tourId)).limit(1);
+  const departure = booking.departureId
+    ? ((await db.select().from(departures).where(eq(departures.id, booking.departureId)).limit(1))[0] ?? null)
+    : null;
+
+  const rentals = await db.select().from(gearRentals).where(eq(gearRentals.bookingId, id));
+  const gearRentalsWithUnits = await Promise.all(
+    rentals.map(async (rental) => {
+      const [unit] = await db.select().from(gearUnits).where(eq(gearUnits.id, rental.gearUnitId)).limit(1);
+      const [item] = await db.select().from(gearItems).where(eq(gearItems.id, unit.gearItemId)).limit(1);
+      return { ...rental, gearUnit: { ...unit, gearItem: item } };
+    })
+  );
+
+  const txList = await db.select().from(paymentTransactions).where(eq(paymentTransactions.bookingId, id));
+
+  // mysql2 prepared statements may return JSON columns as raw strings — parse them.
+  const parseJson = <T>(val: unknown): T | null => {
+    if (val == null) return null;
+    if (typeof val === 'string') { try { return JSON.parse(val) as T; } catch { return null; } }
+    return val as T;
+  };
+
+  return {
+    ...booking,
+    travelersData: parseJson(booking.travelersData),
+    paymentData: parseJson(booking.paymentData),
+    customer,
+    tour,
+    departure,
+    gearRentals: gearRentalsWithUnits,
+    paymentTransactions: txList,
+  } as unknown as BookingDetail;
 }
 
 export async function getNewBookingCount(): Promise<number> {
