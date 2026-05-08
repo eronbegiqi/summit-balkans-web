@@ -152,15 +152,23 @@ export function Header() {
   const isHeroPage = HERO_PAGES.includes(pathname);
   const solidState = scrolled || !isHeroPage;
 
-  // GSAP scroll animation
+  // GSAP scroll animation — use a ref to avoid stale closure on scrolled state
+  const scrolledRef = useRef(false);
+
   useEffect(() => {
     if (!headerRef.current) return;
     const initialH = isHeroPage ? 96 : 64;
-    gsap.set(headerRef.current, { height: initialH });
+
+    // Sync with actual scroll position on mount (browser may restore scroll)
+    const alreadyScrolled = window.scrollY > 80;
+    scrolledRef.current = alreadyScrolled;
+    setScrolled(alreadyScrolled);
+    gsap.set(headerRef.current, { height: alreadyScrolled ? 64 : initialH });
 
     const onScroll = () => {
       const past = window.scrollY > 80;
-      if (past === scrolled) return;
+      if (past === scrolledRef.current) return;
+      scrolledRef.current = past;
       setScrolled(past);
       gsap.to(headerRef.current, {
         height: past ? 64 : initialH,
@@ -172,7 +180,6 @@ export function Header() {
 
     window.addEventListener("scroll", onScroll, { passive: true });
     return () => window.removeEventListener("scroll", onScroll);
-  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isHeroPage]);
 
   // Body scroll lock when mobile menu open
