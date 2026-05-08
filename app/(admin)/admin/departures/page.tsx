@@ -4,6 +4,9 @@ import { StatusBadge } from '@/components/admin/status-badge';
 import { EmptyState } from '@/components/admin/empty-state';
 import { CalendarDays, Plus } from 'lucide-react';
 
+export const dynamic = 'force-dynamic';
+export const revalidate = 0;
+
 export default async function DeparturesPage() {
   const departures = await getDepartures();
   const upcoming = departures.filter((d) => d.status !== 'CANCELLED');

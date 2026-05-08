@@ -7,5 +7,6 @@ export async function getDestinations() {
 }
 
 export async function getDestinationById(id: number) {
-  return db.query.destinations.findFirst({ where: eq(destinations.id, id) });
+  const [row] = await db.select().from(destinations).where(eq(destinations.id, id));
+  return row ?? null;
 }

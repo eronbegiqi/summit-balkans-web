@@ -5,6 +5,9 @@ import { StatusBadge } from '@/components/admin/status-badge';
 import { UnitStatusSelect } from '@/components/admin/inventory/unit-status-select';
 import { ArrowLeft } from 'lucide-react';
 
+export const dynamic = 'force-dynamic';
+export const revalidate = 0;
+
 type Props = { params: Promise<{ id: string }> };
 
 export default async function GearUnitDetailPage({ params }: Props) {

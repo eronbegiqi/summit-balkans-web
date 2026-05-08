@@ -7,20 +7,27 @@ export type BlogPostWithAuthor = typeof blogPosts.$inferSelect & {
 };
 
 export async function getBlogPosts(): Promise<BlogPostWithAuthor[]> {
-  const posts = await db.select().from(blogPosts).orderBy(desc(blogPosts.createdAt));
-  const authorIds = [...new Set(posts.map((p) => p.authorId).filter((id): id is number => id !== null))];
+  const rows = await db.select().from(blogPosts).orderBy(desc(blogPosts.createdAt));
+
+  const authorIds = [...new Set(rows.map((r) => r.authorId).filter((id): id is number => id !== null))];
   const authors = authorIds.length
     ? await db.select().from(adminUsers).where(inArray(adminUsers.id, authorIds))
     : [];
-  const authorMap = new Map(authors.map((a) => [a.id, a]));
-  return posts.map((p) => ({ ...p, author: p.authorId ? (authorMap.get(p.authorId) ?? null) : null }));
+  const authorsMap = Object.fromEntries(authors.map((a) => [a.id, a]));
+
+  return rows.map((r) => ({
+    ...r,
+    author: r.authorId ? (authorsMap[r.authorId] ?? null) : null,
+  }));
 }
 
 export async function getBlogPostById(id: number): Promise<BlogPostWithAuthor | null> {
-  const [post] = await db.select().from(blogPosts).where(eq(blogPosts.id, id)).limit(1);
-  if (!post) return null;
-  const author = post.authorId
-    ? ((await db.select().from(adminUsers).where(eq(adminUsers.id, post.authorId)).limit(1))[0] ?? null)
+  const [row] = await db.select().from(blogPosts).where(eq(blogPosts.id, id));
+  if (!row) return null;
+
+  const author = row.authorId
+    ? ((await db.select().from(adminUsers).where(eq(adminUsers.id, row.authorId)))[0] ?? null)
     : null;
-  return { ...post, author };
+
+  return { ...row, author };
 }

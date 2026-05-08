@@ -4,6 +4,9 @@ import { StatusBadge } from '@/components/admin/status-badge';
 import { EmptyState } from '@/components/admin/empty-state';
 import { Calendar } from 'lucide-react';
 
+export const dynamic = 'force-dynamic';
+export const revalidate = 0;
+
 const BOOKING_STATUSES = ['NEW', 'CONFIRMED', 'PRE_TRIP', 'IN_PROGRESS', 'COMPLETED', 'CANCELLED'];
 const PAYMENT_STATUSES = ['PENDING', 'DEPOSIT_PAID', 'PAID', 'REFUNDED', 'FAILED'];
 

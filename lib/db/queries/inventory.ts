@@ -113,10 +113,12 @@ export async function getGearUnitsWithRentals(gearItemId?: number): Promise<Gear
 }
 
 export async function getGearUnitById(id: number) {
-  const [unit] = await db.select().from(gearUnits).where(eq(gearUnits.id, id)).limit(1);
+  const [unit] = await db.select().from(gearUnits).where(eq(gearUnits.id, id));
   if (!unit) return null;
-  const [item] = await db.select().from(gearItems).where(eq(gearItems.id, unit.gearItemId)).limit(1);
+
+  const [item] = await db.select().from(gearItems).where(eq(gearItems.id, unit.gearItemId));
   const rentals = await db.select().from(gearRentals).where(eq(gearRentals.gearUnitId, id));
+
   return { ...unit, gearItem: item, rentals };
 }
 

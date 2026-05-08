@@ -3,6 +3,9 @@ import { getTourById } from '@/lib/db/queries/tours';
 import { getGuides } from '@/lib/db/queries/guides';
 import { TourForm } from '@/components/admin/tours/tour-form';
 
+export const dynamic = 'force-dynamic';
+export const revalidate = 0;
+
 type Props = { params: Promise<{ id: string }> };
 
 export default async function TourEditPage({ params }: Props) {

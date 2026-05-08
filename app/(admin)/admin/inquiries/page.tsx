@@ -4,6 +4,9 @@ import { StatusBadge } from '@/components/admin/status-badge';
 import { EmptyState } from '@/components/admin/empty-state';
 import { Inbox } from 'lucide-react';
 
+export const dynamic = 'force-dynamic';
+export const revalidate = 0;
+
 const TYPES = ['', 'CONTACT', 'PRIVATE_TRIP', 'TRIP_ALERT', 'GEAR_RENTAL', 'PRESS'] as const;
 const TYPE_LABELS: Record<string, string> = {
   '': 'All',

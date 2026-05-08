@@ -4,6 +4,9 @@ import { toggleBlogPublished } from '@/lib/actions/content';
 import { EmptyState } from '@/components/admin/empty-state';
 import { FileText, Plus } from 'lucide-react';
 
+export const dynamic = 'force-dynamic';
+export const revalidate = 0;
+
 const CATEGORY_LABELS: Record<string, string> = {
   TRAVEL_TIPS: 'Travel Tips',
   DESTINATION_GUIDE: 'Destination Guide',
