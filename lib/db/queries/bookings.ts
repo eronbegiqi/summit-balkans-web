@@ -40,19 +40,19 @@ export async function getBookings(filters: BookingFilters = {}) {
   const { status, paymentStatus, search, page = 1, pageSize = 25 } = filters;
   const offset = (page - 1) * pageSize;
 
-  const rows = await db.execute(sql`
+  const [rows] = await db.execute(sql`
     SELECT
       b.id,
-      b.booking_reference,
-      CONCAT(c.first_name, ' ', c.last_name) AS customer_name,
-      c.email AS customer_email,
-      t.title AS tour_title,
-      d.start_date AS departure_date,
-      b.total_eur,
-      b.payment_status,
+      b.booking_reference   AS bookingReference,
+      CONCAT(c.first_name, ' ', c.last_name) AS customerName,
+      c.email               AS customerEmail,
+      t.title               AS tourTitle,
+      d.start_date          AS departureDate,
+      b.total_eur           AS totalEur,
+      b.payment_status      AS paymentStatus,
       b.status,
-      b.booking_source,
-      b.created_at
+      b.booking_source      AS bookingSource,
+      b.created_at          AS createdAt
     FROM bookings b
     JOIN customers c ON c.id = b.customer_id
     JOIN tours t ON t.id = b.tour_id
@@ -65,7 +65,7 @@ export async function getBookings(filters: BookingFilters = {}) {
     LIMIT ${pageSize} OFFSET ${offset}
   `);
 
-  const countRows = await db.execute(sql`
+  const [countRows] = await db.execute(sql`
     SELECT COUNT(*) AS total
     FROM bookings b
     JOIN customers c ON c.id = b.customer_id
