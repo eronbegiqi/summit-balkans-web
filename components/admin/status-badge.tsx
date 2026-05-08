@@ -54,6 +54,7 @@ type Props = {
 };
 
 export function StatusBadge({ status, className }: Props) {
+  if (!status) return null;
   const variant = statusMap[status] ?? 'gray';
   return (
     <span

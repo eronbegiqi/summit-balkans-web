@@ -93,7 +93,7 @@ export async function getDashboardStats(): Promise<DashboardStats> {
 
 export async function getBookingsChartData(): Promise<MonthlyPoint[]> {
   return safeQuery(async () => {
-    const rows = await db.execute(sql`
+    const [rows] = await db.execute(sql`
       SELECT DATE_FORMAT(created_at, '%Y-%m') AS month, COUNT(*) AS value
       FROM bookings
       WHERE created_at >= DATE_SUB(NOW(), INTERVAL 6 MONTH)
@@ -107,7 +107,7 @@ export async function getBookingsChartData(): Promise<MonthlyPoint[]> {
 
 export async function getRevenueChartData(): Promise<MonthlyPoint[]> {
   return safeQuery(async () => {
-    const rows = await db.execute(sql`
+    const [rows] = await db.execute(sql`
       SELECT DATE_FORMAT(created_at, '%Y-%m') AS month, COALESCE(SUM(paid_amount_eur), 0) AS value
       FROM bookings
       WHERE created_at >= DATE_SUB(NOW(), INTERVAL 6 MONTH)
@@ -121,17 +121,17 @@ export async function getRevenueChartData(): Promise<MonthlyPoint[]> {
 
 export async function getRecentBookings(): Promise<RecentBooking[]> {
   return safeQuery(async () => {
-    const rows = await db.execute(sql`
+    const [rows] = await db.execute(sql`
       SELECT
         b.id,
-        b.booking_reference,
-        CONCAT(c.first_name, ' ', c.last_name) AS customer_name,
-        t.title AS tour_title,
-        d.start_date AS departure_date,
-        b.total_eur,
-        b.payment_status,
+        b.booking_reference   AS bookingReference,
+        CONCAT(c.first_name, ' ', c.last_name) AS customerName,
+        t.title               AS tourTitle,
+        d.start_date          AS departureDate,
+        b.total_eur           AS totalEur,
+        b.payment_status      AS paymentStatus,
         b.status,
-        b.created_at
+        b.created_at          AS createdAt
       FROM bookings b
       JOIN customers c ON c.id = b.customer_id
       JOIN tours t ON t.id = b.tour_id
@@ -145,8 +145,8 @@ export async function getRecentBookings(): Promise<RecentBooking[]> {
 
 export async function getRecentInquiries() {
   return safeQuery(async () => {
-    const rows = await db.execute(sql`
-      SELECT id, type, name, email, status, created_at
+    const [rows] = await db.execute(sql`
+      SELECT id, type, name, email, status, created_at AS createdAt
       FROM inquiries
       ORDER BY created_at DESC
       LIMIT 5
@@ -157,15 +157,15 @@ export async function getRecentInquiries() {
       name: string;
       email: string;
       status: string;
-      created_at: Date;
+      createdAt: Date;
     }>;
   }, []);
 }
 
 export async function getUpcomingDepartures(): Promise<UpcomingDeparture[]> {
   return safeQuery(async () => {
-    const rows = await db.execute(sql`
-      SELECT d.id, t.title AS tour_title, d.start_date, d.capacity, d.booked_count, d.status
+    const [rows] = await db.execute(sql`
+      SELECT d.id, t.title AS tourTitle, d.start_date AS startDate, d.capacity, d.booked_count AS bookedCount, d.status
       FROM departures d
       JOIN tours t ON t.id = d.tour_id
       WHERE d.start_date >= CURDATE()

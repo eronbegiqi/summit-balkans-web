@@ -20,6 +20,16 @@ function getDb(): AppDb {
     connectionLimit: 10,
     waitForConnections: true,
     queueLimit: 0,
+    // mysql2 prepared statements return JSON columns as raw strings.
+    // This typeCast ensures JSON is always parsed into JS objects.
+    typeCast: (field, next) => {
+      if (field.type === 'JSON') {
+        const val = field.string();
+        if (val == null) return null;
+        try { return JSON.parse(val); } catch { return val; }
+      }
+      return next();
+    },
   });
 
   _db = drizzle(pool, { schema, mode: 'default' }) as AppDb;
