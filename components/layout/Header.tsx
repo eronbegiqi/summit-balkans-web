@@ -301,20 +301,6 @@ export function Header() {
             <Phone className="w-4 h-4" strokeWidth={1.5} />
           </a>
 
-          <a
-            href={CONTACT.whatsapp}
-            target="_blank"
-            rel="noopener noreferrer"
-            className={cn(
-              "flex items-center gap-1.5 text-sm font-medium px-4 py-2.5 rounded-lg no-underline border transition-all",
-              solidState
-                ? "text-ink border-mist hover:border-ink"
-                : "text-white border-white/35 hover:border-white/65 hover:bg-white/6"
-            )}
-          >
-            WhatsApp
-          </a>
-
           <Link
             href="/tours"
             className="bg-brand text-white text-sm font-semibold px-5 py-2.5 rounded-lg no-underline hover:bg-brand/90 transition-colors"
@@ -448,14 +434,6 @@ export function Header() {
             >
               Book a Trip
             </Link>
-            <a
-              href={CONTACT.whatsapp}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="flex-1 border-2 border-white/20 text-white text-center py-4 rounded-xl font-medium text-sm no-underline hover:border-white/40 transition-colors"
-            >
-              WhatsApp
-            </a>
           </div>
 
           {/* Contact info */}

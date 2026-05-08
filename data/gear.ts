@@ -9,6 +9,11 @@ export const gearItems: GearItem[] = [
     description: "Lightweight 3-season tent suitable for Balkans conditions. Easy single-person setup.",
     specs: { Weight: "1.8 kg", "Packed size": "45 × 18 cm", Capacity: "2 person", "Season rating": "3-season" },
     image: "https://images.unsplash.com/photo-1504280390367-361c6d9f38f4?w=800&q=80",
+    images: [
+      "https://images.unsplash.com/photo-1504280390367-361c6d9f38f4?w=800&q=80",
+      "https://images.unsplash.com/photo-1487730116645-74489c55bc2c?w=800&q=80",
+      "https://images.unsplash.com/photo-1478131143081-80f7f84ca84d?w=800&q=80",
+    ],
     tags: ["Camping", "Shelter"],
   },
   {
@@ -19,6 +24,11 @@ export const gearItems: GearItem[] = [
     description: "Down-filled sleeping bag, comfort rating 0°C. Suitable for Balkans summers including high-altitude nights.",
     specs: { "Comfort rating": "0°C", "Limit rating": "-5°C", Fill: "750fp down", Weight: "1.1 kg" },
     image: "https://images.unsplash.com/photo-1464207687429-7505649dae38?w=800&q=80",
+    images: [
+      "https://images.unsplash.com/photo-1464207687429-7505649dae38?w=800&q=80",
+      "https://images.unsplash.com/photo-1510312305653-8ed496efae75?w=800&q=80",
+      "https://images.unsplash.com/photo-1487730116645-74489c55bc2c?w=800&q=80",
+    ],
     tags: ["Camping", "Sleep"],
   },
   {
@@ -29,6 +39,11 @@ export const gearItems: GearItem[] = [
     description: "Aluminium telescopic poles with cork grips. Essential for the steeper passes on the Peaks trail.",
     specs: { Material: "Aluminium", "Length range": "65–135 cm", Weight: "520 g/pair", Tip: "Carbide" },
     image: "https://images.unsplash.com/photo-1551632811-561732d1e306?w=800&q=80",
+    images: [
+      "https://images.unsplash.com/photo-1551632811-561732d1e306?w=800&q=80",
+      "https://images.unsplash.com/photo-1516592673884-4a382d1124c2?w=800&q=80",
+      "https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?w=800&q=80",
+    ],
     tags: ["Hiking", "Support"],
   },
   {
@@ -39,6 +54,11 @@ export const gearItems: GearItem[] = [
     description: "300-lumen rechargeable headlamp. USB-C charging included.",
     specs: { Lumens: "300 max", Battery: "USB-C rechargeable", "Beam distance": "80 m", Weight: "86 g" },
     image: "https://images.unsplash.com/photo-1416879595882-3373a0480b5b?w=800&q=80",
+    images: [
+      "https://images.unsplash.com/photo-1416879595882-3373a0480b5b?w=800&q=80",
+      "https://images.unsplash.com/photo-1519681393784-d120267933ba?w=800&q=80",
+      "https://images.unsplash.com/photo-1547483238-f400e65ccd56?w=800&q=80",
+    ],
     tags: ["Safety", "Night"],
   },
   {
@@ -49,6 +69,11 @@ export const gearItems: GearItem[] = [
     description: "Comfortable 30L daypack with hydration sleeve. Ideal for day hikes when your main bag is transferred.",
     specs: { Volume: "30 L", "Back system": "Ventilated panel", "Hydration slot": "Yes", Weight: "780 g" },
     image: "https://images.unsplash.com/photo-1553062407-98eeb64c6a62?w=800&q=80",
+    images: [
+      "https://images.unsplash.com/photo-1553062407-98eeb64c6a62?w=800&q=80",
+      "https://images.unsplash.com/photo-1622260614153-03223fb72052?w=800&q=80",
+      "https://images.unsplash.com/photo-1491553895911-0055eca6402d?w=800&q=80",
+    ],
     tags: ["Hiking", "Carry"],
   },
   {
@@ -59,6 +84,11 @@ export const gearItems: GearItem[] = [
     description: "2.5-layer waterproof breathable jacket. Packs into its own pocket.",
     specs: { Waterproofing: "20,000 mm", Breathability: "15,000 g/m²/24h", Weight: "380 g", "Pack size": "18 × 12 cm" },
     image: "https://images.unsplash.com/photo-1540575467063-178a50c2df87?w=800&q=80",
+    images: [
+      "https://images.unsplash.com/photo-1540575467063-178a50c2df87?w=800&q=80",
+      "https://images.unsplash.com/photo-1520038410233-7141be7e6f97?w=800&q=80",
+      "https://images.unsplash.com/photo-1578662996442-48f60103fc96?w=800&q=80",
+    ],
     sizes: ["XS", "S", "M", "L", "XL"],
     tags: ["Clothing", "Weather"],
   },
@@ -70,6 +100,11 @@ export const gearItems: GearItem[] = [
     description: "10-point strap-on crampons for early season snow crossings. Compatible with most hiking boots.",
     specs: { Points: "10", Compatibility: "Strap-on (universal)", Material: "Steel", Weight: "920 g/pair" },
     image: "https://images.unsplash.com/photo-1534351590666-13e3e96b5017?w=800&q=80",
+    images: [
+      "https://images.unsplash.com/photo-1534351590666-13e3e96b5017?w=800&q=80",
+      "https://images.unsplash.com/photo-1551698618-1dfe5d97d256?w=800&q=80",
+      "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800&q=80",
+    ],
     tags: ["Snow", "Safety"],
   },
   {
@@ -80,6 +115,11 @@ export const gearItems: GearItem[] = [
     description: "Full-featured 65L hiking pack with hip-belt pockets and integrated rain cover. Fits most bodies.",
     specs: { Volume: "65 L", "Back system": "Adjustable torso", "Rain cover": "Integrated", Weight: "1.6 kg" },
     image: "https://images.unsplash.com/photo-1553062407-98eeb64c6a62?w=800&q=80",
+    images: [
+      "https://images.unsplash.com/photo-1553062407-98eeb64c6a62?w=800&q=80",
+      "https://images.unsplash.com/photo-1622260614153-03223fb72052?w=800&q=80",
+      "https://images.unsplash.com/photo-1491553895911-0055eca6402d?w=800&q=80",
+    ],
     sizes: ["S/M", "M/L"],
     tags: ["Hiking", "Carry"],
   },

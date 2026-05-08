@@ -16,7 +16,7 @@ interface ToggleRowProps {
 function ToggleRow({ label, description, checked, onChange, locked }: ToggleRowProps) {
   return (
     <div className="flex items-start justify-between gap-4 py-3 border-b border-white/20 last:border-0">
-      <div>
+      <div className="min-w-0 flex-1">
         <div className="text-sm font-medium text-white">{label}</div>
         <div className="text-xs text-white/45 mt-0.5 leading-relaxed">{description}</div>
       </div>
@@ -26,12 +26,12 @@ function ToggleRow({ label, description, checked, onChange, locked }: ToggleRowP
         aria-checked={checked}
         disabled={locked}
         onClick={() => onChange?.(!checked)}
-        className={`flex-shrink-0 w-10 h-6 rounded-full transition-colors duration-200 relative mt-0.5 border-none cursor-pointer ${
+        className={`flex-shrink-0 w-10 h-6 rounded-full transition-colors duration-200 relative mt-0.5 border-none cursor-pointer overflow-hidden ${
           checked ? "bg-brand" : "bg-white/15"
         } ${locked ? "opacity-50 cursor-not-allowed" : ""}`}
       >
         <span
-          className={`absolute top-1 w-4 h-4 rounded-full bg-white transition-transform duration-200 ${
+          className={`absolute top-1 left-0 w-4 h-4 rounded-full bg-white transition-transform duration-200 ${
             checked ? "translate-x-5" : "translate-x-1"
           }`}
         />

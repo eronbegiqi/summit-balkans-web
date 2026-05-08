@@ -161,7 +161,7 @@ export function RouteMap() {
   }, [filter, loaded]);
 
   return (
-    <section id="route" className="py-20 md:py-28 bg-bone">
+    <section id="route" className="py-20 md:py-28 bg-bone isolate">
       <div className="max-w-content mx-auto px-5 md:px-10">
         <div className="mb-10">
           <div className="font-mono text-[11px] font-medium tracking-[0.14em] uppercase text-terra mb-3">
