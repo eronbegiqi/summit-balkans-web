@@ -6,6 +6,9 @@ import { PublishToggle } from '@/components/admin/publish-toggle';
 import Link from 'next/link';
 import { ArrowLeft } from 'lucide-react';
 
+export const dynamic = 'force-dynamic';
+export const revalidate = 0;
+
 type Props = { params: Promise<{ id: string }> };
 
 export default async function DestinationEditPage({ params }: Props) {

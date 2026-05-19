@@ -49,6 +49,7 @@ export interface GearItem {
   description: string;
   specs: Record<string, string>;
   image: string;
+  images?: string[];
   sizes?: string[];
   tags: string[];
 }

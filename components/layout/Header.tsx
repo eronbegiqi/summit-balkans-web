@@ -152,15 +152,23 @@ export function Header() {
   const isHeroPage = HERO_PAGES.includes(pathname);
   const solidState = scrolled || !isHeroPage;
 
-  // GSAP scroll animation
+  // GSAP scroll animation — use a ref to avoid stale closure on scrolled state
+  const scrolledRef = useRef(false);
+
   useEffect(() => {
     if (!headerRef.current) return;
     const initialH = isHeroPage ? 96 : 64;
-    gsap.set(headerRef.current, { height: initialH });
+
+    // Sync with actual scroll position on mount (browser may restore scroll)
+    const alreadyScrolled = window.scrollY > 80;
+    scrolledRef.current = alreadyScrolled;
+    setScrolled(alreadyScrolled);
+    gsap.set(headerRef.current, { height: alreadyScrolled ? 64 : initialH });
 
     const onScroll = () => {
       const past = window.scrollY > 80;
-      if (past === scrolled) return;
+      if (past === scrolledRef.current) return;
+      scrolledRef.current = past;
       setScrolled(past);
       gsap.to(headerRef.current, {
         height: past ? 64 : initialH,
@@ -172,7 +180,6 @@ export function Header() {
 
     window.addEventListener("scroll", onScroll, { passive: true });
     return () => window.removeEventListener("scroll", onScroll);
-  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isHeroPage]);
 
   // Body scroll lock when mobile menu open
@@ -299,20 +306,6 @@ export function Header() {
             )}
           >
             <Phone className="w-4 h-4" strokeWidth={1.5} />
-          </a>
-
-          <a
-            href={CONTACT.whatsapp}
-            target="_blank"
-            rel="noopener noreferrer"
-            className={cn(
-              "flex items-center gap-1.5 text-sm font-medium px-4 py-2.5 rounded-lg no-underline border transition-all",
-              solidState
-                ? "text-ink border-mist hover:border-ink"
-                : "text-white border-white/35 hover:border-white/65 hover:bg-white/6"
-            )}
-          >
-            WhatsApp
           </a>
 
           <Link
@@ -448,14 +441,6 @@ export function Header() {
             >
               Book a Trip
             </Link>
-            <a
-              href={CONTACT.whatsapp}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="flex-1 border-2 border-white/20 text-white text-center py-4 rounded-xl font-medium text-sm no-underline hover:border-white/40 transition-colors"
-            >
-              WhatsApp
-            </a>
           </div>
 
           {/* Contact info */}

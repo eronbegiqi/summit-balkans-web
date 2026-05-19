@@ -6,13 +6,16 @@ import { saveGearItem } from '@/lib/actions/content';
 import Link from 'next/link';
 import { ArrowLeft } from 'lucide-react';
 
+export const dynamic = 'force-dynamic';
+export const revalidate = 0;
+
 type Props = { params: Promise<{ id: string }> };
 
 const CATEGORIES = ['Shelter', 'Sleep System', 'Clothing', 'Navigation', 'Cooking', 'Lighting', 'Safety', 'Other'] as const;
 
 export default async function GearItemEditPage({ params }: Props) {
   const { id } = await params;
-  const item = await db.query.gearItems.findFirst({ where: eq(gearItems.id, parseInt(id)) });
+  const [item] = await db.select().from(gearItems).where(eq(gearItems.id, parseInt(id)));
   if (!item) notFound();
 
   const [unitCountRow] = await db.select({ count: sql<number>`count(*)` }).from(gearUnits).where(eq(gearUnits.gearItemId, item.id));

@@ -11,6 +11,9 @@ import {
 import { BookingsBarChart, RevenueLineChart } from '@/components/admin/dashboard/charts';
 import { StatusBadge } from '@/components/admin/status-badge';
 
+export const dynamic = 'force-dynamic';
+export const revalidate = 0;
+
 export default async function DashboardPage() {
   const [stats, bookingsChart, revenueChart, recentBookings, recentInquiries, upcomingDepartures] =
     await Promise.all([

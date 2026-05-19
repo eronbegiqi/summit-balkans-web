@@ -9,5 +9,6 @@ export async function getGuides() {
 }
 
 export async function getGuideById(id: number) {
-  return db.query.guides.findFirst({ where: eq(guides.id, id) });
+  const [row] = await db.select().from(guides).where(eq(guides.id, id));
+  return row ?? null;
 }

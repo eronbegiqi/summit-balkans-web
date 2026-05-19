@@ -37,6 +37,44 @@ const eras = [
   },
 ];
 
+function EraCard({ era, index }: { era: typeof eras[0]; index: number }) {
+  return (
+    <div className="flex-shrink-0 w-[min(calc(100vw-40px),340px)] md:w-[520px] bg-white/[0.05] border border-white/10 rounded-card-hero overflow-hidden">
+      <div className="relative h-52 overflow-hidden">
+        {/* eslint-disable-next-line @next/next/no-img-element */}
+        <img
+          src={era.image}
+          alt={era.title}
+          className="w-full h-full object-cover opacity-60"
+        />
+        <div className="absolute inset-0 bg-gradient-to-t from-ink/80 to-transparent" />
+        <div className="absolute bottom-4 left-6">
+          <span className="font-mono text-[10px] uppercase tracking-[0.18em] text-white/50">
+            {String(index + 1).padStart(2, "0")} / {String(eras.length).padStart(2, "0")}
+          </span>
+        </div>
+      </div>
+      <div className="p-6">
+        <div className="font-mono text-[11px] font-semibold tracking-[0.14em] uppercase text-terra mb-2">
+          {era.period}
+        </div>
+        <h3 className="font-fraunces text-2xl font-bold text-white mb-3 tracking-tight">
+          {era.title}
+        </h3>
+        <p className="text-white/55 text-[14px] leading-[1.75] mb-5">{era.desc}</p>
+        <ul className="space-y-2">
+          {era.details.map((d) => (
+            <li key={d} className="flex items-start gap-2.5 text-[13px] text-white/45">
+              <span className="text-terra mt-0.5 flex-shrink-0">—</span>
+              {d}
+            </li>
+          ))}
+        </ul>
+      </div>
+    </div>
+  );
+}
+
 export function HistoricalTimeline() {
   const sectionRef = useRef<HTMLElement>(null);
   const pinRef = useRef<HTMLDivElement>(null);
@@ -48,22 +86,29 @@ export function HistoricalTimeline() {
     const mm = gsap.matchMedia();
 
     mm.add("(min-width: 768px)", () => {
-      const totalScroll = trackRef.current!.scrollWidth - window.innerWidth + 80;
+      // Wait one frame for layout to settle before measuring
+      const raf = requestAnimationFrame(() => {
+        if (!trackRef.current || !sectionRef.current || !pinRef.current) return;
+        const totalScroll = trackRef.current.scrollWidth - window.innerWidth + 80;
 
-      const tl = gsap.timeline({
-        scrollTrigger: {
-          trigger: sectionRef.current,
-          start: "top top",
-          end: `+=${totalScroll}`,
-          pin: pinRef.current,
-          scrub: 1,
-          anticipatePin: 1,
-        },
+        const tl = gsap.timeline({
+          scrollTrigger: {
+            trigger: sectionRef.current,
+            start: "top top",
+            end: `+=${totalScroll}`,
+            pin: pinRef.current,
+            scrub: 1.2,
+            anticipatePin: 1,
+            invalidateOnRefresh: true,
+          },
+        });
+
+        tl.to(trackRef.current, { x: -totalScroll, ease: "none" });
+
+        return () => tl.kill();
       });
 
-      tl.to(trackRef.current, { x: -totalScroll, ease: "none" });
-
-      return () => tl.kill();
+      return () => cancelAnimationFrame(raf);
     });
 
     return () => mm.revert();
@@ -73,13 +118,14 @@ export function HistoricalTimeline() {
     <section
       id="history"
       ref={sectionRef}
-      className="bg-ink overflow-hidden"
+      className="bg-ink"
       style={{
         backgroundImage:
           "url(\"data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M30 0 L60 30 L30 60 L0 30Z' fill='none' stroke='%23ffffff' stroke-width='0.3' opacity='0.04'/%3E%3C/svg%3E\")",
       }}
     >
-      <div ref={pinRef} className="py-20 md:py-28">
+      {/* ── Desktop: GSAP horizontal scroll ── */}
+      <div ref={pinRef} className="py-20 md:py-28 hidden md:block overflow-hidden">
         <div className="max-w-content mx-auto px-5 md:px-10 mb-12">
           <div className="font-mono text-[11px] font-medium tracking-[0.14em] uppercase text-terra mb-3">
             The Story
@@ -89,60 +135,35 @@ export function HistoricalTimeline() {
           </h2>
         </div>
 
-        {/* Horizontal scroll track */}
-        <div ref={trackRef} className="flex gap-6 px-5 md:px-10 pb-8 md:will-change-transform">
+        <div ref={trackRef} className="flex gap-6 px-5 md:px-10 pb-8 will-change-transform">
           {eras.map((era, i) => (
-            <div
-              key={era.period}
-              className="flex-shrink-0 w-[calc(100vw-40px)] md:w-[520px] bg-white/[0.05] border border-white/10 rounded-card-hero overflow-hidden"
-            >
-              {/* Image */}
-              <div className="relative h-52 overflow-hidden">
-                {/* eslint-disable-next-line @next/next/no-img-element */}
-                <img
-                  src={era.image}
-                  alt={era.title}
-                  className="w-full h-full object-cover opacity-60"
-                />
-                <div className="absolute inset-0 bg-gradient-to-t from-ink/80 to-transparent" />
-                <div className="absolute bottom-4 left-6">
-                  <span className="font-mono text-[10px] uppercase tracking-[0.18em] text-white/50">
-                    {String(i + 1).padStart(2, "0")} / {String(eras.length).padStart(2, "0")}
-                  </span>
-                </div>
-              </div>
-
-              {/* Content */}
-              <div className="p-6">
-                <div className="font-mono text-[11px] font-semibold tracking-[0.14em] uppercase text-terra mb-2">
-                  {era.period}
-                </div>
-                <h3 className="font-fraunces text-2xl font-bold text-white mb-3 tracking-tight">
-                  {era.title}
-                </h3>
-                <p className="text-white/55 text-[14px] leading-[1.75] mb-5">{era.desc}</p>
-                <ul className="space-y-2">
-                  {era.details.map((d) => (
-                    <li key={d} className="flex items-start gap-2.5 text-[13px] text-white/45">
-                      <span className="text-terra mt-0.5 flex-shrink-0">—</span>
-                      {d}
-                    </li>
-                  ))}
-                </ul>
-              </div>
-            </div>
+            <EraCard key={era.period} era={era} index={i} />
           ))}
-
-          {/* End spacer */}
-          <div className="flex-shrink-0 w-10 md:w-20" />
+          <div className="flex-shrink-0 w-20" />
         </div>
 
-        {/* Scroll hint — desktop only */}
-        <div className="hidden md:flex items-center gap-2 px-10 mt-2">
+        <div className="flex items-center gap-2 px-10 mt-2">
           <div className="w-12 h-px bg-white/20" />
           <span className="font-mono text-[10px] text-white/25 uppercase tracking-widest">
             Scroll to explore
           </span>
+        </div>
+      </div>
+
+      {/* ── Mobile: vertical stack ── */}
+      <div className="md:hidden py-16 px-5">
+        <div className="mb-10">
+          <div className="font-mono text-[11px] font-medium tracking-[0.14em] uppercase text-terra mb-3">
+            The Story
+          </div>
+          <h2 className="font-fraunces text-[clamp(2rem,8vw,2.8rem)] font-bold tracking-tight text-white">
+            How the trail was born
+          </h2>
+        </div>
+        <div className="space-y-6">
+          {eras.map((era, i) => (
+            <EraCard key={era.period} era={era} index={i} />
+          ))}
         </div>
       </div>
     </section>

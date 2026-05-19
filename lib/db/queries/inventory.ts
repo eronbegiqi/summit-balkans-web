@@ -32,7 +32,7 @@ export type RentalForCalendar = {
 };
 
 export async function getGearItemsWithStats(): Promise<GearItemWithStats[]> {
-  const rows = await db.execute(sql`
+  const [rows] = await db.execute(sql`
     SELECT
       gi.*,
       COUNT(gu.id) AS total_units_count,
@@ -54,7 +54,7 @@ export async function getGearItemsWithStats(): Promise<GearItemWithStats[]> {
 }
 
 export async function getGearUnitsWithRentals(gearItemId?: number): Promise<GearUnitWithRental[]> {
-  const rows = await db.execute(sql`
+  const [rows] = await db.execute(sql`
     SELECT
       gu.*,
       gi.name AS gear_item_name,
@@ -113,14 +113,17 @@ export async function getGearUnitsWithRentals(gearItemId?: number): Promise<Gear
 }
 
 export async function getGearUnitById(id: number) {
-  return db.query.gearUnits.findFirst({
-    where: eq(gearUnits.id, id),
-    with: { gearItem: true, rentals: true },
-  });
+  const [unit] = await db.select().from(gearUnits).where(eq(gearUnits.id, id));
+  if (!unit) return null;
+
+  const [item] = await db.select().from(gearItems).where(eq(gearItems.id, unit.gearItemId));
+  const rentals = await db.select().from(gearRentals).where(eq(gearRentals.gearUnitId, id));
+
+  return { ...unit, gearItem: item, rentals };
 }
 
 export async function getRentalsForCalendar(daysAhead = 60): Promise<RentalForCalendar[]> {
-  const rows = await db.execute(sql`
+  const [rows] = await db.execute(sql`
     SELECT
       gu.id AS unit_id,
       gu.unit_code,
@@ -144,7 +147,7 @@ export async function getRentalsForCalendar(daysAhead = 60): Promise<RentalForCa
 }
 
 export async function getLateRentals() {
-  const rows = await db.execute(sql`
+  const [rows] = await db.execute(sql`
     SELECT
       gr.id,
       gr.expected_return_date,

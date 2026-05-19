@@ -3,6 +3,9 @@ import { getGearItemsWithStats } from '@/lib/db/queries/inventory';
 import { EmptyState } from '@/components/admin/empty-state';
 import { Backpack, Plus } from 'lucide-react';
 
+export const dynamic = 'force-dynamic';
+export const revalidate = 0;
+
 export default async function GearCatalogPage() {
   const items = await getGearItemsWithStats();
 

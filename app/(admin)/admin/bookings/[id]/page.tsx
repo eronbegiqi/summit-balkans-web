@@ -1,10 +1,14 @@
 import { notFound } from 'next/navigation';
 import Link from 'next/link';
 import { getBookingById } from '@/lib/db/queries/bookings';
+import { parseJsonField } from '@/lib/db/utils';
 import { StatusBadge } from '@/components/admin/status-badge';
 import { BookingStatusControls } from '@/components/admin/booking/status-controls';
 import { NotesEditor } from '@/components/admin/booking/notes-editor';
 import { ArrowLeft, Mail, Phone, User } from 'lucide-react';
+
+export const dynamic = 'force-dynamic';
+export const revalidate = 0;
 
 type Props = { params: Promise<{ id: string }> };
 
@@ -18,9 +22,9 @@ export default async function BookingDetailPage({ params }: Props) {
   const paidAmountEur = parseFloat(booking.paidAmountEur ?? '0');
   const depositAmountEur = booking.depositAmountEur ? parseFloat(booking.depositAmountEur) : null;
 
-  const travelers = (booking.travelersData as Array<{
+  const travelers = parseJsonField<Array<{
     firstName: string; lastName: string; email?: string; phone?: string; dietary?: string; fitnessLevel?: string;
-  }> | null) ?? [];
+  }>>(booking.travelersData, []);
 
   return (
     <div className="space-y-6">
@@ -158,7 +162,7 @@ export default async function BookingDetailPage({ params }: Props) {
                 {paymentTransactions.map((tx) => (
                   <div key={tx.id} className="flex items-center justify-between py-2 text-sm border-b border-gray-50 last:border-0">
                     <div>
-                      <p className="font-medium text-gray-700">{tx.transactionType.replace('_', ' ')} · {tx.paymentMethod}</p>
+                      <p className="font-medium text-gray-700">{tx.transactionType?.replace('_', ' ')} · {tx.paymentMethod}</p>
                       <p className="text-xs text-gray-400">{new Date(tx.createdAt).toLocaleDateString('en-GB')}</p>
                       {tx.externalReference && <p className="text-xs font-mono text-gray-400">{tx.externalReference}</p>}
                     </div>
