@@ -84,11 +84,13 @@ export function UpcomingDepartures() {
       {/* Scrollable row */}
       <div
         ref={scrollRef}
-        className="flex gap-4 md:gap-5 overflow-x-auto px-4 md:px-10 pb-4 snap-x snap-mandatory scroll-smooth"
+        className="flex gap-4 md:gap-5 overflow-x-auto pb-4 snap-x snap-mandatory scroll-smooth scroll-pl-4 md:scroll-pl-[max(2.5rem,_calc((100vw_-_1320px)_/_2_+_2.5rem))]"
         style={{ scrollbarWidth: "none" }}
         role="list"
         aria-label="Upcoming tour departures"
       >
+        {/* Leading spacer — aligns first card with section heading on all viewport widths */}
+        <div className="shrink-0 w-4 md:w-[max(2.5rem,_calc((100vw_-_1320px)_/_2_+_2.5rem))]" aria-hidden="true" />
         {departures.map((dep) => {
           const urgent = isLowAvailability(dep.spotsLeft);
           return (
@@ -149,6 +151,8 @@ export function UpcomingDepartures() {
             </div>
           );
         })}
+        {/* Trailing spacer */}
+        <div className="shrink-0 w-4 md:w-10" aria-hidden="true" />
       </div>
     </section>
   );
