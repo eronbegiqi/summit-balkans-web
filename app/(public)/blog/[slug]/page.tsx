@@ -1,8 +1,10 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import Link from "next/link";
-import { getBlogPostBySlug, getBlogPosts } from "@/lib/db/queries/blog";
+import { getBlogPostBySlug } from "@/lib/db/queries/blog";
 import { ArrowLeft, Clock } from "lucide-react";
+
+export const dynamic = "force-dynamic";
 
 const CATEGORY_LABELS: Record<string, string> = {
   TRAVEL_TIPS: "Travel Tips",
@@ -11,11 +13,6 @@ const CATEGORY_LABELS: Record<string, string> = {
   STORIES: "Stories",
   NEWS: "News",
 };
-
-export async function generateStaticParams() {
-  const posts = await getBlogPosts(true);
-  return posts.map((p) => ({ slug: p.slug }));
-}
 
 export async function generateMetadata({
   params,
