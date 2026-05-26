@@ -6,20 +6,25 @@ import { tours, tourStages, departures, guides } from "@/lib/db/schema";
 import { asc, eq, and, sql } from "drizzle-orm";
 import { DifficultyDots } from "@/components/ui/DifficultyDots";
 import { SectionLabel } from "@/components/ui/SectionLabel";
-import { TourStickyBar } from "@/components/tour/TourStickyBar";
 import { StagesAccordion } from "@/components/tour/StagesAccordion";
 import { EmergencyContactsCompact } from "@/components/sections/EmergencyContacts";
 import { formatPrice } from "@/lib/utils";
-import { Clock, Mountain, Users, ArrowRight, MapPin, CheckCircle2, XCircle } from "lucide-react";
+import { Clock, Mountain, Users, ArrowRight, MapPin, CheckCircle2, XCircle, Calendar } from "lucide-react";
 
 export const revalidate = 300;
 
 async function getTour(slug: string) {
-  const tour = await db.query.tours.findFirst({
-    where: and(eq(tours.slug, slug), eq(tours.published, true)),
-    with: { guide: true },
-  });
+  // Explicit selects — avoids the LATERAL JOIN that MariaDB doesn't support
+  const [tour] = await db
+    .select()
+    .from(tours)
+    .where(and(eq(tours.slug, slug), eq(tours.published, true)));
+
   if (!tour) return null;
+
+  const guide = tour.assignedGuideId
+    ? ((await db.select().from(guides).where(eq(guides.id, tour.assignedGuideId)))[0] ?? null)
+    : null;
 
   const today = new Date().toISOString().split("T")[0];
   const [stages, tourDepartures] = await Promise.all([
@@ -48,7 +53,7 @@ async function getTour(slug: string) {
       .orderBy(asc(departures.startDate)),
   ]);
 
-  return { tour, stages, departures: tourDepartures };
+  return { tour: { ...tour, guide }, stages, departures: tourDepartures };
 }
 
 export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }): Promise<Metadata> {
@@ -74,50 +79,23 @@ export default async function TourDetailPage({ params }: { params: Promise<{ slu
 
   const { tour, stages, departures: deps } = data;
   const isGuided = tour.tourType !== "SELF_GUIDED";
-  const price = isGuided ? Number(tour.pricePerPersonEur) : Number(tour.selfGuidedPriceEur ?? tour.pricePerPersonEur);
+  const price = isGuided
+    ? Number(tour.pricePerPersonEur)
+    : Number(tour.selfGuidedPriceEur ?? tour.pricePerPersonEur);
   const totalDistance = stages.reduce((sum, s) => sum + (s.distanceKm ? Number(s.distanceKm) : 0), 0);
   const totalGain = stages.reduce((sum, s) => sum + (s.elevationGainM ?? 0), 0);
   const maxElev = stages.reduce((max, s) => Math.max(max, s.highestPointM ?? 0), 0);
 
-  const firstDep = deps[0];
+  const typeLabel = tour.tourType === "SELF_GUIDED" ? "Self-Guided" : "Guided";
+  const variantLabel =
+    tour.tourVariant && tour.tourVariant !== "OTHER"
+      ? tour.tourVariant.charAt(0) + tour.tourVariant.slice(1).toLowerCase()
+      : null;
 
   return (
     <>
-      {/* Sticky booking bar */}
-      <TourStickyBar
-        tour={{
-          slug: tour.slug,
-          name: tour.title,
-          tagline: tour.excerpt ?? "",
-          country: tour.country ? [tour.country] : [],
-          duration: tour.durationDays,
-          difficulty: (tour.difficulty as 1|2|3|4|5),
-          priceFrom: price,
-          currency: "EUR",
-          coverImage: tour.featuredImageUrl ?? "",
-          images: [],
-          spotsTotal: tour.groupSizeMax ?? 12,
-          nextDeparture: firstDep ? String(firstDep.startDate) : "",
-          spotsLeft: firstDep ? firstDep.capacity - (firstDep.bookedCount ?? 0) : 0,
-          description: tour.excerpt ?? "",
-          highlights: [],
-        }}
-        nextDep={firstDep ? {
-          id: String(firstDep.id),
-          tourSlug: tour.slug,
-          startDate: String(firstDep.startDate),
-          endDate: String(firstDep.endDate),
-          guide: firstDep.guideName ?? "",
-          spotsTotal: firstDep.capacity,
-          spotsLeft: firstDep.capacity - (firstDep.bookedCount ?? 0),
-          price,
-          currency: "EUR",
-          status: (firstDep.capacity - (firstDep.bookedCount ?? 0)) <= 3 ? "low" : "available",
-        } : null}
-      />
-
       {/* Hero */}
-      <section className="relative h-[55vh] min-h-[400px] bg-dark overflow-hidden">
+      <section className="relative h-[55vh] min-h-[400px] bg-dark overflow-hidden pt-[72px]">
         {/* eslint-disable-next-line @next/next/no-img-element */}
         <img
           src={tour.featuredImageUrl ? `${tour.featuredImageUrl}&w=1400` : "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=1400&q=80"}
@@ -128,11 +106,11 @@ export default async function TourDetailPage({ params }: { params: Promise<{ slu
         <div className="absolute bottom-0 left-0 right-0 max-w-content mx-auto px-6 md:px-10 pb-10">
           <div className="flex gap-2 mb-3">
             <span className="font-mono text-[11px] font-semibold px-2 py-1 rounded tracking-[0.06em] uppercase bg-brand text-white">
-              {isGuided ? "Guided" : "Self-Guided"}
+              {typeLabel}
             </span>
-            {tour.tourVariant && tour.tourVariant !== "OTHER" && (
+            {variantLabel && (
               <span className="font-mono text-[11px] font-medium px-2 py-1 rounded tracking-[0.06em] uppercase bg-white/15 text-white">
-                {tour.tourVariant.charAt(0) + tour.tourVariant.slice(1).toLowerCase()}
+                {variantLabel}
               </span>
             )}
           </div>
@@ -150,20 +128,21 @@ export default async function TourDetailPage({ params }: { params: Promise<{ slu
           {totalDistance > 0 && <Stat label="Distance" value={`${totalDistance.toFixed(0)} km`} />}
           {totalGain > 0 && <Stat label="Elevation gain" value={`${totalGain.toLocaleString()} m`} />}
           {maxElev > 0 && <Stat label="Max elevation" value={`${maxElev.toLocaleString()} m`} />}
-          <Stat label="Difficulty" value={<DifficultyDots level={tour.difficulty as 1|2|3|4|5} className="mt-0.5" />} />
+          <Stat label="Difficulty" value={<DifficultyDots level={tour.difficulty as 1 | 2 | 3 | 4 | 5} className="mt-0.5" />} />
           {tour.minParticipants && <Stat label="Min. participants" value={String(tour.minParticipants)} />}
         </div>
       </div>
 
-      <div className="max-w-content mx-auto px-6 md:px-10 py-12 grid grid-cols-1 lg:grid-cols-[1fr_340px] gap-12">
+      <div className="max-w-content mx-auto px-6 md:px-10 py-12 grid grid-cols-1 lg:grid-cols-[1fr_320px] gap-12">
         {/* Main content */}
-        <div className="space-y-12">
+        <div className="space-y-14">
+
           {/* Description */}
           {tour.description && (
             <section>
               <SectionLabel>Overview</SectionLabel>
               <div
-                className="prose prose-ink max-w-none text-ink/80 leading-relaxed"
+                className="prose prose-ink max-w-none text-ink/80 leading-relaxed mt-4"
                 dangerouslySetInnerHTML={{ __html: tour.description }}
               />
             </section>
@@ -186,6 +165,102 @@ export default async function TourDetailPage({ params }: { params: Promise<{ slu
             </section>
           )}
 
+          {/* Dates & Prices */}
+          <section id="departures">
+            <SectionLabel>Dates &amp; Prices</SectionLabel>
+            <h2 className="font-fraunces text-2xl md:text-3xl font-bold tracking-tight mt-2 mb-6">
+              Choose your departure
+            </h2>
+            {deps.length > 0 ? (
+              <div className="overflow-x-auto">
+                <table className="w-full text-sm border-collapse">
+                  <thead>
+                    <tr className="border-b-2 border-divider text-left">
+                      <th className="pb-3 pr-6 font-mono text-[11px] uppercase tracking-[0.08em] text-ink/45 whitespace-nowrap">Dates</th>
+                      <th className="pb-3 pr-6 font-mono text-[11px] uppercase tracking-[0.08em] text-ink/45 whitespace-nowrap">Type</th>
+                      <th className="pb-3 pr-6 font-mono text-[11px] uppercase tracking-[0.08em] text-ink/45 whitespace-nowrap">Guide</th>
+                      <th className="pb-3 pr-6 font-mono text-[11px] uppercase tracking-[0.08em] text-ink/45 whitespace-nowrap">Availability</th>
+                      <th className="pb-3 font-mono text-[11px] uppercase tracking-[0.08em] text-ink/45 whitespace-nowrap text-right">Price</th>
+                      <th className="pb-3 pl-6"></th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {deps.map((dep) => {
+                      const spots = dep.capacity - (dep.bookedCount ?? 0);
+                      const soldOut = spots === 0;
+                      const low = spots > 0 && spots <= 3;
+                      const depPrice = dep.pricePerPersonEur ? Number(dep.pricePerPersonEur) : price;
+                      const start = String(dep.startDate);
+                      const end = String(dep.endDate);
+                      const startFmt = new Date(start).toLocaleDateString("en-GB", { day: "numeric", month: "short" });
+                      const endFmt = new Date(end).toLocaleDateString("en-GB", { day: "numeric", month: "short", year: "numeric" });
+
+                      return (
+                        <tr key={dep.id} className="border-b border-divider hover:bg-bone/50 transition-colors">
+                          <td className="py-4 pr-6 font-mono text-xs whitespace-nowrap">
+                            {startFmt} – {endFmt}
+                          </td>
+                          <td className="py-4 pr-6 whitespace-nowrap">
+                            <div className="flex flex-wrap gap-1">
+                              <span className="font-mono text-[10px] font-semibold px-2 py-0.5 rounded tracking-[0.06em] uppercase bg-brand/10 text-brand">
+                                {typeLabel}
+                              </span>
+                              {variantLabel && (
+                                <span className="font-mono text-[10px] px-2 py-0.5 rounded tracking-[0.06em] uppercase bg-ink/8 text-ink/60">
+                                  {variantLabel}
+                                </span>
+                              )}
+                            </div>
+                          </td>
+                          <td className="py-4 pr-6 text-ink/60 whitespace-nowrap">{dep.guideName ?? "TBC"}</td>
+                          <td className="py-4 pr-6 whitespace-nowrap">
+                            {soldOut ? (
+                              <span className="font-mono text-[11px] text-ink/35">Sold out</span>
+                            ) : (
+                              <span className={`font-mono text-[11px] font-medium ${low ? "text-amber-600" : "text-forest"}`}>
+                                {spots}/{dep.capacity} spots
+                                {low && (
+                                  <span className="ml-1.5 bg-gold text-ink text-[10px] px-1.5 py-0.5 rounded font-semibold">Low</span>
+                                )}
+                              </span>
+                            )}
+                          </td>
+                          <td className="py-4 pr-0 text-right whitespace-nowrap">
+                            <span className="font-fraunces text-lg font-bold">{formatPrice(depPrice)}</span>
+                            <span className="font-inter text-xs text-ink/45"> /pp</span>
+                          </td>
+                          <td className="py-4 pl-6 text-right whitespace-nowrap">
+                            {soldOut ? null : (
+                              <Link
+                                href={`/tours/book?tour=${tour.slug}`}
+                                className="inline-flex items-center gap-1 bg-terra text-white px-4 py-2 rounded-lg text-xs font-semibold no-underline hover:opacity-90 transition-opacity"
+                              >
+                                Book <ArrowRight className="w-3 h-3" strokeWidth={2} />
+                              </Link>
+                            )}
+                          </td>
+                        </tr>
+                      );
+                    })}
+                  </tbody>
+                </table>
+              </div>
+            ) : (
+              <div className="bg-bone border-2 border-divider rounded-xl p-8 text-center">
+                <Calendar className="w-8 h-8 text-ink/25 mx-auto mb-3" strokeWidth={1.5} />
+                <p className="text-ink/55 mb-4">No upcoming departures scheduled yet.</p>
+                <a
+                  href="https://wa.me/38348300155"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center gap-2 border-2 border-divider text-ink px-5 py-2.5 rounded-lg text-sm font-medium no-underline hover:border-ink transition-colors"
+                >
+                  Ask about availability
+                </a>
+              </div>
+            )}
+          </section>
+
           {/* Day-by-day itinerary */}
           {stages.length > 0 && (
             <section>
@@ -196,33 +271,36 @@ export default async function TourDetailPage({ params }: { params: Promise<{ slu
 
           {/* Included / Not included */}
           {(tour.includedItems?.length || tour.notIncludedItems?.length) ? (
-            <section className="grid grid-cols-1 sm:grid-cols-2 gap-6">
-              {tour.includedItems && tour.includedItems.length > 0 && (
-                <div>
-                  <h3 className="font-semibold mb-3 text-ink">Included</h3>
-                  <ul className="space-y-2">
-                    {tour.includedItems.map((item) => (
-                      <li key={item} className="flex items-start gap-2 text-sm text-ink/70">
-                        <CheckCircle2 className="w-4 h-4 text-brand mt-0.5 shrink-0" strokeWidth={1.5} />
-                        {item}
-                      </li>
-                    ))}
-                  </ul>
-                </div>
-              )}
-              {tour.notIncludedItems && tour.notIncludedItems.length > 0 && (
-                <div>
-                  <h3 className="font-semibold mb-3 text-ink">Not included</h3>
-                  <ul className="space-y-2">
-                    {tour.notIncludedItems.map((item) => (
-                      <li key={item} className="flex items-start gap-2 text-sm text-ink/70">
-                        <XCircle className="w-4 h-4 text-ink/30 mt-0.5 shrink-0" strokeWidth={1.5} />
-                        {item}
-                      </li>
-                    ))}
-                  </ul>
-                </div>
-              )}
+            <section>
+              <SectionLabel>What&apos;s included</SectionLabel>
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 mt-4">
+                {tour.includedItems && tour.includedItems.length > 0 && (
+                  <div>
+                    <h3 className="font-semibold mb-3 text-ink">Included</h3>
+                    <ul className="space-y-2">
+                      {tour.includedItems.map((item) => (
+                        <li key={item} className="flex items-start gap-2 text-sm text-ink/70">
+                          <CheckCircle2 className="w-4 h-4 text-brand mt-0.5 shrink-0" strokeWidth={1.5} />
+                          {item}
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                )}
+                {tour.notIncludedItems && tour.notIncludedItems.length > 0 && (
+                  <div>
+                    <h3 className="font-semibold mb-3 text-ink">Not included</h3>
+                    <ul className="space-y-2">
+                      {tour.notIncludedItems.map((item) => (
+                        <li key={item} className="flex items-start gap-2 text-sm text-ink/70">
+                          <XCircle className="w-4 h-4 text-ink/30 mt-0.5 shrink-0" strokeWidth={1.5} />
+                          {item}
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                )}
+              </div>
             </section>
           ) : null}
 
@@ -257,7 +335,6 @@ export default async function TourDetailPage({ params }: { params: Promise<{ slu
 
         {/* Sidebar */}
         <aside className="space-y-6">
-          {/* Price card */}
           <div className="bg-white border-2 border-divider rounded-2xl p-6 sticky top-24">
             <div className="font-fraunces text-3xl font-bold mb-1">
               {formatPrice(price)}
@@ -266,28 +343,12 @@ export default async function TourDetailPage({ params }: { params: Promise<{ slu
             {tour.selfGuidedPriceEur && isGuided && (
               <p className="text-xs text-ink/50 mb-4">Self-guided from {formatPrice(Number(tour.selfGuidedPriceEur))}</p>
             )}
-
-            {deps.length > 0 ? (
-              <>
-                <h4 className="font-semibold text-sm mb-3 mt-4">Upcoming departures</h4>
-                <div className="space-y-2 mb-5">
-                  {deps.slice(0, 4).map((dep) => {
-                    const spots = dep.capacity - (dep.bookedCount ?? 0);
-                    return (
-                      <div key={dep.id} className="flex items-center justify-between text-sm border border-divider rounded-lg px-3 py-2">
-                        <span className="font-mono text-xs">{String(dep.startDate)}</span>
-                        <span className={`text-xs font-medium ${spots <= 3 ? "text-warning" : "text-brand"}`}>
-                          {spots} spots
-                        </span>
-                      </div>
-                    );
-                  })}
-                </div>
-              </>
-            ) : (
-              <p className="text-sm text-ink/50 my-4">Contact us for availability.</p>
-            )}
-
+            <Link
+              href="#departures"
+              className="block w-full text-center border-2 border-divider text-ink py-2.5 rounded-xl font-medium text-sm no-underline hover:border-ink transition-colors mb-3"
+            >
+              View all dates ↓
+            </Link>
             <Link
               href={`/tours/book?tour=${tour.slug}`}
               className="block w-full text-center bg-brand text-white py-3.5 rounded-xl font-semibold no-underline hover:bg-brand/90 transition-colors"
@@ -295,34 +356,34 @@ export default async function TourDetailPage({ params }: { params: Promise<{ slu
               Book This Tour
             </Link>
             <p className="text-center text-xs text-ink/40 mt-2">Free cancellation · 20% deposit secures your spot</p>
-          </div>
 
-          {/* Practical info */}
-          <div className="bg-bone rounded-2xl p-5 border border-divider space-y-3 text-sm">
-            {tour.meetingPoint && (
-              <div className="flex gap-2">
-                <MapPin className="w-4 h-4 text-ink/40 mt-0.5 shrink-0" strokeWidth={1.5} />
-                <div><span className="font-semibold">Starts:</span> {tour.meetingPoint}</div>
-              </div>
-            )}
-            {tour.accommodationType && (
-              <div className="flex gap-2">
-                <span className="w-4 h-4 text-center text-ink/40 shrink-0">🏠</span>
-                <div><span className="font-semibold">Accommodation:</span> {tour.accommodationType}</div>
-              </div>
-            )}
-            {tour.mealsIncluded && (
-              <div className="flex gap-2">
-                <span className="w-4 h-4 text-center text-ink/40 shrink-0">🍽</span>
-                <div><span className="font-semibold">Meals:</span> {tour.mealsIncluded}</div>
-              </div>
-            )}
-            {tour.bestSeasonStart && tour.bestSeasonEnd && (
-              <div className="flex gap-2">
-                <span className="w-4 h-4 text-center text-ink/40 shrink-0">📅</span>
-                <div><span className="font-semibold">Season:</span> {tour.bestSeasonStart} – {tour.bestSeasonEnd}</div>
-              </div>
-            )}
+            {/* Practical info */}
+            <div className="mt-6 pt-5 border-t border-divider space-y-3 text-sm">
+              {tour.meetingPoint && (
+                <div className="flex gap-2">
+                  <MapPin className="w-4 h-4 text-ink/40 mt-0.5 shrink-0" strokeWidth={1.5} />
+                  <div><span className="font-semibold">Starts:</span> {tour.meetingPoint}</div>
+                </div>
+              )}
+              {tour.accommodationType && (
+                <div className="flex gap-2">
+                  <span className="w-4 shrink-0 text-center">🏠</span>
+                  <div><span className="font-semibold">Stay:</span> {tour.accommodationType}</div>
+                </div>
+              )}
+              {tour.mealsIncluded && (
+                <div className="flex gap-2">
+                  <span className="w-4 shrink-0 text-center">🍽</span>
+                  <div><span className="font-semibold">Meals:</span> {tour.mealsIncluded}</div>
+                </div>
+              )}
+              {tour.bestSeasonStart && tour.bestSeasonEnd && (
+                <div className="flex gap-2">
+                  <span className="w-4 shrink-0 text-center">📅</span>
+                  <div><span className="font-semibold">Season:</span> {tour.bestSeasonStart} – {tour.bestSeasonEnd}</div>
+                </div>
+              )}
+            </div>
           </div>
         </aside>
       </div>
