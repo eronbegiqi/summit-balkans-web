@@ -9,6 +9,7 @@ import { RichTextEditor } from '@/components/admin/rich-text-editor';
 import { RepeaterField, StringListField } from '@/components/admin/repeater-field';
 import { ImageUploader } from '@/components/admin/image-uploader';
 import { ConfirmDialog } from '@/components/admin/confirm-dialog';
+import { parseJsonField } from '@/lib/db/utils';
 import type { TourWithGuide } from '@/lib/db/queries/tours';
 import type { GuideListItem } from '@/lib/db/queries/guides';
 
@@ -60,7 +61,7 @@ export function TourForm({ tour, guides }: Props) {
   const [published, setPublished] = useState(tour?.published ?? false);
 
   const [itinerary, setItinerary] = useState<Array<{ day: string; title: string; description: string; distanceKm: string; accommodation: string }>>(
-    ((tour?.itinerary ?? []) as Array<{ day: number; title: string; description: string; distanceKm?: number; accommodation?: string }>).map((d) => ({
+    parseJsonField<Array<{ day: number; title: string; description: string; distanceKm?: number; accommodation?: string }>>(tour?.itinerary, []).map((d) => ({
       day: String(d.day),
       title: d.title,
       description: d.description,
@@ -68,13 +69,13 @@ export function TourForm({ tour, guides }: Props) {
       accommodation: d.accommodation ?? '',
     }))
   );
-  const [included, setIncluded] = useState<string[]>((tour?.includedItems ?? []) as string[]);
-  const [notIncluded, setNotIncluded] = useState<string[]>((tour?.notIncludedItems ?? []) as string[]);
-  const [kitEssential, setKitEssential] = useState<string[]>((tour?.kitEssential ?? []) as string[]);
-  const [kitRecommended, setKitRecommended] = useState<string[]>((tour?.kitRecommended ?? []) as string[]);
-  const [kitProvided, setKitProvided] = useState<string[]>((tour?.kitProvided ?? []) as string[]);
+  const [included, setIncluded] = useState<string[]>(parseJsonField<string[]>(tour?.includedItems, []));
+  const [notIncluded, setNotIncluded] = useState<string[]>(parseJsonField<string[]>(tour?.notIncludedItems, []));
+  const [kitEssential, setKitEssential] = useState<string[]>(parseJsonField<string[]>(tour?.kitEssential, []));
+  const [kitRecommended, setKitRecommended] = useState<string[]>(parseJsonField<string[]>(tour?.kitRecommended, []));
+  const [kitProvided, setKitProvided] = useState<string[]>(parseJsonField<string[]>(tour?.kitProvided, []));
   const [faq, setFaq] = useState<Array<{ question: string; answer: string }>>(
-    ((tour?.faq ?? []) as Array<{ question: string; answer: string }>)
+    parseJsonField<Array<{ question: string; answer: string }>>(tour?.faq, [])
   );
 
   function buildPayload() {
