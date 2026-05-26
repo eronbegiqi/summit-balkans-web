@@ -16,7 +16,7 @@ The data controller for the purposes of GDPR and applicable Kosovo data protecti
 **Summit Balkans**
 Evlia Qelebia, Mitrovica e Veriut 40000, Kosovo
 Email: info@summitbalkans.com
-Phone: +383 49 279 136
+Phone: +383 48 300 155
 
 ## 2. What Data We Collect
 

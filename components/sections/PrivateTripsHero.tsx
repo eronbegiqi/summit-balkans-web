@@ -11,11 +11,14 @@ const miniCards = [
 export function PrivateTripsHero() {
   return (
     <section className="relative min-h-screen flex flex-col justify-center overflow-hidden">
-      <div
-        className="absolute inset-0 bg-cover bg-center"
-        style={{ backgroundImage: "url('https://images.unsplash.com/photo-1606117331085-5760e3097277?w=1920&q=85')" }}
+      {/* eslint-disable-next-line @next/next/no-img-element */}
+      <img
+        src="https://images.unsplash.com/photo-1551632811-561732d1e306?w=1920&q=85"
+        alt="Private hiking trip in the Balkans"
+        className="absolute inset-0 w-full h-full object-cover object-center"
+        loading="eager"
       />
-      <div className="absolute inset-0 bg-gradient-to-br from-dark/78 via-dark/50 to-dark/72" />
+      <div className="absolute inset-0 bg-gradient-to-br from-dark/80 via-dark/55 to-dark/75" />
 
       <div
         className="relative z-10 max-w-content mx-auto px-10 pt-[68px] w-full grid items-center gap-20"

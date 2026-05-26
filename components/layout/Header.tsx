@@ -116,7 +116,7 @@ const navItems: NavItem[] = [
           links: [
             { label: "Blog", href: "/blog" },
             { label: "Before You Visit", href: "/before-you-visit" },
-            { label: "FAQ", href: "/before-you-visit" },
+            { label: "FAQ", href: "/before-you-visit#faq" },
           ],
         },
       ],
@@ -146,6 +146,7 @@ function LogoMark({ dark }: { dark: boolean }) {
 export function Header() {
   const headerRef = useRef<HTMLElement>(null);
   const [scrolled, setScrolled] = useState(false);
+  const scrolledRef = useRef(false); // avoid stale closure in scroll handler
   const [mobileOpen, setMobileOpen] = useState(false);
   const [openMenu, setOpenMenu] = useState<string | null>(null);
   const [mobileExpanded, setMobileExpanded] = useState<string | null>(null);
@@ -156,19 +157,20 @@ export function Header() {
   const isHeroPage = HERO_PAGES.includes(pathname);
   const solidState = scrolled || !isHeroPage;
 
-  // GSAP scroll animation
+  // GSAP scroll animation — use ref to avoid stale closure
   useEffect(() => {
     if (!headerRef.current) return;
     const initialH = isHeroPage ? 96 : 64;
     gsap.set(headerRef.current, { height: initialH });
 
     const onScroll = () => {
-      const past = window.scrollY > 80;
-      if (past === scrolled) return;
+      const past = window.scrollY > 10;
+      if (past === scrolledRef.current) return;
+      scrolledRef.current = past;
       setScrolled(past);
       gsap.to(headerRef.current, {
         height: past ? 64 : initialH,
-        duration: 0.3,
+        duration: 0.25,
         ease: "power2.out",
         overwrite: true,
       });
@@ -176,7 +178,6 @@ export function Header() {
 
     window.addEventListener("scroll", onScroll, { passive: true });
     return () => window.removeEventListener("scroll", onScroll);
-  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isHeroPage]);
 
   // Body scroll lock when mobile menu open

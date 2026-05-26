@@ -21,8 +21,8 @@ const cards = [
     icon: Map,
     title: "Self-Guided",
     desc: "GPX tracks, guesthouse bookings, and an emergency contact — you hike solo.",
-    href: "/tours",
-    cta: "Coming soon",
+    href: "/tours?type=SELF_GUIDED",
+    cta: "View self-guided",
   },
   {
     icon: Backpack,

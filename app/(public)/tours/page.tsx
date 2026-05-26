@@ -11,6 +11,25 @@ import { cn } from "@/lib/utils";
 type TourType = "ALL" | "GUIDED" | "SELF_GUIDED";
 type TourVariant = "ALL" | "QUICK" | "REGULAR" | "CLASSIC";
 
+const FALLBACK_IMAGES: Record<string, string> = {
+  "peaks-of-the-balkans-quick":          "https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?w=800&q=80",
+  "peaks-of-the-balkans-regular":        "https://images.unsplash.com/photo-1519681393784-d120267933ba?w=800&q=80",
+  "peaks-of-the-balkans-classic":        "https://images.unsplash.com/photo-1511884642898-4c92249e20b6?w=800&q=80",
+  "peaks-of-the-balkans-quick-self-guided":   "https://images.unsplash.com/photo-1454496522488-7a8e488e8606?w=800&q=80",
+  "peaks-of-the-balkans-regular-self-guided": "https://images.unsplash.com/photo-1488646953014-85cb44e25828?w=800&q=80",
+  "peaks-of-the-balkans-classic-self-guided": "https://images.unsplash.com/photo-1539635278303-d4002c07eae3?w=800&q=80",
+  _guided:    "https://images.unsplash.com/photo-1551632811-561732d1e306?w=800&q=80",
+  _selfguided: "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800&q=80",
+  _default:   "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800&q=80",
+};
+
+function getTourImage(tour: Tour): string {
+  if (tour.featuredImageUrl) return tour.featuredImageUrl;
+  if (FALLBACK_IMAGES[tour.slug]) return FALLBACK_IMAGES[tour.slug];
+  if (tour.tourType === "SELF_GUIDED") return FALLBACK_IMAGES._selfguided;
+  return FALLBACK_IMAGES._guided;
+}
+
 interface Tour {
   id: number;
   slug: string;
@@ -208,7 +227,7 @@ function TourCard({ tour, priority = false }: { tour: Tour; priority?: boolean }
       <div className="relative">
         {/* eslint-disable-next-line @next/next/no-img-element */}
         <img
-          src={tour.featuredImageUrl ? `${tour.featuredImageUrl}&w=600` : "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=600&q=80"}
+          src={getTourImage(tour)}
           alt={tour.title}
           className="w-full h-[240px] md:h-[300px] object-cover block"
           loading={priority ? "eager" : "lazy"}

@@ -175,7 +175,7 @@ export function BookingWizard({ tourSlug = "peaks-of-the-balkans" }: { tourSlug?
               Back to Summit Balkans
             </Link>
             <a
-              href="https://wa.me/38349279136"
+              href="https://wa.me/38348300155"
               target="_blank"
               rel="noopener noreferrer"
               className="border-2 border-divider text-ink px-6 py-3.5 rounded-xl font-medium no-underline text-center hover:border-ink transition-colors"

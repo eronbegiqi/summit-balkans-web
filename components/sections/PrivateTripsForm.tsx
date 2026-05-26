@@ -65,6 +65,29 @@ export function PrivateTripsForm() {
       experiences: p.experiences.includes(e) ? p.experiences.filter((x) => x !== e) : [...p.experiences, e],
     }));
 
+  const [stepError, setStepError] = useState<string | null>(null);
+
+  const canAdvance = (): string | null => {
+    if (step === 0 && form.destinations.length === 0) return "Please select at least one destination.";
+    if (step === 1 && !form.dateOption) return "Please select a date option.";
+    if (step === 2 && form.experiences.length === 0) return "Please select at least one experience type.";
+    if (step === 3 && form.groupSize < 1) return "Please enter a valid group size.";
+    if (step === 4) {
+      if (!form.name.trim()) return "Please enter your name.";
+      const emailOk = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(form.email);
+      if (!emailOk) return "Please enter a valid email address.";
+      if (!form.agreePrivacy) return "Please accept the privacy policy to continue.";
+    }
+    return null;
+  };
+
+  const handleNext = () => {
+    const err = canAdvance();
+    if (err) { setStepError(err); return; }
+    setStepError(null);
+    setStep((s) => s + 1);
+  };
+
   if (submitted) {
     return (
       <section id="enquiry" className="py-24">
@@ -312,9 +335,13 @@ export function PrivateTripsForm() {
             )}
 
             {/* Nav */}
-            <div className="flex items-center justify-between mt-10 pt-6 border-t-2 border-divider">
+            <div className="mt-10 pt-6 border-t-2 border-divider">
+              {stepError && (
+                <p className="text-sm text-red-600 mb-4 font-medium">{stepError}</p>
+              )}
+              <div className="flex items-center justify-between">
               <button
-                onClick={() => setStep((s) => s - 1)}
+                onClick={() => { setStepError(null); setStep((s) => s - 1); }}
                 className={`flex items-center gap-2 px-5 py-3 rounded-xl border-2 border-divider text-sm font-medium bg-transparent cursor-pointer hover:border-ink transition-colors ${step === 0 ? "opacity-0 pointer-events-none" : ""}`}
               >
                 <ChevronLeft className="w-4 h-4" strokeWidth={1.5} />
@@ -323,7 +350,7 @@ export function PrivateTripsForm() {
 
               {step < 4 ? (
                 <button
-                  onClick={() => setStep((s) => s + 1)}
+                  onClick={handleNext}
                   className="flex items-center gap-2 bg-terra text-white px-6 py-3 rounded-xl text-sm font-semibold border-none cursor-pointer hover:opacity-90"
                 >
                   Next
@@ -354,6 +381,7 @@ export function PrivateTripsForm() {
               {submitError && (
                 <p className="text-xs text-red-600 mt-3">Something went wrong. Please try again or WhatsApp us.</p>
               )}
+              </div>
             </div>
           </div>
 
