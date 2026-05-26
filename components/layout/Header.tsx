@@ -23,6 +23,10 @@ interface NavItem {
 
 const navItems: NavItem[] = [
   {
+    label: "Home",
+    href: "/",
+  },
+  {
     label: "Tours",
     href: "/tours",
     submenu: {
