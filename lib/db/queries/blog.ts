@@ -1,26 +1,41 @@
 import { db } from '@/lib/db/client';
 import { blogPosts, adminUsers } from '@/lib/db/schema';
-import { desc, eq, inArray } from 'drizzle-orm';
+import { and, desc, eq, inArray } from 'drizzle-orm';
 
 export type BlogPostWithAuthor = typeof blogPosts.$inferSelect & {
   author: typeof adminUsers.$inferSelect | null;
 };
 
-export async function getBlogPosts(): Promise<BlogPostWithAuthor[]> {
-  const posts = await db.select().from(blogPosts).orderBy(desc(blogPosts.createdAt));
-  const authorIds = [...new Set(posts.map((p) => p.authorId).filter((id): id is number => id !== null))];
+async function attachAuthor(post: typeof blogPosts.$inferSelect): Promise<BlogPostWithAuthor> {
+  const author = post.authorId
+    ? ((await db.select().from(adminUsers).where(eq(adminUsers.id, post.authorId)))[0] ?? null)
+    : null;
+  return { ...post, author };
+}
+
+export async function getBlogPosts(publishedOnly = true): Promise<BlogPostWithAuthor[]> {
+  const rows = await db
+    .select()
+    .from(blogPosts)
+    .where(publishedOnly ? and(eq(blogPosts.published, true)) : undefined)
+    .orderBy(desc(blogPosts.publishedAt));
+
+  const authorIds = [...new Set(rows.map((r) => r.authorId).filter((id): id is number => id !== null))];
   const authors = authorIds.length
     ? await db.select().from(adminUsers).where(inArray(adminUsers.id, authorIds))
     : [];
   const authorMap = new Map(authors.map((a) => [a.id, a]));
-  return posts.map((p) => ({ ...p, author: p.authorId ? (authorMap.get(p.authorId) ?? null) : null }));
+  return rows.map((r) => ({ ...r, author: r.authorId ? (authorMap.get(r.authorId) ?? null) : null }));
 }
 
 export async function getBlogPostById(id: number): Promise<BlogPostWithAuthor | null> {
-  const [post] = await db.select().from(blogPosts).where(eq(blogPosts.id, id)).limit(1);
+  const [post] = await db.select().from(blogPosts).where(eq(blogPosts.id, id));
   if (!post) return null;
-  const author = post.authorId
-    ? ((await db.select().from(adminUsers).where(eq(adminUsers.id, post.authorId)).limit(1))[0] ?? null)
-    : null;
-  return { ...post, author };
+  return attachAuthor(post);
+}
+
+export async function getBlogPostBySlug(slug: string): Promise<BlogPostWithAuthor | null> {
+  const [post] = await db.select().from(blogPosts).where(eq(blogPosts.slug, slug));
+  if (!post) return null;
+  return attachAuthor(post);
 }
