@@ -3,6 +3,52 @@
 import { useState, useEffect } from "react";
 import Link from "next/link";
 import { Check, ChevronLeft, ChevronRight, Lock, Backpack, Car, BedDouble } from "lucide-react";
+
+const STEP_LABELS = ["Select Departure", "Travellers", "Add-ons", "Your Details", "Review & Pay"];
+
+function BookingSteps({ step }: { step: number }) {
+  return (
+    <div className="fixed top-16 left-0 right-0 z-[99] bg-bone border-b-2 border-divider px-6 md:px-10">
+      <div className="max-w-[1100px] mx-auto flex">
+        {STEP_LABELS.map((label, i) => {
+          const done = i < step;
+          const active = i === step;
+          return (
+            <div
+              key={label}
+              className={`flex-1 flex flex-col items-center py-3 pb-2.5 border-b-[3px] transition-colors ${
+                active ? "border-brand" : "border-transparent"
+              }`}
+            >
+              <div
+                className={`w-[26px] h-[26px] rounded-full flex items-center justify-center mb-1.5 transition-all ${
+                  done
+                    ? "bg-brand border-brand border-2"
+                    : active
+                    ? "bg-ink border-ink border-2"
+                    : "border-2 border-divider"
+                }`}
+              >
+                {done ? (
+                  <Check className="w-3 h-3 text-white" strokeWidth={3} />
+                ) : (
+                  <span className={`font-mono text-xs ${active ? "text-white" : "text-ink/35"}`}>{i + 1}</span>
+                )}
+              </div>
+              <div
+                className={`text-xs font-medium whitespace-nowrap hidden sm:block ${
+                  done ? "text-brand" : active ? "text-ink" : "text-ink/35"
+                }`}
+              >
+                {label}
+              </div>
+            </div>
+          );
+        })}
+      </div>
+    </div>
+  );
+}
 import { formatPrice } from "@/lib/utils";
 import { BookingPolicySummary } from "./BookingPolicySummary";
 import { CancellationTimeline } from "./CancellationTimeline";
@@ -171,7 +217,7 @@ export function BookingWizard({ tourSlug = "peaks-of-the-balkans" }: { tourSlug?
             Confirmation and pre-trip information has been sent to <strong>{state.email}</strong>. Your guide will be in touch within 48 hours.
           </p>
           <div className="flex flex-col gap-3">
-            <Link href="/" className="bg-terra text-white px-6 py-3.5 rounded-xl font-semibold no-underline text-center hover:opacity-90">
+            <Link href="/" className="bg-brand text-white px-6 py-3.5 rounded-xl font-semibold no-underline text-center hover:opacity-90">
               Back to Summit Balkans
             </Link>
             <a
@@ -189,6 +235,8 @@ export function BookingWizard({ tourSlug = "peaks-of-the-balkans" }: { tourSlug?
   }
 
   return (
+    <>
+    <BookingSteps step={step} />
     <div className="grid gap-12 items-start" style={{ gridTemplateColumns: "1fr 360px" }}>
       {/* Main panel */}
       <div>
@@ -507,8 +555,8 @@ export function BookingWizard({ tourSlug = "peaks-of-the-balkans" }: { tourSlug?
               disabled={!state.agreeTerms || isSubmitting}
               className={`w-full py-4 rounded-xl font-bold text-[15px] border-none cursor-pointer transition-opacity ${
                 state.agreeTerms && !isSubmitting
-                  ? "bg-terra text-white hover:opacity-90"
-                  : "bg-terra/40 text-white cursor-not-allowed"
+                  ? "bg-brand text-white hover:opacity-90"
+                  : "bg-brand/40 text-white cursor-not-allowed"
               }`}
             >
               {isSubmitting ? "Confirming booking…" : `Pay ${formatPrice(grandTotal)} with Stripe`}
@@ -535,7 +583,7 @@ export function BookingWizard({ tourSlug = "peaks-of-the-balkans" }: { tourSlug?
             <button
               onClick={() => setStep((s) => s + 1)}
               disabled={step === 0 && !state.departureId}
-              className="flex items-center gap-2 bg-terra text-white px-6 py-3 rounded-xl text-sm font-semibold border-none cursor-pointer hover:opacity-90 transition-opacity disabled:opacity-40"
+              className="flex items-center gap-2 bg-brand text-white px-6 py-3 rounded-xl text-sm font-semibold border-none cursor-pointer hover:opacity-90 transition-opacity disabled:opacity-40"
             >
               Continue
               <ChevronRight className="w-4 h-4" strokeWidth={1.5} />
@@ -580,5 +628,6 @@ export function BookingWizard({ tourSlug = "peaks-of-the-balkans" }: { tourSlug?
         </div>
       </div>
     </div>
+    </>
   );
 }
