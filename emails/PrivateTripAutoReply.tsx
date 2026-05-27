@@ -57,7 +57,7 @@ export function PrivateTripAutoReply({ name, destinations, groupSize, experience
           <Section style={{ padding: "28px 40px" }}>
             <Text style={{ color: brand.ink, fontSize: "14px", fontWeight: "600", margin: "0 0 6px" }}>Want to talk it through now?</Text>
             <Text style={{ color: `${brand.ink}77`, fontSize: "14px", margin: "0 0 16px" }}>Book a free 15-minute call with our trip planning team.</Text>
-            <Link href="https://wa.me/38349279136" style={{ backgroundColor: "#25D366", color: "#fff", padding: "11px 24px", borderRadius: "8px", fontWeight: "700", fontSize: "14px", textDecoration: "none", display: "inline-block" }}>
+            <Link href="https://wa.me/38348300155" style={{ backgroundColor: "#25D366", color: "#fff", padding: "11px 24px", borderRadius: "8px", fontWeight: "700", fontSize: "14px", textDecoration: "none", display: "inline-block" }}>
               Chat on WhatsApp
             </Link>
           </Section>

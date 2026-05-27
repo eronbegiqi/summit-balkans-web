@@ -7,7 +7,7 @@ import { eq } from 'drizzle-orm';
 import { getSession } from '@/lib/auth/session';
 import { Resend } from 'resend';
 
-const resend = new Resend(process.env.RESEND_API_KEY);
+const getResend = () => new Resend(process.env.RESEND_API_KEY ?? '');
 
 type InquiryStatus = typeof inquiries.$inferSelect['status'];
 
@@ -42,7 +42,7 @@ export async function replyToInquiry(inquiryId: number, replyBody: string) {
   const [inquiry] = await db.select().from(inquiries).where(eq(inquiries.id, inquiryId)).limit(1);
   if (!inquiry) throw new Error('Inquiry not found');
 
-  await resend.emails.send({
+  await getResend().emails.send({
     from: `Summit Balkans <${process.env.RESEND_FROM_EMAIL}>`,
     to: [inquiry.email],
     replyTo: process.env.RESEND_FROM_EMAIL,

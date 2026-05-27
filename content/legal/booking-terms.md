@@ -225,4 +225,4 @@ Any disputes arising from these terms or the services provided shall be subject 
 
 **Summit Balkans**
 Evlia Qelebia, Mitrovica e Veriut 40000, Kosovo
-+383 49 279 136 · info@summitbalkans.com
++383 48 300 155 · info@summitbalkans.com

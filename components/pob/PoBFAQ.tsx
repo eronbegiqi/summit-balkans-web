@@ -61,7 +61,7 @@ export function PoBFAQ() {
                 Write to us
               </Link>{" "}
               or{" "}
-              <a href="https://wa.me/38349279136" target="_blank" rel="noopener noreferrer" className="text-brand underline underline-offset-2">
+              <a href="https://wa.me/38348300155" target="_blank" rel="noopener noreferrer" className="text-brand underline underline-offset-2">
                 chat on WhatsApp
               </a>
               .

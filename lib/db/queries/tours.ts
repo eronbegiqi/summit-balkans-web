@@ -50,24 +50,21 @@ export async function getTours(): Promise<TourListItem[]> {
   }));
 }
 
-export async function getTourById(id: number): Promise<TourWithGuide | null> {
-  const [tour] = await db.select().from(tours).where(eq(tours.id, id));
-  if (!tour) return null;
-
+async function attachGuide(tour: typeof tours.$inferSelect): Promise<TourWithGuide> {
   const guide = tour.assignedGuideId
-    ? ((await db.select().from(guides).where(eq(guides.id, tour.assignedGuideId)))[0] ?? null)
+    ? ((await db.select().from(guides).where(eq(guides.id, tour.assignedGuideId)).limit(1))[0] ?? null)
     : null;
-
   return { ...tour, guide };
 }
 
-export async function getTourBySlug(slug: string): Promise<TourWithGuide | null> {
-  const [tour] = await db.select().from(tours).where(eq(tours.slug, slug));
+export async function getTourById(id: number): Promise<TourWithGuide | null> {
+  const [tour] = await db.select().from(tours).where(eq(tours.id, id)).limit(1);
   if (!tour) return null;
+  return attachGuide(tour);
+}
 
-  const guide = tour.assignedGuideId
-    ? ((await db.select().from(guides).where(eq(guides.id, tour.assignedGuideId)))[0] ?? null)
-    : null;
-
-  return { ...tour, guide };
+export async function getTourBySlug(slug: string): Promise<TourWithGuide | null> {
+  const [tour] = await db.select().from(tours).where(eq(tours.slug, slug)).limit(1);
+  if (!tour) return null;
+  return attachGuide(tour);
 }

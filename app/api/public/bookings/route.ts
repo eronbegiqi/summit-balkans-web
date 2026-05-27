@@ -9,7 +9,9 @@ import { BookingConfirmation } from '@/emails/BookingConfirmation';
 
 export const dynamic = 'force-dynamic';
 
-const resend = new Resend(process.env.RESEND_API_KEY);
+function getResend() {
+  return new Resend(process.env.RESEND_API_KEY ?? '');
+}
 const FROM = `Summit Balkans <${process.env.RESEND_FROM_EMAIL ?? 'info@summitbalkans.com'}>`;
 
 const bookingSchema = z.object({
@@ -105,7 +107,7 @@ export async function POST(req: NextRequest) {
     // Send confirmation email (non-blocking)
     if (lead.email) {
       Promise.all([
-        resend.emails.send({
+        getResend().emails.send({
           from: FROM,
           to: [lead.email],
           subject: `Booking confirmed — ${tour.title} · ${ref}`,
@@ -122,7 +124,7 @@ export async function POST(req: NextRequest) {
             totalPrice: total,
           })),
         }),
-        resend.emails.send({
+        getResend().emails.send({
           from: FROM,
           to: ['info@summitbalkans.com'],
           subject: `New booking: ${ref} — ${lead.firstName} ${lead.lastName}`,

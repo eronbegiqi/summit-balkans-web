@@ -37,6 +37,8 @@ export const destinations = mysqlTable('destinations', {
   slug: varchar('slug', { length: 100 }).unique().notNull(),
   name: varchar('name', { length: 100 }).notNull(),
   country: mysqlEnum('country', ['Albania', 'Montenegro', 'Kosovo']).notNull(),
+  destinationType: mysqlEnum('destination_type', ['COUNTRY', 'CITY', 'TRAIL_STOP']).default('TRAIL_STOP'),
+  parentCountry: mysqlEnum('parent_country', ['Albania', 'Montenegro', 'Kosovo']),
   description: text('description'),
   geography: text('geography'),
   bestSeason: varchar('best_season', { length: 100 }),
@@ -46,6 +48,7 @@ export const destinations = mysqlTable('destinations', {
   weatherInfo: text('weather_info'),
   safetyInfo: text('safety_info'),
   heroImageUrl: varchar('hero_image_url', { length: 500 }),
+  coordinates: json('coordinates').$type<{ lat: number; lng: number }>(),
   highlights: json('highlights').$type<string[]>(),
   seoTitle: varchar('seo_title', { length: 255 }),
   seoDescription: varchar('seo_description', { length: 500 }),
@@ -95,10 +98,14 @@ export const tours = mysqlTable(
     durationDays: int('duration_days').notNull(),
     difficulty: tinyint('difficulty').notNull(),
     pricePerPersonEur: decimal('price_per_person_eur', { precision: 10, scale: 2 }).notNull(),
+    selfGuidedPriceEur: decimal('self_guided_price_eur', { precision: 10, scale: 2 }),
     groupSizeMin: int('group_size_min').default(2),
     groupSizeMax: int('group_size_max').default(12),
+    minParticipants: int('min_participants').default(3),
     totalDistanceKm: decimal('total_distance_km', { precision: 6, scale: 2 }),
     maxElevationM: int('max_elevation_m'),
+    tourType: mysqlEnum('tour_type', ['GUIDED', 'SELF_GUIDED']).default('GUIDED'),
+    tourVariant: mysqlEnum('tour_variant', ['QUICK', 'REGULAR', 'CLASSIC', 'OTHER']).default('OTHER'),
     isFlagship: boolean('is_flagship').default(false),
     itinerary: json('itinerary').$type<Array<{
       day: number;
@@ -472,6 +479,55 @@ export const settings = mysqlTable('settings', {
   updatedAt: timestamp('updated_at').defaultNow().onUpdateNow().notNull(),
 });
 
+// ─── 17. DISCOUNTS ───────────────────────────────────────────────────────────
+
+export const discounts = mysqlTable('discounts', {
+  id: bigint('id', { mode: 'number' }).autoincrement().primaryKey(),
+  slug: varchar('slug', { length: 100 }).unique().notNull(),
+  name: varchar('name', { length: 255 }).notNull(),
+  tagline: varchar('tagline', { length: 255 }),
+  description: text('description'),
+  icon: varchar('icon', { length: 50 }),
+  discountType: mysqlEnum('discount_type', ['PERCENTAGE', 'FIXED']).default('PERCENTAGE'),
+  discountValue: decimal('discount_value', { precision: 8, scale: 2 }).notNull(),
+  minParticipants: int('min_participants'),
+  requiresStudentProof: boolean('requires_student_proof').default(false),
+  requiresReferralCode: boolean('requires_referral_code').default(false),
+  earlyBirdDaysAhead: int('early_bird_days_ahead'),
+  active: boolean('active').default(true),
+  displayOrder: int('display_order').default(0),
+  createdAt: timestamp('created_at').defaultNow(),
+  updatedAt: timestamp('updated_at').defaultNow().onUpdateNow(),
+});
+
+// ─── 18. TOUR STAGES ─────────────────────────────────────────────────────────
+
+export const tourStages = mysqlTable(
+  'tour_stages',
+  {
+    id: bigint('id', { mode: 'number' }).autoincrement().primaryKey(),
+    tourId: bigint('tour_id', { mode: 'number' }).notNull().references(() => tours.id, { onDelete: 'cascade' }),
+    dayNumber: int('day_number').notNull(),
+    title: varchar('title', { length: 255 }).notNull(),
+    description: text('description'),
+    fromLocation: varchar('from_location', { length: 100 }),
+    toLocation: varchar('to_location', { length: 100 }),
+    distanceKm: decimal('distance_km', { precision: 6, scale: 2 }),
+    lowestPointM: int('lowest_point_m'),
+    highestPointM: int('highest_point_m'),
+    elevationGainM: int('elevation_gain_m'),
+    elevationLossM: int('elevation_loss_m'),
+    difficulty: varchar('difficulty', { length: 50 }),
+    highlights: json('highlights').$type<string[]>(),
+    accommodation: varchar('accommodation', { length: 255 }),
+    terrain: varchar('terrain', { length: 100 }),
+    createdAt: timestamp('created_at').defaultNow(),
+  },
+  (t) => [
+    index('idx_stages_tour').on(t.tourId, t.dayNumber),
+  ]
+);
+
 // ─── RELATIONS ────────────────────────────────────────────────────────────────
 
 export const adminUsersRelations = relations(adminUsers, ({ many }) => ({
@@ -491,6 +547,7 @@ export const toursRelations = relations(tours, ({ one, many }) => ({
   departures: many(departures),
   bookings: many(bookings),
   reviews: many(reviews),
+  stages: many(tourStages),
 }));
 
 export const departuresRelations = relations(departures, ({ one, many }) => ({
@@ -549,4 +606,8 @@ export const paymentTransactionsRelations = relations(paymentTransactions, ({ on
 
 export const activityLogRelations = relations(activityLog, ({ one }) => ({
   adminUser: one(adminUsers, { fields: [activityLog.adminUserId], references: [adminUsers.id] }),
+}));
+
+export const tourStagesRelations = relations(tourStages, ({ one }) => ({
+  tour: one(tours, { fields: [tourStages.tourId], references: [tours.id] }),
 }));

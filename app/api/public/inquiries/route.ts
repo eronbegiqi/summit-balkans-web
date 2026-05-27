@@ -6,7 +6,7 @@ import { Resend } from 'resend';
 
 export const dynamic = 'force-dynamic';
 
-const resend = new Resend(process.env.RESEND_API_KEY);
+const getResend = () => new Resend(process.env.RESEND_API_KEY ?? '');
 const FROM = `Summit Balkans <${process.env.RESEND_FROM_EMAIL ?? 'info@summitbalkans.com'}>`;
 const ADMIN_EMAIL = 'info@summitbalkans.com';
 
@@ -68,13 +68,13 @@ export async function POST(req: NextRequest) {
     // Send emails in parallel (non-blocking — don't fail the request if email fails)
     const adminUrl = `${process.env.NEXT_PUBLIC_SITE_URL}/admin/inquiries/${inquiryId}`;
     Promise.all([
-      resend.emails.send({
+      getResend().emails.send({
         from: FROM,
         to: [data.email],
         subject: AUTO_REPLY_SUBJECTS[data.type] ?? "Enquiry received — Summit Balkans",
         text: `Hi ${data.name},\n\nThank you for reaching out. We've received your enquiry and will get back to you within 24 hours.\n\nBest regards,\nSummit Balkans`,
       }),
-      resend.emails.send({
+      getResend().emails.send({
         from: FROM,
         to: [ADMIN_EMAIL],
         replyTo: data.email,

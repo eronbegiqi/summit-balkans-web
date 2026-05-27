@@ -62,7 +62,7 @@ export function HomeHero() {
           <span className="w-[3px] h-[3px] rounded-full bg-white/35" />
           <span>Small Groups</span>
           <a
-            href="https://wa.me/38349279136"
+            href="https://wa.me/38348300155"
             target="_blank"
             rel="noopener noreferrer"
             className="flex items-center gap-1.5 text-white/55 hover:text-white transition-colors no-underline ml-2"

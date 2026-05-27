@@ -144,7 +144,7 @@ export default async function BookingConfirmationPage({ params }: Props) {
             <Mail className="h-4 w-4 text-[#2e8a57]" /> info@summitbalkans.com
           </a>
           <a
-            href="https://wa.me/38349279136"
+            href="https://wa.me/38348300155"
             className="flex items-center gap-2 rounded-xl px-5 py-3 text-sm font-semibold text-white no-underline"
             style={{ backgroundColor: '#25D366' }}
           >

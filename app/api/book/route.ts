@@ -37,7 +37,7 @@ function generateRef(): string {
   return ref;
 }
 
-const resend = new Resend(process.env.RESEND_API_KEY);
+const getResend = () => new Resend(process.env.RESEND_API_KEY ?? '');
 const FROM = process.env.RESEND_FROM ?? "Summit Balkans <info@summitbalkans.com>";
 const ADMIN = process.env.ADMIN_EMAIL ?? "info@summitbalkans.com";
 
@@ -89,7 +89,7 @@ export async function POST(req: NextRequest) {
     });
 
     await Promise.all([
-      resend.emails.send({
+      getResend().emails.send({
         from: FROM,
         to: data.email,
         subject: `Booking confirmed — ${data.tourName} · ${bookingRef}`,
@@ -106,7 +106,7 @@ export async function POST(req: NextRequest) {
           totalPrice: data.totalPrice,
         })),
       }),
-      resend.emails.send({
+      getResend().emails.send({
         from: FROM,
         to: ADMIN,
         replyTo: data.email,
