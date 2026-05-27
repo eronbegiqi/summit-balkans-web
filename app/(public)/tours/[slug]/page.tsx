@@ -9,6 +9,7 @@ import { SectionLabel } from "@/components/ui/SectionLabel";
 import { StagesAccordion } from "@/components/tour/StagesAccordion";
 import { EmergencyContactsCompact } from "@/components/sections/EmergencyContacts";
 import { formatPrice } from "@/lib/utils";
+import { parseJsonField } from "@/lib/db/utils";
 import { Clock, Mountain, Users, ArrowRight, MapPin, CheckCircle2, XCircle, Calendar } from "lucide-react";
 
 export const revalidate = 300;
@@ -21,6 +22,19 @@ async function getTour(slug: string) {
     .where(and(eq(tours.slug, slug), eq(tours.published, true)));
 
   if (!tour) return null;
+
+  // MySQL2 prepared statements return JSON columns as raw strings — parse them
+  const parsedTour = {
+    ...tour,
+    gallery:          parseJsonField<string[]>(tour.gallery, []),
+    itinerary:        parseJsonField<typeof tour.itinerary>(tour.itinerary, []),
+    includedItems:    parseJsonField<string[]>(tour.includedItems, []),
+    notIncludedItems: parseJsonField<string[]>(tour.notIncludedItems, []),
+    kitEssential:     parseJsonField<string[]>(tour.kitEssential, []),
+    kitRecommended:   parseJsonField<string[]>(tour.kitRecommended, []),
+    kitProvided:      parseJsonField<string[]>(tour.kitProvided, []),
+    faq:              parseJsonField<Array<{ question: string; answer: string }>>(tour.faq, []),
+  };
 
   const guide = tour.assignedGuideId
     ? ((await db.select().from(guides).where(eq(guides.id, tour.assignedGuideId)))[0] ?? null)
@@ -53,7 +67,12 @@ async function getTour(slug: string) {
       .orderBy(asc(departures.startDate)),
   ]);
 
-  return { tour: { ...tour, guide }, stages, departures: tourDepartures };
+  const parsedStages = stages.map((s) => ({
+    ...s,
+    highlights: parseJsonField<string[]>(s.highlights, []),
+  }));
+
+  return { tour: { ...parsedTour, guide }, stages: parsedStages, departures: tourDepartures };
 }
 
 export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }): Promise<Metadata> {
