@@ -37,7 +37,7 @@ export function BookingConfirmation({
   children,
   addOns,
   totalPrice,
-  adminWhatsApp = "38349279136",
+  adminWhatsApp = "38348300155",
 }: BookingConfirmationProps) {
   const previewText = `Booking confirmed — ${tourName} · Ref ${bookingRef}`;
 

@@ -1,10 +1,10 @@
 export const CONTACT = {
   address: "Evlia Qelebia, Mitrovica e Veriut 40000, Kosovo",
-  phone: "+383 49 279 136",
-  phoneLink: "tel:+38349279136",
+  phone: "+383 48 300 155",
+  phoneLink: "tel:+38348300155",
   email: "info@summitbalkans.com",
   emailLink: "mailto:info@summitbalkans.com",
-  whatsapp: "https://wa.me/38349279136",
+  whatsapp: "https://wa.me/38348300155",
   mapsUrl:
     "https://www.google.com/maps/place/Summit+Balkans/@42.8910032,20.8691889,19z/data=!3m1!4b1!4m6!3m5!1s0x1353456646a682bb:0x67ad264463e2d0b5!8m2!3d42.8910022!4d20.8698326!16s%2Fg%2F11nc2chyr8",
   mapsEmbed:

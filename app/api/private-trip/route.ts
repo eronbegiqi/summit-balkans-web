@@ -25,7 +25,7 @@ const privateTripSchema = z.object({
   { message: "A season or date range is required", path: ["dateOption"] }
 );
 
-const resend = new Resend(process.env.RESEND_API_KEY);
+const getResend = () => new Resend(process.env.RESEND_API_KEY ?? '');
 const FROM = process.env.RESEND_FROM ?? "Summit Balkans <info@summitbalkans.com>";
 const ADMIN = process.env.ADMIN_EMAIL ?? "info@summitbalkans.com";
 
@@ -64,7 +64,7 @@ export async function POST(req: NextRequest) {
         status: "NEW",
       }),
       // Emails
-      resend.emails.send({
+      getResend().emails.send({
         from: FROM,
         to: data.email,
         subject: "We'll design your Balkans route — Summit Balkans",
@@ -76,7 +76,7 @@ export async function POST(req: NextRequest) {
           dateOption: data.dateOption,
         })),
       }),
-      resend.emails.send({
+      getResend().emails.send({
         from: FROM,
         to: ADMIN,
         replyTo: data.email,

@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { db } from '@/lib/db/client';
-import { tours, departures, guides } from '@/lib/db/schema';
-import { asc, eq, gte, and, sql } from 'drizzle-orm';
+import { tours, departures, guides, tourStages } from '@/lib/db/schema';
+import { asc, eq, and, sql } from 'drizzle-orm';
 
 export const revalidate = 300;
 
@@ -16,32 +16,41 @@ export async function GET(_req: NextRequest, { params }: { params: Promise<{ slu
 
     if (!tour) return NextResponse.json({ error: 'Not found' }, { status: 404 });
 
-    const today = new Date().toISOString().split('T')[0];
-    const tourDepartures = await db
-      .select({
-        id: departures.id,
-        startDate: departures.startDate,
-        endDate: departures.endDate,
-        capacity: departures.capacity,
-        bookedCount: departures.bookedCount,
-        pricePerPersonEur: departures.pricePerPersonEur,
-        language: departures.language,
-        status: departures.status,
-        guideName: guides.name,
-      })
-      .from(departures)
-      .leftJoin(guides, eq(departures.guideId, guides.id))
-      .where(
-        and(
-          eq(departures.tourId, tour.id),
-          sql`${departures.startDate} >= ${today}`,
-          sql`${departures.status} != 'CANCELLED'`
+    // Fetch stages and departures in parallel
+    const [stages, tourDepartures] = await Promise.all([
+      db
+        .select()
+        .from(tourStages)
+        .where(eq(tourStages.tourId, tour.id))
+        .orderBy(asc(tourStages.dayNumber)),
+
+      db
+        .select({
+          id: departures.id,
+          startDate: departures.startDate,
+          endDate: departures.endDate,
+          capacity: departures.capacity,
+          bookedCount: departures.bookedCount,
+          pricePerPersonEur: departures.pricePerPersonEur,
+          language: departures.language,
+          status: departures.status,
+          guideName: guides.name,
+        })
+        .from(departures)
+        .leftJoin(guides, eq(departures.guideId, guides.id))
+        .where(
+          and(
+            eq(departures.tourId, tour.id),
+            sql`${departures.startDate} >= ${new Date().toISOString().split('T')[0]}`,
+            sql`${departures.status} != 'CANCELLED'`
+          )
         )
-      )
-      .orderBy(asc(departures.startDate));
+        .orderBy(asc(departures.startDate)),
+    ]);
 
     return NextResponse.json({
       ...tour,
+      stages,
       departures: tourDepartures.map((d) => ({
         ...d,
         spotsLeft: d.capacity - (d.bookedCount ?? 0),
