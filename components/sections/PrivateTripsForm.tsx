@@ -85,6 +85,13 @@ export function PrivateTripsForm() {
     }));
   };
 
+  const handleNext = () => {
+    const err = validateStep(step, form);
+    if (err) { setStepError(err); return; }
+    setStepError(null);
+    setStep((s) => s + 1);
+  };
+
   if (submitted) {
     return (
       <section id="enquiry" className="py-24">
@@ -187,7 +194,7 @@ export function PrivateTripsForm() {
                         name="dateopt"
                         value={opt}
                         checked={form.dateOption === opt}
-                        onChange={() => setForm((p) => ({ ...p, dateOption: opt }))}
+                        onChange={() => { setStepError(null); setForm((p) => ({ ...p, dateOption: opt })); }}
                         className="accent-forest w-4 h-4"
                       />
                       <span className="text-[15px] font-medium">{opt}</span>
@@ -296,7 +303,7 @@ export function PrivateTripsForm() {
                       <input
                         type={f.type}
                         value={form[f.key as keyof FormState] as string}
-                        onChange={(e) => setForm((p) => ({ ...p, [f.key]: e.target.value }))}
+                        onChange={(e) => { setStepError(null); setForm((p) => ({ ...p, [f.key]: e.target.value })); }}
                         className="w-full px-3.5 py-3 border-2 border-divider rounded-lg font-inter text-[15px] bg-white outline-none focus:border-forest transition-colors"
                       />
                     </div>
@@ -333,6 +340,9 @@ export function PrivateTripsForm() {
 
             {/* Nav */}
             <div className="mt-10 pt-6 border-t-2 border-divider">
+              {stepError && (
+                <p className="text-sm text-red-600 mb-4 font-medium">{stepError}</p>
+              )}
               <div className="flex items-center justify-between">
                 <button
                   onClick={() => { setStepError(null); setStep((s) => s - 1); }}
@@ -344,12 +354,7 @@ export function PrivateTripsForm() {
 
                 {step < 4 ? (
                   <button
-                    onClick={() => {
-                      const err = validateStep(step, form);
-                      if (err) { setStepError(err); return; }
-                      setStepError(null);
-                      setStep((s) => s + 1);
-                    }}
+                    onClick={handleNext}
                     className="flex items-center gap-2 bg-terra text-white px-6 py-3 rounded-xl text-sm font-semibold border-none cursor-pointer hover:opacity-90"
                   >
                     Next
@@ -381,9 +386,6 @@ export function PrivateTripsForm() {
                   </button>
                 )}
               </div>
-              {stepError && (
-                <p className="text-xs text-red-600 mt-3">{stepError}</p>
-              )}
               {submitError && (
                 <p className="text-xs text-red-600 mt-3">Something went wrong. Please try again or WhatsApp us.</p>
               )}
