@@ -27,8 +27,25 @@ interface FormState {
   agreePrivacy: boolean;
 }
 
+function validateStep(step: number, form: FormState): string | null {
+  if (step === 0 && form.destinations.length === 0)
+    return "Please select at least one destination.";
+  if (step === 1 && !form.dateOption && !(form.customFrom && form.customTo))
+    return "Please choose a season or enter specific dates.";
+  if (step === 3 && form.experiences.length === 0)
+    return "Please select at least one experience type.";
+  if (step === 4) {
+    if (!form.name.trim()) return "Please enter your name.";
+    if (!form.email.trim()) return "Please enter your email address.";
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(form.email))
+      return "Please enter a valid email address.";
+  }
+  return null;
+}
+
 export function PrivateTripsForm() {
   const [step, setStep] = useState(0);
+  const [stepError, setStepError] = useState<string | null>(null);
   const [submitted, setSubmitted] = useState(false);
   const [submitting, setSubmitting] = useState(false);
   const [submitError, setSubmitError] = useState(false);
@@ -47,6 +64,7 @@ export function PrivateTripsForm() {
   });
 
   const toggleDest = (d: string) => {
+    setStepError(null);
     if (d === "Flexible") {
       setForm((p) => ({ ...p, destinations: ["Flexible"] }));
       return;
@@ -59,30 +77,16 @@ export function PrivateTripsForm() {
     }));
   };
 
-  const toggleExp = (e: string) =>
+  const toggleExp = (e: string) => {
+    setStepError(null);
     setForm((p) => ({
       ...p,
       experiences: p.experiences.includes(e) ? p.experiences.filter((x) => x !== e) : [...p.experiences, e],
     }));
-
-  const [stepError, setStepError] = useState<string | null>(null);
-
-  const canAdvance = (): string | null => {
-    if (step === 0 && form.destinations.length === 0) return "Please select at least one destination.";
-    if (step === 1 && !form.dateOption) return "Please select a date option.";
-    if (step === 2 && form.experiences.length === 0) return "Please select at least one experience type.";
-    if (step === 3 && form.groupSize < 1) return "Please enter a valid group size.";
-    if (step === 4) {
-      if (!form.name.trim()) return "Please enter your name.";
-      const emailOk = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(form.email);
-      if (!emailOk) return "Please enter a valid email address.";
-      if (!form.agreePrivacy) return "Please accept the privacy policy to continue.";
-    }
-    return null;
   };
 
   const handleNext = () => {
-    const err = canAdvance();
+    const err = validateStep(step, form);
     if (err) { setStepError(err); return; }
     setStepError(null);
     setStep((s) => s + 1);
@@ -190,7 +194,7 @@ export function PrivateTripsForm() {
                         name="dateopt"
                         value={opt}
                         checked={form.dateOption === opt}
-                        onChange={() => setForm((p) => ({ ...p, dateOption: opt }))}
+                        onChange={() => { setStepError(null); setForm((p) => ({ ...p, dateOption: opt })); }}
                         className="accent-forest w-4 h-4"
                       />
                       <span className="text-[15px] font-medium">{opt}</span>
@@ -299,7 +303,7 @@ export function PrivateTripsForm() {
                       <input
                         type={f.type}
                         value={form[f.key as keyof FormState] as string}
-                        onChange={(e) => setForm((p) => ({ ...p, [f.key]: e.target.value }))}
+                        onChange={(e) => { setStepError(null); setForm((p) => ({ ...p, [f.key]: e.target.value })); }}
                         className="w-full px-3.5 py-3 border-2 border-divider rounded-lg font-inter text-[15px] bg-white outline-none focus:border-forest transition-colors"
                       />
                     </div>
@@ -340,48 +344,51 @@ export function PrivateTripsForm() {
                 <p className="text-sm text-red-600 mb-4 font-medium">{stepError}</p>
               )}
               <div className="flex items-center justify-between">
-              <button
-                onClick={() => { setStepError(null); setStep((s) => s - 1); }}
-                className={`flex items-center gap-2 px-5 py-3 rounded-xl border-2 border-divider text-sm font-medium bg-transparent cursor-pointer hover:border-ink transition-colors ${step === 0 ? "opacity-0 pointer-events-none" : ""}`}
-              >
-                <ChevronLeft className="w-4 h-4" strokeWidth={1.5} />
-                Back
-              </button>
+                <button
+                  onClick={() => { setStepError(null); setStep((s) => s - 1); }}
+                  className={`flex items-center gap-2 px-5 py-3 rounded-xl border-2 border-divider text-sm font-medium bg-transparent cursor-pointer hover:border-ink transition-colors ${step === 0 ? "opacity-0 pointer-events-none" : ""}`}
+                >
+                  <ChevronLeft className="w-4 h-4" strokeWidth={1.5} />
+                  Back
+                </button>
 
-              {step < 4 ? (
-                <button
-                  onClick={handleNext}
-                  className="flex items-center gap-2 bg-terra text-white px-6 py-3 rounded-xl text-sm font-semibold border-none cursor-pointer hover:opacity-90"
-                >
-                  Next
-                  <ChevronRight className="w-4 h-4" strokeWidth={1.5} />
-                </button>
-              ) : (
-                <button
-                  onClick={async () => {
-                    setSubmitting(true);
-                    setSubmitError(false);
-                    try {
-                      const res = await fetch("/api/private-trip", {
-                        method: "POST",
-                        headers: { "Content-Type": "application/json" },
-                        body: JSON.stringify(form),
-                      });
-                      if (res.ok) { setSubmitted(true); }
-                      else { setSubmitError(true); }
-                    } catch { setSubmitError(true); }
-                    finally { setSubmitting(false); }
-                  }}
-                  disabled={submitting || !form.agreePrivacy}
-                  className="bg-terra text-white px-6 py-3 rounded-xl text-sm font-semibold border-none cursor-pointer hover:opacity-90 disabled:opacity-60 disabled:cursor-not-allowed"
-                >
-                  {submitting ? "Sending…" : "Send Enquiry"}
-                </button>
-              )}
+                {step < 4 ? (
+                  <button
+                    onClick={handleNext}
+                    className="flex items-center gap-2 bg-terra text-white px-6 py-3 rounded-xl text-sm font-semibold border-none cursor-pointer hover:opacity-90"
+                  >
+                    Next
+                    <ChevronRight className="w-4 h-4" strokeWidth={1.5} />
+                  </button>
+                ) : (
+                  <button
+                    onClick={async () => {
+                      const err = validateStep(4, form);
+                      if (err) { setStepError(err); return; }
+                      setStepError(null);
+                      setSubmitting(true);
+                      setSubmitError(false);
+                      try {
+                        const res = await fetch("/api/private-trip", {
+                          method: "POST",
+                          headers: { "Content-Type": "application/json" },
+                          body: JSON.stringify(form),
+                        });
+                        if (res.ok) { setSubmitted(true); }
+                        else { setSubmitError(true); }
+                      } catch { setSubmitError(true); }
+                      finally { setSubmitting(false); }
+                    }}
+                    disabled={submitting || !form.agreePrivacy}
+                    className="bg-terra text-white px-6 py-3 rounded-xl text-sm font-semibold border-none cursor-pointer hover:opacity-90 disabled:opacity-60 disabled:cursor-not-allowed"
+                  >
+                    {submitting ? "Sending…" : "Send Enquiry"}
+                  </button>
+                )}
+              </div>
               {submitError && (
                 <p className="text-xs text-red-600 mt-3">Something went wrong. Please try again or WhatsApp us.</p>
               )}
-              </div>
             </div>
           </div>
 

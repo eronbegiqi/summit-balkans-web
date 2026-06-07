@@ -14,13 +14,16 @@ const privateTripSchema = z.object({
   email: z.string().email(),
   phone: z.string().optional(),
   notes: z.string().optional(),
-  destinations: z.array(z.string()),
+  destinations: z.array(z.string()).min(1),
   groupSize: z.number().min(2).max(12),
   experiences: z.array(z.string()),
   dateOption: z.string(),
   customFrom: z.string().optional(),
   customTo: z.string().optional(),
-});
+}).refine(
+  (d) => d.dateOption.length > 0 || (!!d.customFrom && !!d.customTo),
+  { message: "A season or date range is required", path: ["dateOption"] }
+);
 
 const getResend = () => new Resend(process.env.RESEND_API_KEY ?? '');
 const FROM = process.env.RESEND_FROM ?? "Summit Balkans <info@summitbalkans.com>";
