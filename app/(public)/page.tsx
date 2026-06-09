@@ -14,7 +14,7 @@ export default function HomePage() {
       <UpcomingDepartures />
       <WhereWeGo />
       <HowYouTravel />
-      <FeaturedTrips />
+      {/* <FeaturedTrips /> */}
       <WhySummitBalkans />
       <Testimonials />
       <CTABand />
