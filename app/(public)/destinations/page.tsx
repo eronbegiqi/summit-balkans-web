@@ -22,7 +22,7 @@ const countries = [
     id: "montenegro",
     name: "Montenegro",
     code: "MNE",
-    tagline: "Durmitor peaks & Adriatic coast",
+    tagline: "Accursed peaks & Adriatic coast",
     description: "A country smaller than Yorkshire with mountains that rival the Alps. Durmitor National Park — a UNESCO World Heritage site — towers above glacial Black Lake. The Tara Canyon is Europe's deepest.",
     image: "https://images.unsplash.com/photo-1531366936337-7c912a4589a7?w=1200&q=85",
     highlights: ["Durmitor Ring", "Bobotov Kuk", "Peaks of the Balkans"],

@@ -229,7 +229,7 @@ function TourCard({ tour, priority = false }: { tour: Tour; priority?: boolean }
         <img
           src={getTourImage(tour)}
           alt={tour.title}
-          className="w-full h-[240px] md:h-[300px] object-cover block"
+          className="w-full h-[100%] md:h-[300px] object-cover block"
           loading={priority ? "eager" : "lazy"}
         />
         {/* Badges */}
@@ -253,7 +253,7 @@ function TourCard({ tour, priority = false }: { tour: Tour; priority?: boolean }
         </div>
       </div>
 
-      <div className="p-6 md:py-8 md:pr-8 md:pl-0 flex flex-col justify-center">
+      <div className="p-6 md:py-8 flex flex-col justify-center">
         <DifficultyDots level={tour.difficulty as 1 | 2 | 3 | 4 | 5} className="mb-3" />
         <h2 className="font-fraunces text-2xl md:text-3xl font-bold tracking-tight mb-2">{tour.title}</h2>
         {tour.excerpt && (

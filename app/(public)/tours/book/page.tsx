@@ -31,7 +31,7 @@ export default function BookPage() {
       </header>
 
       {/* Content — BookingWizard renders its own fixed step bar below the header */}
-      <div className="max-w-[1100px] mx-auto px-6 md:px-10 pb-20" style={{ paddingTop: "132px" }}>
+      <div className="max-w-[1100px] mx-auto px-6 md:px-10 pb-20" style={{ paddingTop: "162px" }}>
         <BookingWizard />
       </div>
     </div>

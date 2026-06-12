@@ -8,7 +8,7 @@ const STEP_LABELS = ["Select Departure", "Travellers", "Add-ons", "Your Details"
 
 function BookingSteps({ step }: { step: number }) {
   return (
-    <div className="fixed top-16 left-0 right-0 z-[99] bg-bone border-b-2 border-divider px-6 md:px-10">
+    <div className="fixed top-16 left-0 right-0 z-[99] bg-bone border-b-1 border-divider px-6 md:px-10">
       <div className="max-w-[1100px] mx-auto flex">
         {STEP_LABELS.map((label, i) => {
           const done = i < step;
@@ -16,7 +16,7 @@ function BookingSteps({ step }: { step: number }) {
           return (
             <div
               key={label}
-              className={`flex-1 flex flex-col items-center py-3 pb-2.5 border-b-[3px] transition-colors ${
+              className={`flex-1 flex flex-col items-center py-3 transition-colors ${
                 active ? "border-brand" : "border-transparent"
               }`}
             >
@@ -25,7 +25,7 @@ function BookingSteps({ step }: { step: number }) {
                   done
                     ? "bg-brand border-brand border-2"
                     : active
-                    ? "bg-ink border-ink border-2"
+                    ? "bg-brand "
                     : "border-2 border-divider"
                 }`}
               >
