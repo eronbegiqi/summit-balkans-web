@@ -1,8 +1,9 @@
-import { reviews } from "@/data/reviews";
 import { Star } from "lucide-react";
+import { getPublishedReviews } from "@/lib/db/queries/reviews";
+import { GoogleReviewBadge } from "@/components/ui/GoogleReviewBadge";
 
-export function PoBReviews() {
-  const pobReviews = reviews.filter((r) => r.tour === "Peaks of the Balkans");
+export async function PoBReviews() {
+  const pobReviews = await getPublishedReviews();
 
   if (pobReviews.length === 0) return null;
 
@@ -23,7 +24,7 @@ export function PoBReviews() {
                   <Star key={s} className="w-4 h-4 text-gold fill-gold" strokeWidth={0} />
                 ))}
               </div>
-              <span className="font-mono text-sm font-semibold">4.9</span>
+              <span className="font-mono text-sm font-semibold">5.0</span>
               <span className="font-mono text-[12px] text-ink/40">
                 ({pobReviews.length} reviews)
               </span>
@@ -53,10 +54,13 @@ export function PoBReviews() {
                     {r.avatarInitial}
                   </span>
                 </div>
-                <div>
+                <div className="flex-1">
                   <div className="text-sm font-semibold">{r.name}</div>
-                  <div className="font-mono text-[11px] text-ink/40">{r.country}</div>
+                  {r.country && <div className="font-mono text-[11px] text-ink/40">{r.country}</div>}
                 </div>
+                {r.reviewUrl && r.source === "GOOGLE" && (
+                  <GoogleReviewBadge href={r.reviewUrl} />
+                )}
               </div>
             </div>
           ))}

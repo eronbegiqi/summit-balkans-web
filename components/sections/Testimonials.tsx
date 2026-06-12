@@ -3,16 +3,18 @@
 import { useCallback, useEffect, useState } from "react";
 import useEmblaCarousel from "embla-carousel-react";
 import Autoplay from "embla-carousel-autoplay";
-import { reviews } from "@/data/reviews";
+import type { Review } from "@/lib/types";
 import { SectionLabel } from "@/components/ui/SectionLabel";
+import { GoogleReviewBadge } from "@/components/ui/GoogleReviewBadge";
 
-interface Review { id: string; name: string; country: string; quote: string; avatarInitial: string; tour?: string; }
+export type { Review };
 
 function TestiCard({ review }: { review: Review }) {
+  const meta = [review.country, review.tour].filter(Boolean).join(" · ");
   return (
-    <div className="flex-none border-2 border-divider rounded-card bg-white px-6 py-6 md:px-7 md:py-7">
+    <div className="flex-none border-2 border-divider rounded-card bg-white px-6 py-6 md:px-7 md:py-7 h-full flex flex-col">
       <div className="text-warning text-sm tracking-[2px] mb-3">★★★★★</div>
-      <p className="text-[15px] leading-[1.65] text-ink/75 mb-5 italic">
+      <p className="text-[15px] leading-[1.65] text-ink/75 mb-5 italic flex-1">
         &ldquo;{review.quote}&rdquo;
       </p>
       <div className="flex items-center gap-3">
@@ -21,16 +23,19 @@ function TestiCard({ review }: { review: Review }) {
         </div>
         <div>
           <div className="text-sm font-semibold">{review.name}</div>
-          <div className="text-xs text-ink/45 font-mono">
-            {review.country}{review.tour ? ` · ${review.tour}` : ""}
-          </div>
+          {meta && <div className="text-xs text-ink/45 font-mono">{meta}</div>}
         </div>
       </div>
+      {review.reviewUrl && review.source === "GOOGLE" && (
+        <div className="mt-4 pt-4 border-t border-divider">
+          <GoogleReviewBadge href={review.reviewUrl} />
+        </div>
+      )}
     </div>
   );
 }
 
-function MobileCarousel() {
+function MobileCarousel({ reviews }: { reviews: Review[] }) {
   const autoplay = Autoplay({ delay: 6000, stopOnInteraction: true, stopOnMouseEnter: true });
   const [emblaRef, emblaApi] = useEmblaCarousel(
     { loop: true, align: "center", slidesToScroll: 1 },
@@ -79,7 +84,7 @@ function MobileCarousel() {
   );
 }
 
-function DesktopMarquee() {
+function DesktopMarquee({ reviews }: { reviews: Review[] }) {
   const doubled = [...reviews, ...reviews];
   return (
     <div className="relative overflow-hidden">
@@ -100,7 +105,9 @@ function DesktopMarquee() {
   );
 }
 
-export function Testimonials() {
+export function Testimonials({ reviews }: { reviews: Review[] }) {
+  if (reviews.length === 0) return null;
+
   return (
     <section className="py-16 md:py-24 bg-bone overflow-hidden border-t-2 border-divider">
       <div className="max-w-content mx-auto px-4 md:px-10 mb-10 md:mb-12">
@@ -112,12 +119,12 @@ export function Testimonials() {
 
       {/* Mobile (< 1024px): Embla carousel */}
       <div className="block lg:hidden">
-        <MobileCarousel />
+        <MobileCarousel reviews={reviews} />
       </div>
 
       {/* Desktop (1024px+): infinite marquee */}
       <div className="hidden lg:block">
-        <DesktopMarquee />
+        <DesktopMarquee reviews={reviews} />
       </div>
 
       <style>{`
