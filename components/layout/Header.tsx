@@ -117,6 +117,8 @@ const navItems: NavItem[] = [
             { label: "Blog", href: "/blog" },
             { label: "Before You Visit", href: "/before-you-visit" },
             { label: "FAQ", href: "/before-you-visit#faq" },
+            { label: "Offers & Discounts", href: "/offers" },
+            { label: "Booking Terms", href: "/legal/booking-terms" },
           ],
         },
       ],
