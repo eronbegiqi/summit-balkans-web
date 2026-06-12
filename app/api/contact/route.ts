@@ -9,7 +9,7 @@ import { inquiries } from "@/lib/db/schema";
 import { ContactAutoReply } from "@/emails/ContactAutoReply";
 import { AdminContactAlert } from "@/emails/AdminContactAlert";
 
-const resend = new Resend(process.env.RESEND_API_KEY);
+const getResend = () => new Resend(process.env.RESEND_API_KEY ?? '');
 const FROM = process.env.RESEND_FROM ?? "Summit Balkans <info@summitbalkans.com>";
 const ADMIN = process.env.ADMIN_EMAIL ?? "info@summitbalkans.com";
 
@@ -37,13 +37,13 @@ export async function POST(req: NextRequest) {
         status: "NEW",
       }),
       // Emails
-      resend.emails.send({
+      getResend().emails.send({
         from: FROM,
         to: email,
         subject: "We got your message — Summit Balkans",
         html: await render(ContactAutoReply({ name, subject, message })),
       }),
-      resend.emails.send({
+      getResend().emails.send({
         from: FROM,
         to: ADMIN,
         replyTo: email,

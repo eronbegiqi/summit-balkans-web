@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { ArrowRight } from "lucide-react";
 import { SectionLabel } from "@/components/ui/SectionLabel";
+import { EmergencyContactsSection } from "@/components/sections/EmergencyContacts";
 
 export const metadata: Metadata = {
   title: "Before You Visit",
@@ -280,6 +281,9 @@ export default function BeforeYouVisitPage() {
           </Link>
         </div>
       </div>
+
+      {/* Emergency contacts */}
+      <EmergencyContactsSection />
 
       {/* FAQ */}
       <section id="faq" className="py-24">

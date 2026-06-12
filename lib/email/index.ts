@@ -9,7 +9,7 @@ export { GearRentalConfirmation } from './templates/gear-rental-confirmation';
 // Re-export customer-facing templates from the emails/ root folder
 export { BookingConfirmation } from '@/emails/BookingConfirmation';
 
-const resend = new Resend(process.env.RESEND_API_KEY);
+const getResend = () => new Resend(process.env.RESEND_API_KEY ?? '');
 
 const FROM = process.env.RESEND_FROM_EMAIL ?? 'info@summitbalkans.com';
 const ADMIN_EMAIL = 'info@summitbalkans.com';
@@ -23,7 +23,7 @@ type SendOptions = {
 
 async function send({ to, subject, react, replyTo }: SendOptions) {
   const html = await render(react);
-  return resend.emails.send({
+  return getResend().emails.send({
     from: `Summit Balkans <${FROM}>`,
     to: Array.isArray(to) ? to : [to],
     subject,

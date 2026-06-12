@@ -36,14 +36,12 @@ export async function getInquiries(filters: InquiryFilters = {}) {
 }
 
 export async function getInquiryById(id: number): Promise<InquiryDetail | null> {
-  const [row] = await db.select().from(inquiries).where(eq(inquiries.id, id));
-  if (!row) return null;
-
-  const assignedTo = row.assignedToId
-    ? ((await db.select().from(adminUsers).where(eq(adminUsers.id, row.assignedToId)))[0] ?? null)
+  const [inquiry] = await db.select().from(inquiries).where(eq(inquiries.id, id)).limit(1);
+  if (!inquiry) return null;
+  const assignedTo = inquiry.assignedToId
+    ? ((await db.select().from(adminUsers).where(eq(adminUsers.id, inquiry.assignedToId)).limit(1))[0] ?? null)
     : null;
-
-  return { ...row, assignedTo };
+  return { ...inquiry, assignedTo };
 }
 
 export async function getInquiryCountsByType() {

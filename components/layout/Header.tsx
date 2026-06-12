@@ -23,6 +23,10 @@ interface NavItem {
 
 const navItems: NavItem[] = [
   {
+    label: "Home",
+    href: "/",
+  },
+  {
     label: "Tours",
     href: "/tours",
     submenu: {
@@ -112,8 +116,7 @@ const navItems: NavItem[] = [
           links: [
             { label: "Blog", href: "/blog" },
             { label: "Before You Visit", href: "/before-you-visit" },
-            { label: "FAQ", href: "/before-you-visit" },
-            { label: "Booking Terms", href: "/legal/booking-terms" },
+            { label: "FAQ", href: "/before-you-visit#faq" },
           ],
         },
       ],
@@ -143,6 +146,7 @@ function LogoMark({ dark }: { dark: boolean }) {
 export function Header() {
   const headerRef = useRef<HTMLElement>(null);
   const [scrolled, setScrolled] = useState(false);
+  const scrolledRef = useRef(false); // avoid stale closure in scroll handler
   const [mobileOpen, setMobileOpen] = useState(false);
   const [openMenu, setOpenMenu] = useState<string | null>(null);
   const [mobileExpanded, setMobileExpanded] = useState<string | null>(null);
@@ -153,27 +157,20 @@ export function Header() {
   const isHeroPage = HERO_PAGES.includes(pathname);
   const solidState = scrolled || !isHeroPage;
 
-  // GSAP scroll animation — use a ref to avoid stale closure on scrolled state
-  const scrolledRef = useRef(false);
-
+  // GSAP scroll animation — use ref to avoid stale closure
   useEffect(() => {
     if (!headerRef.current) return;
     const initialH = isHeroPage ? 96 : 64;
-
-    // Sync with actual scroll position on mount (browser may restore scroll)
-    const alreadyScrolled = window.scrollY > 80;
-    scrolledRef.current = alreadyScrolled;
-    setScrolled(alreadyScrolled);
-    gsap.set(headerRef.current, { height: alreadyScrolled ? 64 : initialH });
+    gsap.set(headerRef.current, { height: initialH });
 
     const onScroll = () => {
-      const past = window.scrollY > 80;
+      const past = window.scrollY > 10;
       if (past === scrolledRef.current) return;
       scrolledRef.current = past;
       setScrolled(past);
       gsap.to(headerRef.current, {
         height: past ? 64 : initialH,
-        duration: 0.3,
+        duration: 0.25,
         ease: "power2.out",
         overwrite: true,
       });
@@ -309,6 +306,20 @@ export function Header() {
             <Phone className="w-4 h-4" strokeWidth={1.5} />
           </a>
 
+          <a
+            href={CONTACT.whatsapp}
+            target="_blank"
+            rel="noopener noreferrer"
+            className={cn(
+              "flex items-center gap-1.5 text-sm font-medium px-4 py-2.5 rounded-lg no-underline border transition-all",
+              solidState
+                ? "text-ink border-mist hover:border-ink"
+                : "text-white border-white/35 hover:border-white/65 hover:bg-white/6"
+            )}
+          >
+            WhatsApp
+          </a>
+
           <Link
             href="/tours"
             className="bg-brand text-white text-sm font-semibold px-5 py-2.5 rounded-lg no-underline hover:bg-brand/90 transition-colors"
@@ -442,6 +453,14 @@ export function Header() {
             >
               Book a Trip
             </Link>
+            <a
+              href={CONTACT.whatsapp}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="flex-1 border-2 border-white/20 text-white text-center py-4 rounded-xl font-medium text-sm no-underline hover:border-white/40 transition-colors"
+            >
+              WhatsApp
+            </a>
           </div>
 
           {/* Contact info */}

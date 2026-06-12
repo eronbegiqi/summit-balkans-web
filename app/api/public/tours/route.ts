@@ -1,12 +1,22 @@
-import { NextResponse } from 'next/server';
+import { NextRequest, NextResponse } from 'next/server';
 import { db } from '@/lib/db/client';
-import { tours, departures, guides } from '@/lib/db/schema';
-import { and, asc, eq, gte, sql } from 'drizzle-orm';
+import { tours } from '@/lib/db/schema';
+import { and, asc, eq, sql } from 'drizzle-orm';
 
 export const revalidate = 300;
 
-export async function GET() {
+export async function GET(req: NextRequest) {
+  const { searchParams } = req.nextUrl;
+  const variantFilter = searchParams.get('variant')?.toUpperCase();
+  const typeFilter = searchParams.get('type')?.toUpperCase();
+
   try {
+    const conditions = [eq(tours.published, true)];
+    if (variantFilter)
+      conditions.push(eq(tours.tourVariant, variantFilter as 'QUICK' | 'REGULAR' | 'CLASSIC' | 'OTHER'));
+    if (typeFilter)
+      conditions.push(eq(tours.tourType, typeFilter as 'GUIDED' | 'SELF_GUIDED'));
+
     const rows = await db
       .select({
         id: tours.id,
@@ -19,7 +29,11 @@ export async function GET() {
         durationDays: tours.durationDays,
         difficulty: tours.difficulty,
         pricePerPersonEur: tours.pricePerPersonEur,
+        selfGuidedPriceEur: tours.selfGuidedPriceEur,
         groupSizeMax: tours.groupSizeMax,
+        minParticipants: tours.minParticipants,
+        tourType: tours.tourType,
+        tourVariant: tours.tourVariant,
         isFlagship: tours.isFlagship,
         bestSeasonStart: tours.bestSeasonStart,
         bestSeasonEnd: tours.bestSeasonEnd,
@@ -27,10 +41,10 @@ export async function GET() {
         maxElevationM: tours.maxElevationM,
       })
       .from(tours)
-      .where(eq(tours.published, true))
+      .where(and(...conditions))
       .orderBy(asc(tours.displayOrder), asc(tours.title));
 
-    // Get next departure per tour
+    // Get next departure per tour (separate query, no lateral join for MariaDB compat)
     const today = new Date().toISOString().split('T')[0];
     const nextDepartures = await db.execute(sql`
       SELECT tour_id, MIN(start_date) AS next_departure,
