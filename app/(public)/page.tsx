@@ -6,8 +6,11 @@ import { FeaturedTrips } from "@/components/sections/FeaturedTrips";
 import { WhySummitBalkans } from "@/components/sections/WhySummitBalkans";
 import { Testimonials } from "@/components/sections/Testimonials";
 import { CTABand } from "@/components/sections/CTABand";
+import { getPublishedReviews } from "@/lib/db/queries/reviews";
 
-export default function HomePage() {
+export default async function HomePage() {
+  const reviews = await getPublishedReviews();
+
   return (
     <>
       <HomeHero />
@@ -16,7 +19,7 @@ export default function HomePage() {
       <HowYouTravel />
       {/* <FeaturedTrips /> */}
       <WhySummitBalkans />
-      <Testimonials />
+      <Testimonials reviews={reviews} />
       <CTABand />
     </>
   );

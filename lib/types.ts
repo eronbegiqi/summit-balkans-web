@@ -32,13 +32,17 @@ export interface Departure {
 export interface Review {
   id: string;
   name: string;
-  country: string;
-  countryCode: string;
+  country?: string;
+  countryCode?: string;
   rating: number;
   quote: string;
   tour?: string;
   date: string;
   avatarInitial: string;
+  /** Origin of the review, e.g. "GOOGLE" | "DIRECT". */
+  source?: string;
+  /** Link to the original review listing (e.g. the Google reviews page). */
+  reviewUrl?: string;
 }
 
 export interface GearItem {
