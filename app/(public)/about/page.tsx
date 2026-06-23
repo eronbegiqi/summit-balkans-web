@@ -26,7 +26,7 @@ export default function AboutPage() {
       {/* Hero */}
       <section className="relative min-h-[65vh] flex items-center overflow-hidden">
         <div className="absolute inset-0 bg-cover bg-center" style={{ backgroundImage: "url('https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?w=1920&q=85')" }} />
-        <div className="absolute inset-0 bg-dark/72" />
+        <div className="absolute inset-0 bg-black/40" />
         <div className="relative z-10 max-w-content mx-auto px-10 pt-[72px] w-full">
           <h1
             className="font-fraunces font-bold text-white tracking-tight leading-[1.0] max-w-[700px] mb-6"
@@ -43,7 +43,7 @@ export default function AboutPage() {
       {/* Our Story */}
       <section className="py-24">
         <div className="max-w-content mx-auto px-10">
-          <div className="grid grid-cols-2 gap-16 items-start">
+          <div className="grid md:grid-cols-2 grid-cols-1 gap-16 items-start">
             <div>
               <SectionLabel>Our Story</SectionLabel>
               <h2 className="font-fraunces text-4xl font-bold tracking-tight mb-8">Founded in the mountains</h2>
@@ -75,7 +75,7 @@ export default function AboutPage() {
         <div className="max-w-content mx-auto px-10">
           <SectionLabel>The Team</SectionLabel>
           <h2 className="font-fraunces text-4xl font-bold tracking-tight mb-12">Our guides</h2>
-          <div className="grid grid-cols-4 gap-5">
+          <div className="grid md:grid-cols-4 grid-cols-1 gap-5">
             {guides.map((g) => (
               <div key={g.name} className="border-2 border-divider rounded-card bg-white p-6">
                 <div
@@ -109,7 +109,7 @@ export default function AboutPage() {
         <div className="max-w-content mx-auto px-10 relative z-10">
           <SectionLabel light>What We Stand For</SectionLabel>
           <h2 className="font-fraunces text-4xl font-bold text-white tracking-tight mb-12">Our values</h2>
-          <div className="grid grid-cols-3 gap-12">
+          <div className="grid md:grid-cols-3 grid-cols-1 gap-12">
             {values.map((v) => (
               <div key={v.title}>
                 <h3 className="font-fraunces text-2xl font-bold text-white mb-3">{v.title}</h3>

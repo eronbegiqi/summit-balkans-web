@@ -12,7 +12,7 @@ const countries = [
   },
   {
     name: "Montenegro",
-    tag: "Durmitor peaks & Adriatic coast",
+    tag: "Montenegro peaks & Adriatic coast",
     code: "MONTENEGRO",
     href: "/destinations#montenegro",
     image: "https://images.unsplash.com/photo-1531366936337-7c912a4589a7?w=900&q=85",

@@ -36,7 +36,7 @@ function TestiCard({ review }: { review: Review }) {
 }
 
 function MobileCarousel({ reviews }: { reviews: Review[] }) {
-  const autoplay = Autoplay({ delay: 6000, stopOnInteraction: true, stopOnMouseEnter: true });
+  const autoplay = Autoplay({ delay: 5000, stopOnInteraction: false, stopOnMouseEnter: false });
   const [emblaRef, emblaApi] = useEmblaCarousel(
     { loop: true, align: "center", slidesToScroll: 1 },
     [autoplay]

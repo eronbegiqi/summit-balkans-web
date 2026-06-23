@@ -21,7 +21,7 @@ export function PrivateTripsHero() {
       <div className="absolute inset-0 bg-gradient-to-br from-dark/80 via-dark/55 to-dark/75" />
 
       <div
-        className="relative z-10 max-w-content mx-auto px-10 pt-[68px] w-full grid items-center gap-20"
+        className="relative z-10 max-w-content mx-auto px-10 pt-[68px] w-full grid  items-center gap-20"
         style={{ gridTemplateColumns: "1fr 420px" }}
       >
         <div>

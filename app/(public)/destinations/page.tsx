@@ -59,7 +59,7 @@ export default function DestinationsPage() {
             <div
               key={country.id}
               id={country.id}
-              className={`grid grid-cols-2 gap-16 items-center ${i % 2 === 1 ? "[direction:rtl]" : ""}`}
+              className={`grid md:grid-cols-2 grid-cols-1 md:gap-16 gap-4 items-center ${i % 2 === 1 ? "[direction:rtl]" : ""}`}
             >
               <div className={`rounded-card-hero overflow-hidden border-2 border-divider aspect-[4/3] ${i % 2 === 1 ? "[direction:ltr]" : ""}`}>
                 {/* eslint-disable-next-line @next/next/no-img-element */}
