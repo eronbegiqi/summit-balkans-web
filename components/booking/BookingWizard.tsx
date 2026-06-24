@@ -63,6 +63,12 @@ const FALLBACK_DATES = [
 
 type Departure = { id: string; date: string; endDate: string; guide: string; spots: number; total: number; price: number; low: boolean };
 
+export type BookingWizardServerData = {
+  tourTitle: string;
+  basePrice: number;
+  departures: Departure[];
+};
+
 const addOns = [
   { id: "gear", icon: Backpack, title: "Gear Rental Pack", desc: "Trekking poles, sleeping bag, daypack & headlamp for your whole trip.", price: 45, unit: "/day" },
   { id: "transfer", icon: Car, title: "Airport Transfer", desc: "Private transfer from Prishtina, Tirana, or Podgorica airport.", price: 35, unit: "/person" },
@@ -92,15 +98,26 @@ function formatShortDate(d: string) {
   return new Date(d).toLocaleDateString("en-GB", { day: "numeric", month: "short", year: "numeric" });
 }
 
-export function BookingWizard({ tourSlug = "peaks-of-the-balkans" }: { tourSlug?: string }) {
+export function BookingWizard({
+  tourSlug = "peaks-of-the-balkans",
+  serverData,
+}: {
+  tourSlug?: string;
+  serverData?: BookingWizardServerData | null;
+}) {
   const [step, setStep] = useState(0);
   const [confirmed, setConfirmed] = useState(false);
   const [bookingError, setBookingError] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [availableDates, setAvailableDates] = useState<Departure[]>(FALLBACK_DATES);
+  const [availableDates, setAvailableDates] = useState<Departure[]>(serverData?.departures ?? FALLBACK_DATES);
 
-  // Fetch real departures from DB on mount; keep fallback if unavailable
+  // Use server-prefetched data when available; otherwise fetch it on the client as a fallback.
   useEffect(() => {
+    if (serverData?.departures?.length) {
+      setAvailableDates(serverData.departures);
+      return;
+    }
+
     fetch(`/api/public/tours/${tourSlug}`)
       .then((r) => r.json())
       .then((data) => {
@@ -124,7 +141,7 @@ export function BookingWizard({ tourSlug = "peaks-of-the-balkans" }: { tourSlug?
         }
       })
       .catch(() => {}); // silently keep fallback
-  }, [tourSlug]);
+  }, [tourSlug, serverData]);
 
   const [state, setState] = useState<BookingState>({
     departureId: null,
@@ -138,7 +155,7 @@ export function BookingWizard({ tourSlug = "peaks-of-the-balkans" }: { tourSlug?
   });
 
   const selectedDep = availableDates.find((d) => d.id === state.departureId) ?? null;
-  const basePrice = selectedDep?.price ?? 1290;
+  const basePrice = selectedDep?.price ?? serverData?.basePrice ?? 1290;
   const adultTotal = basePrice * state.adults;
   const childTotal = Math.round(basePrice * 0.85) * state.children;
   const gearTotal = state.addOns.has("gear") ? 45 * 10 : 0;
@@ -172,7 +189,7 @@ export function BookingWizard({ tourSlug = "peaks-of-the-balkans" }: { tourSlug?
           departureDate: formatShortDate(selectedDep.date),
           returnDate: formatShortDate(selectedDep.endDate),
           guide: selectedDep.guide,
-          tourName: "Peaks of the Balkans",
+          tourName: serverData?.tourTitle ?? "Peaks of the Balkans",
           adults: state.adults,
           children: state.children,
           addOns: Array.from(state.addOns).map((id) => addOnLabels[id] ?? id),

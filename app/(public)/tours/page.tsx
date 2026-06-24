@@ -158,7 +158,7 @@ export default function ToursPage() {
           {loading ? (
             <div className="flex flex-col gap-8">
               {[1, 2, 3].map((i) => (
-                <div key={i} className="h-[280px] rounded-card-hero bg-ink/5 animate-pulse" />
+                <div key={i} className="rounded-card-hero bg-ink/5 animate-pulse" />
               ))}
             </div>
           ) : tours.length === 0 ? (

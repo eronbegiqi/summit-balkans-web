@@ -53,7 +53,7 @@ export async function getInquiries(filters: InquiryFilters = {}) {
 }
 
 export async function getInquiryById(id: number): Promise<InquiryLookupResult> {
-  return safeQuery(async () => {
+  return safeQuery<InquiryLookupResult>(async () => {
     const [inquiry] = await db.select().from(inquiries).where(eq(inquiries.id, id)).limit(1);
     if (!inquiry) {
       return { inquiry: null, notFound: true, error: null };
@@ -64,7 +64,7 @@ export async function getInquiryById(id: number): Promise<InquiryLookupResult> {
       : null;
 
     return { inquiry: { ...inquiry, assignedTo }, notFound: false, error: null };
-  }, { inquiry: null, notFound: false, error: 'Unable to load inquiry right now.' });
+  }, { inquiry: null, notFound: true, error: 'Unable to load inquiry right now.' });
 }
 
 export async function getInquiryCountsByType() {

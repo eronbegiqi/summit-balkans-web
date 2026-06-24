@@ -226,7 +226,7 @@ export function Header() {
           "fixed top-0 left-0 right-0 z-[100] flex items-center justify-between px-5 md:px-10",
           "transition-colors duration-300",
           solidState
-            ? "bg-bone/95 backdrop-blur-md border-b border-mist/60"
+            ? "bg-white backdrop-blur-md border-b border-mist/60"
             : "bg-transparent"
         )}
       >
