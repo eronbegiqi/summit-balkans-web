@@ -15,6 +15,9 @@ const nextConfig: NextConfig = {
         protocol: "https",
         hostname: "media.summitbalkans.com",
       },
+      {
+        protocol: "https", hostname: "pub-84f4670fd13a4a1e978382d986a3ecad.r2.dev" 
+      },
     ],
   },
   experimental: {
