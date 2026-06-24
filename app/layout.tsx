@@ -3,6 +3,7 @@ import { Fraunces, Inter, JetBrains_Mono } from "next/font/google";
 import "leaflet/dist/leaflet.css";
 import "@/styles/globals.css";
 import Script from "next/script";
+import { Analytics } from "@vercel/analytics/next";
 
 const fraunces = Fraunces({
   subsets: ["latin"],
@@ -63,7 +64,10 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           gtag('config', 'G-MCDEJ36XL7');`}
         </Script>
       </head>
-      <body>{children}</body>
+      <body>
+        {children}
+        <Analytics />
+      </body>
     </html>
   );
 }
