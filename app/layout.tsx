@@ -39,6 +39,17 @@ export const metadata: Metadata = {
     siteName: "Summit Balkans",
     locale: "en_GB",
     type: "website",
+    images: [
+      {
+        url: "https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?w=1200&q=85",
+        width: 1200,
+        height: 630,
+        alt: "Summit Balkans hiking in the Balkans",
+      },
+    ],
+  },
+  twitter: {
+    card: "summary_large_image",
   },
   verification: {
     google: "XtiAN5eYbBB4_z9vyFJqPV7kZ2e7yr1Iiz81eZfztFo",

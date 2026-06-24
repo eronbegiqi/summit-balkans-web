@@ -1,14 +1,21 @@
+import Image from "next/image";
 import Link from "next/link";
 import { MessageCircle } from "lucide-react";
 
 export function CTABand() {
   return (
     <section className="bg-dark py-24 text-center relative overflow-hidden">
-      {/* Faint mountain underlay */}
-      <div
-        className="absolute inset-0 opacity-[0.12] bg-cover bg-center"
-        style={{ backgroundImage: "url('https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=1600&q=60')" }}
-      />
+      <div className="absolute inset-0 opacity-[0.12]">
+        <Image
+          src="https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=1600&q=60"
+          alt=""
+          fill
+          sizes="100vw"
+          className="object-cover"
+          aria-hidden="true"
+          priority={false}
+        />
+      </div>
 
       <div className="relative z-10 max-w-content mx-auto px-10">
         <h2

@@ -82,7 +82,7 @@ export function CookieBanner() {
           <p className="text-sm text-white/55 max-w-xl leading-relaxed">
             We use cookies to improve your experience.{" "}
             <Link href="/legal/cookie-policy" className="text-white/70 underline underline-offset-2 hover:text-white transition-colors">
-              Learn more
+              Read our cookie policy
             </Link>
           </p>
           <div className="flex gap-2.5 flex-shrink-0 flex-wrap">

@@ -1,3 +1,4 @@
+import Image from "next/image";
 import Link from "next/link";
 import { ArrowRight } from "lucide-react";
 import { SectionLabel } from "@/components/ui/SectionLabel";
@@ -49,14 +50,16 @@ export function WhereWeGo() {
               className="relative rounded-card-hero overflow-hidden cursor-pointer border-2 border-transparent hover:-translate-y-1 hover:border-brand active:scale-[0.98] transition-all duration-200 no-underline group block"
               style={{ aspectRatio: "16/10" }}
             >
-              {/* Background image */}
-              {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img
-                src={c.image}
-                alt={c.name}
-                className="w-full h-full object-cover block transition-transform duration-500 group-hover:scale-[1.04]"
-                loading="lazy"
-              />
+              <div className="relative w-full h-full">
+                <Image
+                  src={c.image}
+                  alt={c.name}
+                  fill
+                  sizes="(min-width: 768px) 33vw, 100vw"
+                  className="object-cover transition-transform duration-500 group-hover:scale-[1.04]"
+                  loading="lazy"
+                />
+              </div>
 
               {/* Stronger gradient overlay */}
               <div
@@ -80,7 +83,7 @@ export function WhereWeGo() {
                 </div>
                 <div className="text-base md:text-lg text-white/85 leading-snug">{c.tag}</div>
                 <div className="flex items-center gap-1.5 text-[13px] font-semibold text-white mt-3 opacity-0 translate-y-1 group-hover:opacity-100 group-hover:translate-y-0 transition-all duration-200">
-                  Explore
+                  Explore {c.name}
                   <ArrowRight className="w-4 h-4" strokeWidth={1.5} />
                 </div>
               </div>

@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import { useRef, useState, useEffect, useCallback } from "react";
 import Link from "next/link";
 import { ChevronLeft, ChevronRight, ArrowRight } from "lucide-react";
@@ -172,13 +173,16 @@ export function UpcomingDepartures() {
                 role="listitem"
                 className="flex-none w-[260px] md:w-[300px] rounded-card border-2 border-divider bg-white overflow-hidden snap-start hover:border-brand hover:-translate-y-0.5 active:scale-[0.98] transition-all duration-200"
               >
-                {/* eslint-disable-next-line @next/next/no-img-element */}
-                <img
-                  src={imgSrc}
-                  alt={dep.tourTitle}
-                  className="w-full h-[160px] md:h-[168px] object-cover block"
-                  loading="lazy"
-                />
+                <div className="relative w-full h-[160px] md:h-[168px]">
+                  <Image
+                    src={imgSrc}
+                    alt={dep.tourTitle}
+                    fill
+                    sizes="(min-width: 768px) 300px, 100vw"
+                    className="object-cover"
+                    loading="lazy"
+                  />
+                </div>
                 <div className="px-4 md:px-5 py-4 md:py-[18px]">
                   <div className="flex items-center gap-1.5 mb-2.5 flex-wrap">
                     {countries.map((c) => (

@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import Link from "next/link";
 import { ArrowRight, MessageCircle } from "lucide-react";
 
@@ -10,11 +11,17 @@ export function HomeHero() {
       aria-label="Hero"
     >
       {/* Background */}
-      <div
-        className="absolute inset-0 bg-cover bg-center"
-        style={{ backgroundImage: "url('https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?w=1920&q=85')" }}
-      />
-      
+      <div className="absolute inset-0">
+        <Image
+          src="https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?w=1920&q=85"
+          alt="Mountain trail in the Balkans"
+          fill
+          sizes="100vw"
+          className="object-cover"
+          priority
+        />
+      </div>
+
       {/* Overlay - Changed to 20% black */}
       <div className="absolute inset-0 bg-black/40" />
 
