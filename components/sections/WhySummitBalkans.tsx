@@ -25,7 +25,7 @@ const pillars = [
 const stats = [
   { value: 200, suffix: "+", label: "Travellers", decimals: 0 },
   { value: 60, suffix: "+", label: "Routes", decimals: 0 },
-  { value: 4.9, suffix: "★", label: "Avg. Rating", decimals: 1 },
+  { value: 5, suffix: "★", label: "Avg. Rating", decimals: 1 },
 ];
 
 function useCounter(target: number, decimals: number, active: boolean) {
