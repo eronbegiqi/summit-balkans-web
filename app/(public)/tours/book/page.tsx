@@ -66,9 +66,10 @@ async function getBookingServerData(slug: string): Promise<BookingWizardServerDa
   }
 }
 
-export default async function BookPage({ searchParams }: { searchParams: Promise<{ tour?: string }> }) {
+export default async function BookPage({ searchParams }: { searchParams: Promise<{ tour?: string; departure?: string }> }) {
   const params = await searchParams;
   const slug = params.tour?.trim() || "peaks-of-the-balkans";
+  const preselectedDepartureId = params.departure?.trim() || null;
   const serverData = await getBookingServerData(slug);
 
   return (
@@ -94,7 +95,7 @@ export default async function BookPage({ searchParams }: { searchParams: Promise
 
       {/* Content — BookingWizard renders its own fixed step bar below the header */}
       <div className="max-w-[1100px] mx-auto px-6 md:px-10 pb-20" style={{ paddingTop: "162px" }}>
-        <BookingWizard tourSlug={slug} serverData={serverData} />
+        <BookingWizard tourSlug={slug} serverData={serverData} preselectedDepartureId={preselectedDepartureId} />
       </div>
     </div>
   );

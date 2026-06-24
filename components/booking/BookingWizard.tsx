@@ -101,11 +101,16 @@ function formatShortDate(d: string) {
 export function BookingWizard({
   tourSlug = "peaks-of-the-balkans",
   serverData,
+  preselectedDepartureId = null,
 }: {
   tourSlug?: string;
   serverData?: BookingWizardServerData | null;
+  preselectedDepartureId?: string | null;
 }) {
-  const [step, setStep] = useState(0);
+  // When the user clicks "Book" on a specific departure, skip straight to the
+  // Travellers step with that departure already selected. The general
+  // "Book This Tour" CTA omits the departure and starts at step 0.
+  const [step, setStep] = useState(preselectedDepartureId ? 1 : 0);
   const [confirmed, setConfirmed] = useState(false);
   const [bookingError, setBookingError] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -144,7 +149,7 @@ export function BookingWizard({
   }, [tourSlug, serverData]);
 
   const [state, setState] = useState<BookingState>({
-    departureId: null,
+    departureId: preselectedDepartureId,
     adults: 1,
     children: 0,
     addOns: new Set(),
