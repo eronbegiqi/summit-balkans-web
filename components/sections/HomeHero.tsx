@@ -56,7 +56,7 @@ export function HomeHero() {
         <div className="flex items-center gap-5 text-[13px] text-white/65 flex-wrap">
           <span className="text-gold text-sm tracking-[1px]">★★★★★</span>
           <span className="w-[3px] h-[3px] rounded-full bg-white/35" />
-          <span>4.9 · 200+ Travellers</span>
+          <span>5 · 200+ Travellers</span>
           <span className="w-[3px] h-[3px] rounded-full bg-white/35" />
           <span>Local Guides</span>
           <span className="w-[3px] h-[3px] rounded-full bg-white/35" />
