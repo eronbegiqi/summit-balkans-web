@@ -1,5 +1,3 @@
-"use client";
-
 import Image from "next/image";
 import Link from "next/link";
 import { ArrowRight, MessageCircle } from "lucide-react";
@@ -18,7 +16,9 @@ export function HomeHero() {
           fill
           sizes="100vw"
           className="object-cover"
+          quality={70}
           priority
+          fetchPriority="high"
         />
       </div>
 
