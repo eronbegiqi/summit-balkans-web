@@ -49,6 +49,13 @@ export async function toggleGuidePublished(id: number, published: boolean) {
   revalidatePath('/admin/guides');
 }
 
+export async function deleteGuide(id: number) {
+  await requireAdmin();
+  await db.delete(guides).where(eq(guides.id, id));
+  revalidatePath('/admin/guides');
+  redirect('/admin/guides');
+}
+
 // ─── Departures ──────────────────────────────────────────────────────────────
 
 export async function saveDeparture(id: number | null, data: Omit<typeof departures.$inferInsert, 'id' | 'createdAt' | 'updatedAt'>) {

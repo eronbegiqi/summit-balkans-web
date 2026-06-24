@@ -3,6 +3,7 @@ import { getGuideById } from '@/lib/db/queries/guides';
 import { saveGuide, toggleGuidePublished } from '@/lib/actions/content';
 import { parseJsonField } from '@/lib/db/utils';
 import { PublishToggle } from '@/components/admin/publish-toggle';
+import { GuideDeleteButton } from '@/components/admin/guides/guide-delete-button';
 import Link from 'next/link';
 import { ArrowLeft } from 'lucide-react';
 
@@ -75,6 +76,7 @@ export default async function GuideEditPage({ params }: Props) {
             onToggle={async (p) => { 'use server'; await toggleGuidePublished(guide.id, p); }}
           />
           <button type="submit" className="w-full rounded-lg py-3 text-sm font-semibold text-white" style={{ backgroundColor: '#2e8a57' }}>Save guide</button>
+          <GuideDeleteButton id={guide.id} />
         </div>
       </form>
     </div>
