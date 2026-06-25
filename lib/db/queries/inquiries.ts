@@ -53,7 +53,7 @@ export async function getInquiries(filters: InquiryFilters = {}) {
 }
 
 export async function getInquiryById(id: number): Promise<InquiryLookupResult> {
-  return safeQuery(async () => {
+  return safeQuery<InquiryLookupResult>(async () => {
     const [inquiry] = await db.select().from(inquiries).where(eq(inquiries.id, id)).limit(1);
     if (!inquiry) {
       return { inquiry: null, notFound: true, error: null };
