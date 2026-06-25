@@ -82,7 +82,7 @@ export default function PrivateTripsPage() {
 
       {/* How it works */}
       <section className="py-24">
-        <div className="max-w-content mx-auto px-10">
+        <div className="max-w-content mx-auto px-6">
           <SectionLabel>The Process</SectionLabel>
           <h2
             className="font-fraunces font-bold tracking-tight leading-[1.1] mb-4"
@@ -90,20 +90,20 @@ export default function PrivateTripsPage() {
           >
             How a private trip works
           </h2>
-          <p className="text-base text-ink/55 max-w-[520px] mb-14">
+          <p className="text-base text-ink/55 max-w-[650px] mb-14">
             No forms, no queues. A short conversation turns into a custom itinerary within 24 hours.
           </p>
 
           {/* Process grid */}
-          <div className="grid grid-cols-4 gap-0 relative">
-            <div className="absolute top-7 left-[calc(12.5%+14px)] right-[calc(12.5%+14px)] h-0.5 bg-divider z-0" />
+          <div className="grid grid-cols-1 md:grid-cols-4 gap-10 md:gap-0 relative">
+            <div className="hidden md:block absolute top-7 left-[48px] right-[calc(25%_-_48px)] h-0.5 bg-divider z-0 gap-x-10" />
             {steps.map((s) => (
-              <div key={s.num} className="text-center px-5 relative z-10">
-                <div className="w-14 h-14 rounded-full bg-white border-2 border-divider mx-auto mb-5 flex items-center justify-center font-fraunces text-[22px] font-bold hover:bg-terra hover:border-terra hover:text-white transition-all cursor-default group">
+              <div key={s.num} className="text-center relative z-10">
+                <div className="w-14 h-14 rounded-full bg-white border-2 border-divider mb-5 flex items-center justify-center font-fraunces text-[22px] font-bold hover:bg-brand hover:border-brand hover:text-white transition-all cursor-default group">
                   <span className="group-hover:text-white text-ink">{s.num}</span>
                 </div>
-                <h3 className="font-fraunces text-lg font-bold mb-2">{s.title}</h3>
-                <p className="text-sm text-ink/55 leading-[1.6]">{s.desc}</p>
+                <h3 className="font-fraunces text-lg font-bold mb-2 text-left">{s.title}</h3>
+                <p className="text-sm text-ink/55 leading-[1.6] text-left">{s.desc}</p>
               </div>
             ))}
           </div>
@@ -112,7 +112,7 @@ export default function PrivateTripsPage() {
 
       {/* Trip examples */}
       <section className="py-24 bg-dark relative overflow-hidden">
-        <div className="max-w-content mx-auto px-10">
+        <div className="max-w-content mx-auto px-6">
           <SectionLabel light>Real Examples</SectionLabel>
           <h2
             className="font-fraunces font-bold text-white tracking-tight mb-12"
@@ -120,7 +120,7 @@ export default function PrivateTripsPage() {
           >
             Trips we&apos;ve planned
           </h2>
-          <div className="grid grid-cols-3 gap-5">
+          <div className="grid md:grid-cols-3 gap-5">
             {examples.map((ex) => (
               <div key={ex.title} className="border-2 border-white/10 rounded-2xl overflow-hidden hover:border-white/30 hover:-translate-y-0.5 transition-all duration-200 cursor-pointer">
                 {/* eslint-disable-next-line @next/next/no-img-element */}
@@ -144,7 +144,7 @@ export default function PrivateTripsPage() {
 
       {/* Private testimonials */}
       <section className="py-20 border-t-2 border-b-2 border-divider">
-        <div className="max-w-content mx-auto px-10 grid grid-cols-3 gap-8">
+        <div className="max-w-content mx-auto px-6 grid md:grid-cols-3 gap-8">
           {privateReviews.map((r) => (
             <div key={r.name} className="px-7 py-7 border-2 border-divider rounded-card bg-white">
               <div className="text-gold text-[13px] tracking-[2px] mb-3">★★★★★</div>

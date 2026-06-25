@@ -52,7 +52,7 @@ const navItems: NavItem[] = [
         items: [
           { value: "60+", label: "Routes" },
           { value: "200+", label: "Travellers" },
-          { value: "4.9★", label: "Average rating" },
+          { value: "5.0★", label: "Average rating" },
         ],
       },
     },
@@ -306,20 +306,6 @@ export function Header() {
             )}
           >
             <Phone className="w-4 h-4" strokeWidth={1.5} />
-          </a>
-
-          <a
-            href={CONTACT.whatsapp}
-            target="_blank"
-            rel="noopener noreferrer"
-            className={cn(
-              "flex items-center gap-1.5 text-sm font-medium px-4 py-2.5 rounded-lg no-underline border transition-all",
-              solidState
-                ? "text-ink border-mist hover:border-ink"
-                : "text-white border-white/35 hover:border-white/65 hover:bg-white/6"
-            )}
-          >
-            WhatsApp
           </a>
 
           <Link

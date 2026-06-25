@@ -99,7 +99,7 @@ export default function ToursPage() {
           >
             Guided & self-guided tours across the Balkans.
           </h1>
-          <p className="text-xl text-ink/55 mt-4 max-w-[540px]">
+          <p className="text-xl text-ink/55 mt-4 max-w-[650px]">
             Small groups, local guides, fixed-departure schedules. Pick your trail and style.
           </p>
         </div>
@@ -229,7 +229,7 @@ function TourCard({ tour, priority = false }: { tour: Tour; priority?: boolean }
         <img
           src={getTourImage(tour)}
           alt={tour.title}
-          className="w-full h-[100%] md:h-[300px] object-cover block"
+          className="w-full h-[100%] object-cover block"
           loading={priority ? "eager" : "lazy"}
         />
         {/* Badges */}

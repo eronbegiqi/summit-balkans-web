@@ -92,8 +92,8 @@ export default function BeforeYouVisitPage() {
     <>
       {/* Hero — light */}
       <section className="bg-bone border-b-2 border-divider pt-[72px]">
-        <div className="max-w-content mx-auto px-10 py-16">
-          <div className="grid grid-cols-[1fr_320px] gap-16 items-start">
+        <div className="max-w-content mx-auto px-6 py-16">
+          <div className="grid grid-cols-1 lg:grid-cols-[1fr_320px] gap-16 items-start">
             <div>
               <SectionLabel>Pre-Trip Guide</SectionLabel>
               <h1
@@ -126,7 +126,7 @@ export default function BeforeYouVisitPage() {
 
       {/* Difficulty Guide */}
       <section id="difficulty" className="py-24 border-b-2 border-divider">
-        <div className="max-w-content mx-auto px-10">
+        <div className="max-w-content mx-auto px-6">
           <SectionLabel>Fitness Guide</SectionLabel>
           <h2 className="font-fraunces text-4xl font-bold tracking-tight mb-12">Our 5-level difficulty scale</h2>
           <div className="flex flex-col gap-4">
@@ -136,17 +136,19 @@ export default function BeforeYouVisitPage() {
                   className="w-1.5 self-stretch rounded-full flex-shrink-0"
                   style={{ background: `hsl(${100 - d.level * 18}, 55%, ${50 - d.level * 3}%)` }}
                 />
-                <div className="flex gap-1 flex-shrink-0 mt-1">
-                  {Array.from({ length: 5 }).map((_, i) => (
-                    <span key={i} className={`w-2.5 h-2.5 rounded-full ${i < d.level ? "bg-forest" : "bg-divider"}`} />
-                  ))}
-                </div>
-                <div className="flex-1">
-                  <div className="font-fraunces text-xl font-bold mb-1">{d.name}</div>
-                  <p className="text-sm text-ink/65 mb-3">{d.desc}</p>
-                  <div className="flex gap-6 text-xs text-ink/45 font-mono">
-                    <span>Example: {d.example}</span>
-                    <span>Suits: {d.suits}</span>
+                <div className="flex min-w-0 flex-1 flex-col gap-4 md:flex-row md:items-start">
+                  <div className="flex gap-1 flex-shrink-0 mt-1 md:mt-0">
+                    {Array.from({ length: 5 }).map((_, i) => (
+                      <span key={i} className={`w-2.5 h-2.5 rounded-full ${i < d.level ? "bg-forest" : "bg-divider"}`} />
+                    ))}
+                  </div>
+                  <div className="flex-1">
+                    <div className="font-fraunces text-xl font-bold mb-1">{d.name}</div>
+                    <p className="text-sm text-ink/65 mb-3">{d.desc}</p>
+                    <div className="flex gap-6 text-xs text-ink/45 font-mono">
+                      <span>Example: {d.example}</span>
+                      <span>Suits: {d.suits}</span>
+                    </div>
                   </div>
                 </div>
               </div>
@@ -157,13 +159,13 @@ export default function BeforeYouVisitPage() {
 
       {/* Pack list */}
       <section id="pack" className="py-24 border-b-2 border-divider">
-        <div className="max-w-content mx-auto px-10">
+        <div className="max-w-content mx-auto px-6">
           <SectionLabel>Pack List</SectionLabel>
           <h2 className="font-fraunces text-4xl font-bold tracking-tight mb-4">What to pack</h2>
           <p className="text-base text-ink/55 max-w-[520px] mb-12">
             A general pack list for Balkans hiking. Your pre-trip info will include a tour-specific version.
           </p>
-          <div className="grid grid-cols-[repeat(3,1fr)] gap-6">
+          <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
             {packCategories.map((cat) => (
               <div key={cat.title} className="bg-white border-2 border-divider rounded-card p-6">
                 <h3 className="font-fraunces text-lg font-bold mb-4">{cat.title}</h3>
@@ -192,7 +194,7 @@ export default function BeforeYouVisitPage() {
 
       {/* Best time to visit */}
       <section id="seasons" className="py-24 border-b-2 border-divider">
-        <div className="max-w-content mx-auto px-10">
+        <div className="max-w-content mx-auto px-6">
           <SectionLabel>When to Go</SectionLabel>
           <h2 className="font-fraunces text-4xl font-bold tracking-tight mb-12">Best time to visit</h2>
           <div className="overflow-x-auto">
@@ -234,11 +236,11 @@ export default function BeforeYouVisitPage() {
 
       {/* Visas */}
       <section id="visas" className="py-24 border-b-2 border-divider">
-        <div className="max-w-content mx-auto px-10">
+        <div className="max-w-content mx-auto px-6">
           <SectionLabel>Entry Requirements</SectionLabel>
           <h2 className="font-fraunces text-4xl font-bold tracking-tight mb-4">Visas &amp; entry</h2>
           <p className="text-base text-ink/55 max-w-[520px] mb-12">Most nationalities require no visa. We handle all border crossing admin for group tours.</p>
-          <div className="flex flex-col gap-0">
+          <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-3">
             {visaInfo.map((item, i) => (
               <div key={item.group} className={`border-2 border-divider rounded-card bg-white p-6 ${i > 0 ? "-mt-0.5" : ""}`}>
                 <div className="font-fraunces text-lg font-bold mb-2">{item.group}</div>
@@ -251,10 +253,10 @@ export default function BeforeYouVisitPage() {
 
       {/* Health & Safety */}
       <section id="health" className="py-24 border-b-2 border-divider">
-        <div className="max-w-content mx-auto px-10">
+        <div className="max-w-content mx-auto px-6">
           <SectionLabel>Safety</SectionLabel>
           <h2 className="font-fraunces text-4xl font-bold tracking-tight mb-12">Health &amp; safety</h2>
-          <div className="grid grid-cols-3 gap-6">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
             {[
               { title: "Travel Insurance", body: "Mandatory for all Summit Balkans tours. Must include medical evacuation and trip cancellation. We recommend World Nomads or SafetyWing for hikers." },
               { title: "Emergency Contacts", body: "Albania: 127 · Montenegro: 112 · Kosovo: 192. Your guide carries a satellite communicator on all multi-day tours." },
@@ -270,13 +272,13 @@ export default function BeforeYouVisitPage() {
       </section>
 
       {/* Gear rental banner */}
-      <div className="border-b-2 border-divider bg-dark py-6">
-        <div className="max-w-content mx-auto px-10 flex items-center justify-between gap-8">
-          <div>
+      <div className=" bg-brand py-6">
+        <div className="max-w-content mx-auto px-6 flex flex-wrap items-center justify-between gap-8">
+          <div className="flex flex-col gap-1.5">
             <span className="font-fraunces text-xl font-bold text-white mr-3">Missing something?</span>
             <span className="text-white/55 text-sm">Rent quality kit directly from us in Prishtina.</span>
           </div>
-          <Link href="/gear" className="inline-flex items-center gap-2 bg-terra text-white px-5 py-2.5 rounded-lg font-semibold text-sm no-underline hover:opacity-90 flex-shrink-0">
+          <Link href="/gear" className="inline-flex items-center gap-2 border border-white text-white px-5 py-2.5 rounded-lg font-semibold text-sm no-underline hover:opacity-90 flex-shrink-0">
             Browse Gear <ArrowRight className="w-3.5 h-3.5" strokeWidth={1.5} />
           </Link>
         </div>
@@ -287,10 +289,10 @@ export default function BeforeYouVisitPage() {
 
       {/* FAQ */}
       <section id="faq" className="py-24">
-        <div className="max-w-content mx-auto px-10">
+        <div className="max-w-content mx-auto px-6">
           <SectionLabel>Common Questions</SectionLabel>
           <h2 className="font-fraunces text-4xl font-bold tracking-tight mb-12">FAQ</h2>
-          <div className="grid grid-cols-2 gap-x-16 gap-y-0">
+          <div className="grid md:grid-cols-2 gap-x-16 gap-y-0">
             {faqs.map((item, i) => (
               <div key={i} className="border-b-2 border-divider py-6">
                 <h3 className="font-fraunces text-lg font-bold mb-2">{item.q}</h3>

@@ -61,9 +61,9 @@ export function HomeHero() {
 
         {/* Trust line */}
         <div className="flex items-center gap-5 text-[13px] text-white/65 flex-wrap">
-          <span className="text-gold text-sm tracking-[1px]">★★★★★</span>
+          <span className="text-gold text-sm tracking-[1px]">★★★★★ 5.0 ·</span>
           <span className="w-[3px] h-[3px] rounded-full bg-white/35" />
-          <span>5 · 200+ Travellers</span>
+          <span> 200+ Travellers</span>
           <span className="w-[3px] h-[3px] rounded-full bg-white/35" />
           <span>Local Guides</span>
           <span className="w-[3px] h-[3px] rounded-full bg-white/35" />
