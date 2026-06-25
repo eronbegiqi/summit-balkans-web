@@ -20,7 +20,16 @@ const TYPE_LABELS: Record<string, string> = {
 
 export default async function InquiryDetailPage({ params }: Props) {
   const { id } = await params;
-  const inquiry = await getInquiryById(parseInt(id));
+  const { inquiry, error } = await getInquiryById(parseInt(id));
+  if (error) {
+    return (
+      <div className="rounded-xl border border-yellow-200 bg-yellow-50 p-6 text-sm text-yellow-800">
+        <p className="font-semibold">We couldn’t load this inquiry right now.</p>
+        <p className="mt-1">The admin panel could not reach the inquiries data source. Please try again in a moment.</p>
+      </div>
+    );
+  }
+
   if (!inquiry) notFound();
 
   const fields: Array<[string, string | number | null | undefined]> = [
