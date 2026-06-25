@@ -4,7 +4,6 @@ import { useRef, useState, useEffect, useCallback } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { Menu, X, ArrowRight, Phone, Mail, ChevronDown, Instagram, Facebook } from "lucide-react";
-import { gsap } from "gsap";
 import { cn } from "@/lib/utils";
 import { CONTACT } from "@/lib/constants";
 import { MegaMenuPanel } from "@/components/layout/MegaMenuPanel";
@@ -52,7 +51,7 @@ const navItems: NavItem[] = [
         items: [
           { value: "60+", label: "Routes" },
           { value: "200+", label: "Travellers" },
-          { value: "4.9★", label: "Average rating" },
+          { value: "5.0★", label: "Average rating" },
         ],
       },
     },
@@ -146,7 +145,6 @@ function LogoMark({ dark }: { dark: boolean }) {
 // ── Header ────────────────────────────────────────────────────────────────────
 
 export function Header() {
-  const headerRef = useRef<HTMLElement>(null);
   const [scrolled, setScrolled] = useState(false);
   const scrolledRef = useRef(false); // avoid stale closure in scroll handler
   const [mobileOpen, setMobileOpen] = useState(false);
@@ -159,28 +157,20 @@ export function Header() {
   const isHeroPage = HERO_PAGES.includes(pathname);
   const solidState = scrolled || !isHeroPage;
 
-  // GSAP scroll animation — use ref to avoid stale closure
+  // Track scroll past the fold. Height is animated purely in CSS (see header
+  // className), so this handler only flips a boolean — no layout reads/writes,
+  // no animation library, no forced reflow.
   useEffect(() => {
-    if (!headerRef.current) return;
-    const initialH = isHeroPage ? 96 : 64;
-    gsap.set(headerRef.current, { height: initialH });
-
     const onScroll = () => {
       const past = window.scrollY > 10;
       if (past === scrolledRef.current) return;
       scrolledRef.current = past;
       setScrolled(past);
-      gsap.to(headerRef.current, {
-        height: past ? 64 : initialH,
-        duration: 0.25,
-        ease: "power2.out",
-        overwrite: true,
-      });
     };
 
     window.addEventListener("scroll", onScroll, { passive: true });
     return () => window.removeEventListener("scroll", onScroll);
-  }, [isHeroPage]);
+  }, []);
 
   // Body scroll lock when mobile menu open
   useEffect(() => {
@@ -221,10 +211,12 @@ export function Header() {
   return (
     <>
       <header
-        ref={headerRef}
         className={cn(
           "fixed top-0 left-0 right-0 z-[100] flex items-center justify-between px-5 md:px-10",
-          "transition-colors duration-300",
+          "transition-[height,background-color,border-color] duration-300 ease-out",
+          // Height collapses on scroll; hero pages start taller (96px → 64px),
+          // other pages are a constant 64px. Animated by CSS, not JS.
+          isHeroPage && !scrolled ? "h-24" : "h-16",
           solidState
             ? "bg-white backdrop-blur-md border-b border-mist/60"
             : "bg-transparent"
@@ -306,20 +298,6 @@ export function Header() {
             )}
           >
             <Phone className="w-4 h-4" strokeWidth={1.5} />
-          </a>
-
-          <a
-            href={CONTACT.whatsapp}
-            target="_blank"
-            rel="noopener noreferrer"
-            className={cn(
-              "flex items-center gap-1.5 text-sm font-medium px-4 py-2.5 rounded-lg no-underline border transition-all",
-              solidState
-                ? "text-ink border-mist hover:border-ink"
-                : "text-white border-white/35 hover:border-white/65 hover:bg-white/6"
-            )}
-          >
-            WhatsApp
           </a>
 
           <Link

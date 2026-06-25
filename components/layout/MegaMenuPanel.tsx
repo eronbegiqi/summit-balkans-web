@@ -46,7 +46,7 @@ export function MegaMenuPanel({ data, visible }: MegaMenuPanelProps) {
       }`}
       aria-hidden={!visible}
     >
-      <div className=" mx-auto px-5 md:px-10 py-8">
+      <div className=" mx-auto px-5 md:px-10 md:pr-20 py-8">
         <div className={`grid gap-8 ${data.featured ? "grid-cols-[1fr_260px_160px]" : data.stats ? "grid-cols-[1fr_160px]" : "grid-cols-1 sm:grid-cols-2 lg:grid-cols-4"}`}>
           {/* Columns */}
           <div className="flex gap-8">

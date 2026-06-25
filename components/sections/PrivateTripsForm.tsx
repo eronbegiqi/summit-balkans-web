@@ -120,11 +120,8 @@ export function PrivateTripsForm() {
 
   return (
     <section id="enquiry" className="py-24">
-      <div className="max-w-content mx-auto px-10">
-        <div
-          className="grid gap-20 items-start"
-          style={{ gridTemplateColumns: "1fr 420px" }}
-        >
+      <div className="max-w-content mx-auto px-6 sm:px-8 lg:px-10">
+        <div className="grid gap-20 items-start grid-cols-1 lg:grid-cols-[1fr_420px]">
           {/* Form */}
           <div>
             <SectionLabel>Start Here</SectionLabel>
@@ -227,7 +224,7 @@ export function PrivateTripsForm() {
                 <h3 className="font-fraunces text-[30px] font-bold tracking-tight mb-2 leading-[1.15]">
                   How many people?
                 </h3>
-                <p className="text-[15px] text-ink/50 mb-8">Private trips from 2 to 12 people.</p>
+                <p className="text-[15px] text-ink/50 mb-8">Private trips from 1 to 12 people.</p>
                 <div
                   className="font-fraunces font-bold text-ink leading-[1] mb-1 tracking-[-0.04em]"
                   style={{ fontSize: "72px", fontVariationSettings: "'opsz' 72" }}
@@ -237,14 +234,14 @@ export function PrivateTripsForm() {
                 <p className="text-sm text-ink/45 mb-6">Including yourself</p>
                 <input
                   type="range"
-                  min={2}
+                  min={1}
                   max={12}
                   value={form.groupSize}
                   onChange={(e) => setForm((p) => ({ ...p, groupSize: parseInt(e.target.value) }))}
-                  className="w-full h-1 rounded bg-divider appearance-none accent-terra cursor-pointer"
+                  className="w-full h-1 rounded bg-divider appearance-none accent-brand cursor-pointer"
                 />
                 <div className="flex justify-between font-mono text-[11px] text-ink/35 mt-2">
-                  <span>2</span><span>12</span>
+                  <span>1</span><span>12</span>
                 </div>
               </div>
             )}
@@ -355,7 +352,7 @@ export function PrivateTripsForm() {
                 {step < 4 ? (
                   <button
                     onClick={handleNext}
-                    className="flex items-center gap-2 bg-terra text-white px-6 py-3 rounded-xl text-sm font-semibold border-none cursor-pointer hover:opacity-90"
+                    className="flex items-center gap-2 bg-brand text-white px-6 py-3 rounded-xl text-sm font-semibold border-none cursor-pointer hover:opacity-90"
                   >
                     Next
                     <ChevronRight className="w-4 h-4" strokeWidth={1.5} />
@@ -380,7 +377,7 @@ export function PrivateTripsForm() {
                       finally { setSubmitting(false); }
                     }}
                     disabled={submitting || !form.agreePrivacy}
-                    className="bg-terra text-white px-6 py-3 rounded-xl text-sm font-semibold border-none cursor-pointer hover:opacity-90 disabled:opacity-60 disabled:cursor-not-allowed"
+                    className="bg-brand text-white px-6 py-3 rounded-xl text-sm font-semibold border-none cursor-pointer hover:opacity-90 disabled:opacity-60 disabled:cursor-not-allowed"
                   >
                     {submitting ? "Sending…" : "Send Enquiry"}
                   </button>
@@ -393,7 +390,7 @@ export function PrivateTripsForm() {
           </div>
 
           {/* Sidebar */}
-          <div className="sticky top-24 bg-dark rounded-2xl p-8 text-white">
+          <div className="relative lg:sticky lg:top-24 bg-dark rounded-2xl p-8 text-white">
             <div className="font-mono text-[11px] text-white/35 tracking-[0.1em] uppercase mb-4">
               What&apos;s included
             </div>

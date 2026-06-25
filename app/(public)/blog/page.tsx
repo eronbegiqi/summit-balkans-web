@@ -30,7 +30,7 @@ export default async function BlogPage() {
           >
             From the trail.
           </h1>
-          <p className="text-xl text-ink/55 mt-4 max-w-[540px]">
+          <p className="text-xl text-ink/55 mt-4 max-w-[650px]">
             Reports, guides, and stories from our guides and the people who travel with us.
           </p>
         </div>
@@ -55,7 +55,7 @@ export default async function BlogPage() {
               </a>
             </div>
           ) : (
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
               {posts.map((post) => (
                 <article
                   key={post.id}

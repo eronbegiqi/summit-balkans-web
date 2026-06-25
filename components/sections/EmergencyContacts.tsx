@@ -3,6 +3,7 @@ import { AlertTriangle, Phone } from "lucide-react";
 const countries = [
   {
     flag: "🇦🇱",
+    id: 1,
     name: "Albania",
     numbers: [
       { label: "Emergency (all)", number: "112" },
@@ -15,6 +16,7 @@ const countries = [
   {
     flag: "🇽🇰",
     name: "Kosovo",
+    id: 2,
     numbers: [
       { label: "Emergency (all)", number: "112" },
       { label: "Police", number: "192" },
@@ -27,6 +29,7 @@ const countries = [
   {
     flag: "🇲🇪",
     name: "Montenegro",
+    id: 3,
     numbers: [
       { label: "Emergency (all)", number: "112" },
       { label: "Police", number: "122" },
@@ -79,8 +82,8 @@ export function EmergencyContactsSection() {
                 <h3 className="font-semibold text-base">{country.name}</h3>
               </div>
               <ul className="space-y-2">
-                {country.numbers.map((n) => (
-                  <li key={n.number} className={`flex items-center justify-between text-sm py-1.5 border-b border-white/8 last:border-0 ${n.highlight ? "text-yellow-300" : "text-white/70"}`}>
+                {country.numbers.map((n, idx) => (
+                  <li key={`${country.id}-${idx}`} className={`flex items-center justify-between text-sm py-1.5 border-b border-white/8 last:border-0 ${n.highlight ? "text-yellow-300" : "text-white/70"}`}>
                     <span>{n.label}</span>
                     <a
                       href={`tel:${n.number.replace(/\s/g, "")}`}
@@ -138,7 +141,7 @@ export function EmergencyContactsCompact() {
               <div key={c.name}>
                 <p className="font-semibold mb-1">{c.flag} {c.name}</p>
                 {c.numbers.filter((n) => n.highlight || n.label.includes("Mountain")).map((n) => (
-                  <p key={n.number} className="text-ink/60">
+                  <p key={`${c.id}-${n.label}`} className="text-ink/60">
                     {n.label}: <a href={`tel:${n.number.replace(/\s/g, "")}`} className="text-brand font-mono no-underline hover:underline">{n.number}</a>
                   </p>
                 ))}

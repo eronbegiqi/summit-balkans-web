@@ -21,8 +21,7 @@ export function PrivateTripsHero() {
       <div className="absolute inset-0 bg-gradient-to-br from-dark/80 via-dark/55 to-dark/75" />
 
       <div
-        className="relative z-10 max-w-content mx-auto px-10 pt-[68px] w-full grid  items-center gap-20"
-        style={{ gridTemplateColumns: "1fr 420px" }}
+        className="relative z-10 max-w-content mx-auto px-6 sm:px-8 lg:px-10 pt-[68px] w-full grid grid-cols-1 lg:grid-cols-[1fr_420px] items-center gap-20"
       >
         <div>
           <div className="flex items-center gap-2 font-mono text-[11px] text-gold tracking-[0.14em] uppercase mb-5">
@@ -35,12 +34,12 @@ export function PrivateTripsHero() {
           >
             Your group. Your route. Your pace.
           </h1>
-          <p className="text-lg text-white/68 leading-[1.65] mb-9 max-w-[500px]">
+          <p className="text-lg text-white/80 leading-[1.65] mb-9 max-w-[500px]">
             We design custom hiking trips around your group&apos;s interests, fitness, and schedule. From 2 people to 12. From 3 days to two weeks.
           </p>
           <Link
             href="#enquiry"
-            className="inline-flex items-center gap-2.5 bg-terra text-white border-2 border-terra px-7 py-4 rounded-xl font-inter text-[15px] font-bold no-underline hover:opacity-88 transition-opacity"
+            className="inline-flex items-center gap-2.5 bg-brand text-white  px-7 py-4 rounded-xl font-inter text-[15px] font-bold no-underline hover:opacity-88 transition-opacity"
           >
             Tell Us About Your Trip
             <ArrowRight className="w-4 h-4" strokeWidth={1.5} />
@@ -51,7 +50,7 @@ export function PrivateTripsHero() {
               { icon: Calendar, text: "Any time of year" },
               { icon: Clock, text: "Reply in 24h" },
             ].map(({ icon: Icon, text }) => (
-              <div key={text} className="flex items-center gap-2 text-[13px] text-white/55">
+              <div key={text} className="flex items-center gap-2 text-[13px] text-white/80">
                 <Icon className="w-4 h-4 text-gold" strokeWidth={1.5} />
                 {text}
               </div>
@@ -64,7 +63,7 @@ export function PrivateTripsHero() {
           {miniCards.map((card) => (
             <div
               key={card.label}
-              className="bg-dark/55 backdrop-blur-xl border border-white/12 rounded-xl p-5"
+              className="bg-dark/55 backdrop-blur-xl border border-white/10 rounded-xl p-5"
             >
               <div className="font-mono text-[10px] text-white/40 tracking-[0.1em] uppercase mb-1.5">
                 {card.label}
