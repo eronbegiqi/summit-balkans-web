@@ -62,22 +62,21 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       lang="en"
       className={`${fraunces.variable} ${inter.variable} ${jetbrainsMono.variable}`}
     >
-      <head>
+      <body>
+        {children}
+        <Analytics />
+        {/* Load Google Analytics only once the page is idle so it never blocks
+            the main thread during initial render / LCP. */}
         <Script
-          async
           src="https://www.googletagmanager.com/gtag/js?id=G-MCDEJ36XL7"
-          strategy="afterInteractive"
+          strategy="lazyOnload"
         />
-        <Script id="google-analytics" strategy="afterInteractive">
+        <Script id="google-analytics" strategy="lazyOnload">
           {`window.dataLayer = window.dataLayer || [];
           function gtag(){dataLayer.push(arguments);}
           gtag('js', new Date());
           gtag('config', 'G-MCDEJ36XL7');`}
         </Script>
-      </head>
-      <body>
-        {children}
-        <Analytics />
       </body>
     </html>
   );
