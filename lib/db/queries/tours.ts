@@ -1,4 +1,5 @@
 import { db } from '@/lib/db/client';
+import { cachedQuery } from '@/lib/db/cache';
 import { tours, guides } from '@/lib/db/schema';
 import { eq, sql } from 'drizzle-orm';
 
@@ -22,6 +23,7 @@ export type TourWithGuide = typeof tours.$inferSelect & {
 };
 
 export async function getTours(): Promise<TourListItem[]> {
+  return cachedQuery('tours:all', async () => {
   const [rows] = await db.execute(sql`
     SELECT
       t.id, t.slug, t.title, t.country, t.duration_days, t.difficulty,
@@ -48,6 +50,7 @@ export async function getTours(): Promise<TourListItem[]> {
     departureCount: Number(r.departure_count),
     guideName: r.guide_name ? String(r.guide_name) : null,
   }));
+  }, []);
 }
 
 async function attachGuide(tour: typeof tours.$inferSelect): Promise<TourWithGuide> {
@@ -58,9 +61,11 @@ async function attachGuide(tour: typeof tours.$inferSelect): Promise<TourWithGui
 }
 
 export async function getTourById(id: number): Promise<TourWithGuide | null> {
-  const [tour] = await db.select().from(tours).where(eq(tours.id, id)).limit(1);
-  if (!tour) return null;
-  return attachGuide(tour);
+  return cachedQuery<TourWithGuide | null>(`tours:id:${id}`, async () => {
+    const [tour] = await db.select().from(tours).where(eq(tours.id, id)).limit(1);
+    if (!tour) return null;
+    return attachGuide(tour);
+  }, null);
 }
 
 export async function getTourBySlug(slug: string): Promise<TourWithGuide | null> {

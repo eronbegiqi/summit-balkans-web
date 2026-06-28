@@ -1,9 +1,10 @@
 'use server';
 
 import { revalidatePath } from 'next/cache';
+import { redirect } from 'next/navigation';
 import { db } from '@/lib/db/client';
-import { bookings, activityLog, paymentTransactions } from '@/lib/db/schema';
-import { eq } from 'drizzle-orm';
+import { bookings, activityLog, paymentTransactions, gearRentals } from '@/lib/db/schema';
+import { and, eq } from 'drizzle-orm';
 import { getSession } from '@/lib/auth/session';
 
 async function getAdminSession() {
@@ -62,6 +63,32 @@ export async function saveInternalNotes(bookingId: number, notes: string) {
   await getAdminSession();
   await db.update(bookings).set({ internalNotes: notes }).where(eq(bookings.id, bookingId));
   revalidatePath(`/admin/bookings/${bookingId}`);
+}
+
+export async function deleteBooking(bookingId: number) {
+  const session = await getAdminSession();
+
+  const [booking] = await db.select().from(bookings).where(eq(bookings.id, bookingId)).limit(1);
+  if (!booking) throw new Error('Booking not found');
+
+  await Promise.all([
+    db.delete(paymentTransactions).where(eq(paymentTransactions.bookingId, bookingId)),
+    db.delete(gearRentals).where(eq(gearRentals.bookingId, bookingId)),
+    db.delete(activityLog).where(and(eq(activityLog.entityType, 'booking'), eq(activityLog.entityId, bookingId))),
+  ]);
+
+  await db.delete(bookings).where(eq(bookings.id, bookingId));
+
+  await db.insert(activityLog).values({
+    adminUserId: session.adminUserId,
+    entityType: 'booking',
+    entityId: bookingId,
+    action: 'deleted',
+    changes: { deleted: { from: booking.bookingReference, to: null } },
+  });
+
+  revalidatePath('/admin/bookings');
+  redirect('/admin/bookings');
 }
 
 export async function recordManualPayment(

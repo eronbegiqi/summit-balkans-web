@@ -34,35 +34,32 @@ export default function GearPage() {
   return (
     <>
       {/* Hero — dark section with topo */}
-      <section className="bg-dark pt-[68px] pb-0 relative overflow-hidden">
+      <section className="bg-dark pt-16 md:pt-[68px] pb-0 relative overflow-hidden">
         <div
           className="absolute inset-0 opacity-[0.04] bg-repeat-x"
           style={{
             backgroundImage: `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='800' height='400'%3E%3Cpath d='M0,200 C80,160 160,180 240,200 C320,220 400,160 480,200 C560,240 640,180 720,200 C740,207 760,210 800,200' fill='none' stroke='%23ffffff' stroke-width='1.5'/%3E%3Cpath d='M0,240 C80,200 160,220 240,240 C320,260 400,200 480,240 C560,280 640,220 720,240 C740,247 760,250 800,240' fill='none' stroke='%23ffffff' stroke-width='1.5'/%3E%3C/svg%3E")`,
           }}
         />
-        <div
-          className="relative z-10 max-w-content mx-auto px-10 py-[72px] pb-20 grid items-center gap-20"
-          style={{ gridTemplateColumns: "1fr 480px" }}
-        >
-          <div>
+        <div className="relative z-10 max-w-content mx-auto px-5 sm:px-6 lg:px-6 py-14 sm:py-16 lg:py-[72px] lg:pb-20 grid grid-cols-1 lg:grid-cols-[minmax(0,1fr)_minmax(320px,480px)] items-center gap-10 sm:gap-12 lg:gap-20">
+          <div className="min-w-0">
             <div className="flex items-center gap-2 font-mono text-[11px] text-gold tracking-[0.14em] uppercase mb-[18px]">
               <span className="block w-5 h-px bg-gold" />
               Gear Rental
             </div>
             <h1
-              className="font-fraunces font-bold text-white leading-[1.02] tracking-[-0.03em] mb-[22px]"
-              style={{ fontSize: "clamp(44px, 5.5vw, 76px)", fontVariationSettings: "'opsz' 64" }}
+              className="font-fraunces font-bold text-white leading-[1.04] tracking-normal mb-[22px]"
+              style={{ fontSize: "clamp(38px, 9vw, 76px)", fontVariationSettings: "'opsz' 64" }}
             >
               Rent quality gear, travel light.
             </h1>
-            <p className="text-lg text-white/60 leading-[1.65] mb-9">
+            <p className="text-base sm:text-lg text-white/60 leading-[1.65] mb-8 sm:mb-9 max-w-[640px]">
               No need to haul heavy kit from home. Rent what you need in Prishtina and pick it up ready to go.
             </p>
-            <div className="flex gap-3 flex-wrap">
+            <div className="flex flex-col sm:flex-row gap-3 flex-wrap">
               <a
                 href="#gear-grid"
-                className="inline-flex items-center gap-2 bg-terra text-white border-2 border-terra px-6 py-[13px] rounded-xl font-inter text-sm font-bold no-underline hover:opacity-88 transition-opacity"
+                className="inline-flex items-center justify-center gap-2 bg-brand text-white px-6 py-[13px] rounded-xl font-inter text-sm font-bold no-underline hover:opacity-88 transition-opacity"
               >
                 Browse Gear
                 <ArrowRight className="w-4 h-4" strokeWidth={1.5} />
@@ -71,13 +68,13 @@ export default function GearPage() {
                 href="https://wa.me/38348300155"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="inline-flex items-center gap-2 border-2 border-white/30 text-white px-6 py-[13px] rounded-xl font-inter text-sm font-medium no-underline hover:border-white/65 transition-colors"
+                className="inline-flex items-center justify-center gap-2 border-2 border-white/30 text-white px-6 py-[13px] rounded-xl font-inter text-sm font-medium no-underline hover:border-white/65 transition-colors"
               >
                 <MessageCircle className="w-4 h-4" strokeWidth={1.5} />
                 Ask via WhatsApp
               </a>
             </div>
-            <div className="flex gap-6 mt-7 flex-wrap">
+            <div className="grid gap-3 sm:flex sm:gap-6 mt-7 sm:flex-wrap">
               {["Free sanitisation between rentals", "Deposit refunded on return", "Available for non-tour hikers"].map((item) => (
                 <div key={item} className="flex items-center gap-2 text-[13px] text-white/50">
                   <Check className="w-3.5 h-3.5 text-gold flex-shrink-0" strokeWidth={2} />
@@ -88,16 +85,16 @@ export default function GearPage() {
           </div>
 
           {/* Gear preview cards */}
-          <div className="grid grid-cols-2 gap-3">
+          <div className="grid grid-cols-2 gap-3 w-full max-w-[480px] lg:max-w-none">
             {gearItems.slice(0, 4).map((item) => (
               <div
                 key={item.id}
-                className="bg-white/6 border border-white/10 rounded-xl p-5 text-center hover:border-white/25 hover:bg-white/9 transition-all cursor-pointer"
+                className="bg-white/6 border border-white/10 rounded-xl p-4 sm:p-5 text-center hover:border-white/25 hover:bg-white/9 transition-all cursor-pointer"
               >
                 <div className="text-gold mb-2.5">
                   <Mountain className="w-6 h-6 mx-auto" strokeWidth={1.5} />
                 </div>
-                <div className="text-[13px] font-semibold text-white mb-0.5">{item.name}</div>
+                <div className="text-[13px] font-semibold text-white mb-0.5 break-words">{item.name}</div>
                 <div className="font-mono text-xs text-white/40">€{item.dayRate}/day</div>
               </div>
             ))}
@@ -107,7 +104,7 @@ export default function GearPage() {
 
       {/* How-to strip */}
       <div className="bg-forest py-6">
-        <div className="max-w-content mx-auto px-10 flex justify-around flex-wrap gap-2">
+        <div className="max-w-content mx-auto px-6 flex justify-around flex-wrap gap-2">
           {[
             "Message us to check availability",
             "Pick up in Prishtina",
@@ -127,7 +124,7 @@ export default function GearPage() {
 
       {/* Gear grid */}
       <section id="gear-grid" className="py-24">
-        <div className="max-w-content mx-auto px-10">
+        <div className="max-w-content mx-auto px-6">
           <SectionLabel>All Gear</SectionLabel>
           <h2
             className="font-fraunces font-bold tracking-tight mb-3"
@@ -139,7 +136,7 @@ export default function GearPage() {
             All gear is inspected, cleaned, and ready to go. Click any item to see specs and calculate the cost.
           </p>
 
-          <div className="grid grid-cols-4 gap-5">
+          <div className="grid md:grid-cols-4 gap-5">
             {gearItems.map((item) => (
               <GearDetailModal key={item.id} item={item} />
             ))}
@@ -149,7 +146,7 @@ export default function GearPage() {
 
       {/* How to rent */}
       <section className="py-24 bg-dark relative overflow-hidden">
-        <div className="max-w-content mx-auto px-10">
+        <div className="max-w-content mx-auto px-6">
           <SectionLabel light>How It Works</SectionLabel>
           <h2
             className="font-fraunces font-bold text-white tracking-tight mb-14"
@@ -166,8 +163,8 @@ export default function GearPage() {
             ].map((step) => (
               <div key={step.num}>
                 <div
-                  className="font-fraunces font-bold text-white/8 leading-[1] mb-3.5 tracking-[-0.04em]"
-                  style={{ fontSize: "64px", fontVariationSettings: "'opsz' 60" }}
+                  className="font-fraunces font-bold text-white/10 leading-[1] mb-3.5 tracking-[-0.04em]"
+                  style={{ fontSize: "44px", fontVariationSettings: "'opsz' 60" }}
                 >
                   {step.num}
                 </div>
@@ -193,16 +190,13 @@ export default function GearPage() {
 
       {/* Bundle CTA */}
       <section className="py-20 border-t-2 border-divider">
-        <div className="max-w-content mx-auto px-10">
-          <div
-            className="bg-forest rounded-2xl px-14 py-[52px] grid items-center gap-12"
-            style={{ gridTemplateColumns: "1fr auto" }}
-          >
+        <div className="max-w-content mx-auto px-6">
+          <div className="bg-forest rounded-2xl px-5 py-8 sm:px-8 sm:py-10 lg:px-14 lg:py-[52px] grid grid-cols-1 lg:grid-cols-[minmax(0,1fr)_auto] items-start lg:items-center gap-8 lg:gap-12">
             <div>
               <div className="font-mono text-[11px] text-white/45 tracking-[0.12em] uppercase mb-3.5">Bundle Deal</div>
               <h3
-                className="font-fraunces font-bold text-white tracking-tight leading-[1.1] mb-3"
-                style={{ fontSize: "34px", fontVariationSettings: "'opsz' 32" }}
+                className="font-fraunces font-bold text-white tracking-normal leading-[1.1] mb-3"
+                style={{ fontSize: "clamp(26px, 7vw, 34px)", fontVariationSettings: "'opsz' 32" }}
               >
                 Book a tour + gear and save 10%
               </h3>
@@ -210,10 +204,10 @@ export default function GearPage() {
                 Add gear rental when you book any guided tour and we&apos;ll take 10% off the gear cost. Already have a tour booking? Just let us know.
               </p>
             </div>
-            <div className="flex flex-col gap-3 items-center">
+            <div className="flex flex-col gap-3 items-stretch sm:items-start lg:items-center">
               <Link
                 href="/tours"
-                className="inline-flex items-center gap-2 bg-white text-forest border-2 border-white px-7 py-3.5 rounded-xl font-inter text-[15px] font-bold whitespace-nowrap no-underline hover:opacity-90 transition-opacity"
+                className="inline-flex items-center justify-center gap-2 bg-white text-forest border-2 border-white px-7 py-3.5 rounded-xl font-inter text-[15px] font-bold whitespace-nowrap no-underline hover:opacity-90 transition-opacity"
               >
                 Browse Tours
                 <ArrowRight className="w-4 h-4" strokeWidth={1.5} />

@@ -1,4 +1,5 @@
 import { db } from '@/lib/db/client';
+import { cachedQuery } from '@/lib/db/cache';
 import { inquiries, adminUsers } from '@/lib/db/schema';
 import { and, desc, eq, sql } from 'drizzle-orm';
 import type { SQL } from 'drizzle-orm';
@@ -22,15 +23,6 @@ export type InquiryLookupResult = {
   error: string | null;
 };
 
-async function safeQuery<T>(fn: () => Promise<T>, fallback: T): Promise<T> {
-  try {
-    return await fn();
-  } catch (error) {
-    console.error('[db/queries/inquiries]', error);
-    return fallback;
-  }
-}
-
 export async function getInquiries(filters: InquiryFilters = {}) {
   const { type, status, page = 1, pageSize = 25 } = filters;
   const offset = (page - 1) * pageSize;
@@ -41,7 +33,7 @@ export async function getInquiries(filters: InquiryFilters = {}) {
 
   const whereClause = conditions.length ? and(...conditions) : undefined;
 
-  return safeQuery(async () => {
+  return cachedQuery(`inquiries:list:${JSON.stringify({ type, status, page, pageSize })}`, async () => {
     const [items, countRows] = await Promise.all([
       db.select().from(inquiries).where(whereClause).orderBy(desc(inquiries.createdAt)).limit(pageSize).offset(offset),
       db.select({ count: sql<number>`count(*)` }).from(inquiries).where(whereClause),
@@ -53,7 +45,7 @@ export async function getInquiries(filters: InquiryFilters = {}) {
 }
 
 export async function getInquiryById(id: number): Promise<InquiryLookupResult> {
-  return safeQuery<InquiryLookupResult>(async () => {
+  return cachedQuery<InquiryLookupResult>(`inquiries:id:${id}`, async () => {
     const [inquiry] = await db.select().from(inquiries).where(eq(inquiries.id, id)).limit(1);
     if (!inquiry) {
       return { inquiry: null, notFound: true, error: null };
@@ -68,7 +60,7 @@ export async function getInquiryById(id: number): Promise<InquiryLookupResult> {
 }
 
 export async function getInquiryCountsByType() {
-  return safeQuery(async () => {
+  return cachedQuery('inquiries:countsByType', async () => {
     const [rows] = await db.execute(sql`
       SELECT type, status, COUNT(*) AS count
       FROM inquiries

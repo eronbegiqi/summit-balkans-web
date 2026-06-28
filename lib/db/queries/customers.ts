@@ -1,4 +1,5 @@
 import { db } from '@/lib/db/client';
+import { cachedQuery } from '@/lib/db/cache';
 import { customers, bookings } from '@/lib/db/schema';
 import { desc, eq, or, sql } from 'drizzle-orm';
 
@@ -36,6 +37,7 @@ export async function getCustomers(filters: CustomerFilters = {}) {
   const { search, page = 1, pageSize = 25 } = filters;
   const offset = (page - 1) * pageSize;
 
+  return cachedQuery(`customers:list:${JSON.stringify({ search, page, pageSize })}`, async () => {
   const [rows] = await db.execute(sql`
     SELECT
       id, first_name, last_name, email, phone, country,
@@ -67,14 +69,16 @@ export async function getCustomers(filters: CustomerFilters = {}) {
 
   const total = Number((countRows as unknown as Array<{ total: number }>)[0]?.total ?? 0);
   return { items, total, page, pageSize, totalPages: Math.ceil(total / pageSize) };
+  }, { items: [] as CustomerListItem[], total: 0, page, pageSize, totalPages: 0 });
 }
 
 export async function getCustomerById(id: number): Promise<CustomerDetail | null> {
+  return cachedQuery<CustomerDetail | null>(`customers:id:${id}`, async () => {
   const [customer] = await db.select().from(customers).where(eq(customers.id, id));
   if (!customer) return null;
 
   const bookingRows = await db.execute(sql`
-    SELECT b.id, b.booking_reference, t.title AS tour_title,
+    SELECT b.id AS booking_id, b.booking_reference AS booking_reference, t.title AS tour_title,
            b.status, b.payment_status, b.total_eur, b.created_at
     FROM bookings b
     JOIN tours t ON t.id = b.tour_id
@@ -83,14 +87,15 @@ export async function getCustomerById(id: number): Promise<CustomerDetail | null
   `);
 
   const bookingList = (bookingRows as unknown as Array<Record<string, unknown>>).map((r) => ({
-    id: Number(r.id),
-    bookingReference: String(r.booking_reference),
-    tourTitle: String(r.tour_title),
-    status: String(r.status),
-    paymentStatus: String(r.payment_status),
-    totalEur: String(r.total_eur),
+    id: Number(r.booking_id ?? 0),
+    bookingReference: String(r.booking_reference ?? ''),
+    tourTitle: String(r.tour_title ?? ''),
+    status: String(r.status ?? ''),
+    paymentStatus: String(r.payment_status ?? ''),
+    totalEur: String(r.total_eur ?? '0'),
     createdAt: new Date(r.created_at as string),
   }));
 
   return { ...customer, bookings: bookingList };
+  }, null);
 }

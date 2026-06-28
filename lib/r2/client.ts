@@ -13,6 +13,16 @@ const r2 = new S3Client({
 const BUCKET = process.env.R2_BUCKET_NAME!;
 const PUBLIC_URL = process.env.R2_PUBLIC_URL!;
 
+export function getMissingR2ConfigKeys() {
+  return [
+    'R2_ACCOUNT_ID',
+    'R2_ACCESS_KEY_ID',
+    'R2_SECRET_ACCESS_KEY',
+    'R2_BUCKET_NAME',
+    'R2_PUBLIC_URL',
+  ].filter((key) => !process.env[key]);
+}
+
 export type ImageVariants = {
   original: string;
   large: string;

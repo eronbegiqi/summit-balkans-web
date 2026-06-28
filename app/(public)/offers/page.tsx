@@ -37,7 +37,7 @@ export default async function OffersPage() {
   return (
     <>
       {/* Hero */}
-      <section className="bg-dark pt-[72px] pb-20 overflow-hidden relative">
+      <section className="bg-dark pt-[100px] pb-20 overflow-hidden relative">
         <div className="absolute inset-0 opacity-[0.04]"
           style={{ backgroundImage: "radial-gradient(circle at 30% 50%, #2e8a57 0%, transparent 60%), radial-gradient(circle at 70% 50%, #D4A574 0%, transparent 60%)" }}
         />

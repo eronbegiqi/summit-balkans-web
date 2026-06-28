@@ -16,7 +16,7 @@ const CATEGORY_LABELS: Record<string, string> = {
 };
 
 export default async function BlogPage() {
-  const posts = await getBlogPosts();
+  const posts = await getBlogPosts(false);
 
   return (
     <div className="space-y-6">

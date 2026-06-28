@@ -53,12 +53,10 @@ export function AdminSidebar({ newBookingsCount, newInquiriesCount }: Props) {
   return (
     <aside className="fixed inset-y-0 left-0 z-40 flex w-[250px] flex-col" style={{ backgroundColor: '#0E1310' }}>
       {/* Logo */}
-      <div className="flex h-[60px] shrink-0 items-center border-b border-white/10 px-6">
-        <span className="text-sm font-bold tracking-wider text-white" style={{ fontFamily: 'monospace', letterSpacing: '0.1em' }}>
-          SUMMIT BALKANS
-        </span>
+      <div className="px-5">
+          <img  src="/logo-white.svg" alt="Summit Balkans" className="h-8 pt-2 w-auto"/>
       </div>
-
+      
       {/* Nav */}
       <nav className="flex-1 overflow-y-auto px-3 py-4">
         <ul className="space-y-0.5">

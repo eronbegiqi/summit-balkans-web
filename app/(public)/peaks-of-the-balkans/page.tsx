@@ -18,7 +18,9 @@ import { RelatedTrips } from "@/components/pob/RelatedTrips";
 import { PoBCTABand } from "@/components/pob/PoBCTABand";
 import { RouteMapClient } from "@/components/pob/RouteMapClient";
 import { TourStickyBar } from "@/components/tour/TourStickyBar";
-import { getTourBySlug, getDeparturesByTour } from "@/data/tours";
+import { getTourBySlug } from "@/data/tours";
+import { getUpcomingDeparturesByTourSlug } from "@/lib/db/queries/departures";
+import type { Departure } from "@/lib/types";
 
 export const metadata: Metadata = {
   title: "Peaks of the Balkans — Summit Balkans",
@@ -31,10 +33,23 @@ export const metadata: Metadata = {
   },
 };
 
-export default function PeaksOfTheBalkansPage() {
+export default async function PeaksOfTheBalkansPage() {
   const tour = getTourBySlug("peaks-of-the-balkans");
-  const deps = getDeparturesByTour("peaks-of-the-balkans");
-  const nextDep = deps.find((d) => d.status === "available" || d.status === "low") ?? null;
+  const deps = await getUpcomingDeparturesByTourSlug("peaks-of-the-balkans");
+  const nextDep: Departure | null = deps[0]
+    ? {
+        id: String(deps[0].id),
+        tourSlug: deps[0].tour.slug,
+        startDate: String(deps[0].startDate),
+        endDate: String(deps[0].endDate),
+        guide: deps[0].guide?.name ?? "Local guide",
+        spotsTotal: Number(deps[0].capacity),
+        spotsLeft: Math.max(Number(deps[0].capacity) - Number(deps[0].bookedCount ?? 0), 0),
+        price: Number(deps[0].pricePerPersonEur ?? deps[0].tour.pricePerPersonEur ?? 0),
+        currency: "EUR",
+        status: deps[0].status === "SOLD_OUT" ? "sold-out" : deps[0].status === "LIMITED" ? "low" : "available",
+      }
+    : null;
 
   return (
     <>

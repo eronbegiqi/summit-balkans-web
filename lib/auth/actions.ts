@@ -1,11 +1,13 @@
 'use server';
 
 import { redirect } from 'next/navigation';
+import { after } from 'next/server';
 import { db } from '@/lib/db/client';
 import { adminUsers } from '@/lib/db/schema';
 import { eq } from 'drizzle-orm';
 import { verifyPassword } from './password';
 import { createSession, setSessionCookie, clearSessionCookie } from './session';
+import { warmAdminCache } from '@/lib/db/warm-cache';
 
 export async function login(formData: FormData): Promise<{ error: string } | never> {
   const email = formData.get('email') as string;
@@ -43,6 +45,12 @@ export async function login(formData: FormData): Promise<{ error: string } | nev
   });
 
   await setSessionCookie(token);
+
+  // Pre-load every admin page's data so offline snapshots exist immediately
+  // after login. Runs in the background so it never delays the redirect; the
+  // DB is reachable here (we just authenticated against it).
+  after(() => warmAdminCache());
+
   redirect('/admin/dashboard');
 }
 

@@ -47,7 +47,7 @@ const config: Config = {
         dark: "#0E1310",
       },
       fontFamily: {
-        fraunces: ["var(--font-fraunces)", "serif"],
+        fraunces: ["var(--font-inter)", "sans-serif"],
         inter: ["var(--font-inter)", "sans-serif"],
         mono: ["var(--font-mono)", "monospace"],
       },
@@ -97,14 +97,14 @@ const config: Config = {
             "--tw-prose-bullets": "#2e8a57",
             "--tw-prose-hr": "#C9CFC8",
             "h2": {
-              fontFamily: "var(--font-fraunces), serif",
+              fontFamily: "var(--font-inter), sans-serif",
               fontSize: "1.75rem",
               marginTop: "2.5rem",
               fontWeight: "700",
               letterSpacing: "-0.02em",
             },
             "h3": {
-              fontFamily: "var(--font-fraunces), serif",
+              fontFamily: "var(--font-inter), sans-serif",
               fontSize: "1.25rem",
               fontWeight: "700",
             },

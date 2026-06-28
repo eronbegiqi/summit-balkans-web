@@ -85,23 +85,29 @@ export default async function CustomerDetailPage({ params }: Props) {
               <p className="text-sm text-gray-400">No bookings yet.</p>
             ) : (
               <div className="space-y-2">
-                {customer.bookings.map((b) => (
-                  <Link
-                    key={b.id}
-                    href={`/admin/bookings/${b.id}`}
-                    className="flex items-center justify-between rounded-lg border border-gray-100 px-4 py-3 text-sm hover:bg-gray-50 transition-colors"
-                  >
-                    <div>
-                      <p className="font-mono font-semibold text-gray-900">{b.bookingReference}</p>
-                      <p className="text-xs text-gray-500">{b.tourTitle}</p>
-                    </div>
-                    <div className="flex items-center gap-3 text-right">
-                      <StatusBadge status={b.status} />
-                      <StatusBadge status={b.paymentStatus} />
-                      <span className="font-semibold text-gray-900">€{parseFloat(b.totalEur).toLocaleString()}</span>
-                    </div>
-                  </Link>
-                ))}
+                {customer.bookings.map((b, index) => {
+                  const bookingKey = Number.isFinite(b.id) && b.id > 0
+                    ? `booking-${b.id}`
+                    : `booking-${b.bookingReference || 'unknown'}-${index}`;
+
+                  return (
+                    <Link
+                      key={bookingKey}
+                      href={`/admin/bookings/${b.id || index + 1}`}
+                      className="flex items-center justify-between rounded-lg border border-gray-100 px-4 py-3 text-sm hover:bg-gray-50 transition-colors"
+                    >
+                      <div>
+                        <p className="font-mono font-semibold text-gray-900">{b.bookingReference}</p>
+                        <p className="text-xs text-gray-500">{b.tourTitle}</p>
+                      </div>
+                      <div className="flex items-center gap-3 text-right">
+                        <StatusBadge status={b.status} />
+                        <StatusBadge status={b.paymentStatus} />
+                        <span className="font-semibold text-gray-900">€{parseFloat(b.totalEur).toLocaleString()}</span>
+                      </div>
+                    </Link>
+                  );
+                })}
               </div>
             )}
           </div>
