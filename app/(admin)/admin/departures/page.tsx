@@ -2,6 +2,7 @@ import Link from 'next/link';
 import { getDepartures } from '@/lib/db/queries/departures';
 import { StatusBadge } from '@/components/admin/status-badge';
 import { EmptyState } from '@/components/admin/empty-state';
+import { toDateInputValue } from '@/lib/db/utils';
 import { CalendarDays, Plus } from 'lucide-react';
 
 export const dynamic = 'force-dynamic';
@@ -42,7 +43,7 @@ export default async function DeparturesPage() {
                   <tr key={d.id} className="hover:bg-gray-50">
                     <td className="px-4 py-3 font-medium text-gray-900 max-w-[180px] truncate">{d.tour.title}</td>
                     <td className="px-4 py-3 text-gray-600 whitespace-nowrap">
-                      {String(d.startDate).split('T')[0]} → {String(d.endDate).split('T')[0]}
+                      {toDateInputValue(d.startDate)} → {toDateInputValue(d.endDate)}
                     </td>
                     <td className="px-4 py-3 text-gray-500">{d.capacity}</td>
                     <td className="px-4 py-3 text-gray-500">{d.bookedCount ?? 0}</td>

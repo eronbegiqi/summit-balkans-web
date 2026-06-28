@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { db } from '@/lib/db/client';
-import { departures, tours } from '@/lib/db/schema';
-import { asc, eq, and, sql, gt } from 'drizzle-orm';
+import { departures, tours, guides } from '@/lib/db/schema';
+import { asc, eq, and, sql } from 'drizzle-orm';
 
 export const revalidate = 300;
 
@@ -27,9 +27,11 @@ export async function GET(req: NextRequest) {
         tourVariant: tours.tourVariant,
         tourType: tours.tourType,
         guidedPriceEur: tours.pricePerPersonEur,
+        guideName: guides.name,
       })
       .from(departures)
       .innerJoin(tours, eq(departures.tourId, tours.id))
+      .leftJoin(guides, eq(departures.guideId, guides.id))
       .where(
         and(
           eq(tours.published, true),

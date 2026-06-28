@@ -51,12 +51,12 @@ export function GearDetailModal({ item }: { item: GearItem }) {
       {/* Modal overlay */}
       {open && (
         <div
-          className="fixed inset-0 z-[300] flex items-center justify-center p-5 bg-dark/65 backdrop-blur-sm"
+          className="fixed inset-0 z-[300] flex items-stretch sm:items-center justify-center sm:p-5 bg-dark/65 backdrop-blur-sm"
           onClick={(e) => { if (e.target === e.currentTarget) setOpen(false); }}
         >
-          <div className="bg-bone rounded-2xl max-w-[860px] w-full max-h-[90vh] overflow-y-auto" style={{ scrollbarWidth: "thin" }}>
+          <div className="bg-bone w-full h-full sm:h-auto sm:max-h-[90vh] sm:max-w-[860px] sm:rounded-2xl overflow-y-auto" style={{ scrollbarWidth: "thin" }}>
             {/* Header */}
-            <div className="flex items-center justify-between px-7 py-6 border-b-2 border-divider">
+            <div className="sticky top-0 z-10 bg-bone flex items-center justify-between px-5 sm:px-7 py-4 sm:py-6 border-b-2 border-divider">
               <div className="flex items-center gap-2">
                 <Mountain className="w-5 h-5 text-forest" strokeWidth={1.5} />
                 <span className="font-semibold text-sm">Gear details</span>
@@ -70,14 +70,14 @@ export function GearDetailModal({ item }: { item: GearItem }) {
             </div>
 
             {/* Body */}
-            <div className="grid" style={{ gridTemplateColumns: "1fr 320px" }}>
+            <div className="grid grid-cols-1 md:grid-cols-[minmax(0,1fr)_320px]">
               {/* Gallery */}
-              <div className="p-7">
+              <div className="p-5 sm:p-7">
                 {/* eslint-disable-next-line @next/next/no-img-element */}
                 <img
                   src={`${item.image}&w=700`}
                   alt={item.name}
-                  className="w-full rounded-xl border-2 border-divider object-cover h-[260px] block mb-2.5"
+                  className="w-full rounded-xl border-2 border-divider object-cover h-[220px] sm:h-[260px] block mb-2.5"
                 />
                 {item.sizes && (
                   <div className="flex gap-2 flex-wrap mt-4">
@@ -90,11 +90,13 @@ export function GearDetailModal({ item }: { item: GearItem }) {
               </div>
 
               {/* Info */}
-              <div className="px-7 py-7 border-l-2 border-divider">
+              <div className="px-5 sm:px-7 py-5 sm:py-7 border-t-2 md:border-t-0 md:border-l-2 border-divider">
                 <span className="inline-block font-mono text-xs bg-gold text-ink px-2.5 py-1 rounded-md mb-3">
                   €{item.dayRate}/day
                 </span>
-                <h2 className="font-fraunces text-[28px] font-bold tracking-tight mb-2.5">{item.name}</h2>
+                <h2 className="font-fraunces font-bold tracking-tight mb-2.5" style={{ fontSize: "clamp(24px, 7vw, 28px)" }}>
+                  {item.name}
+                </h2>
                 <p className="text-sm leading-[1.7] text-ink/65 mb-5">{item.description}</p>
 
                 {/* Specs */}
@@ -109,7 +111,7 @@ export function GearDetailModal({ item }: { item: GearItem }) {
                 </div>
 
                 {/* Day rate calculator */}
-                <div className="bg-white border-2 border-divider rounded-xl p-5 mt-5">
+                <div className="bg-white border-2 border-divider rounded-xl p-4 sm:p-5 mt-5">
                   <div className="font-mono text-[11px] text-ink/40 tracking-[0.1em] uppercase mb-3.5">Day Rate Calculator</div>
                   <div className="flex items-center gap-3 mb-3.5">
                     <span className="text-sm flex-1">Number of days</span>
@@ -133,7 +135,7 @@ export function GearDetailModal({ item }: { item: GearItem }) {
                   </div>
                   <div className="flex justify-between items-baseline pt-3 border-t-2 border-ink">
                     <span className="text-sm font-semibold">Total</span>
-                    <span className="font-fraunces text-[28px] font-bold">{formatPrice(days * item.dayRate)}</span>
+                    <span className="font-fraunces text-[24px] sm:text-[28px] font-bold">{formatPrice(days * item.dayRate)}</span>
                   </div>
                   <div className="text-xs text-ink/40 text-right mt-1.5">
                     + {formatPrice(item.deposit)} deposit (refunded)
@@ -142,7 +144,7 @@ export function GearDetailModal({ item }: { item: GearItem }) {
                     href="https://wa.me/38348300155"
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="block w-full bg-terra text-white border-2 border-terra py-3.5 rounded-xl font-semibold text-sm text-center no-underline hover:opacity-88 transition-opacity mt-3.5"
+                    className="block w-full bg-brand text-white py-3.5 rounded-xl font-semibold text-sm text-center no-underline hover:opacity-88 transition-opacity mt-3.5"
                   >
                     Add to Booking
                   </a>

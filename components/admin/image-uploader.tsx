@@ -44,11 +44,14 @@ export function ImageUploader({ value, onChange, folder = 'general', className }
         formData.append('folder', folder);
 
         const res = await fetch('/api/upload', { method: 'POST', body: formData });
-        if (!res.ok) throw new Error('Upload failed');
+        if (!res.ok) {
+          const data = await res.json().catch(() => null);
+          throw new Error(data?.error ?? 'Upload failed');
+        }
         const data: UploadedImage = await res.json();
         onChange?.(data);
-      } catch {
-        setError('Upload failed. Please try again.');
+      } catch (error) {
+        setError(error instanceof Error ? error.message : 'Upload failed. Please try again.');
       } finally {
         setUploading(false);
       }

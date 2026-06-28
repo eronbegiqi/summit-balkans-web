@@ -4,6 +4,7 @@ import "leaflet/dist/leaflet.css";
 import "@/styles/globals.css";
 import Script from "next/script";
 import { Analytics } from "@vercel/analytics/next";
+import { Toaster } from "sonner";
 
 const fraunces = Fraunces({
   subsets: ["latin"],
@@ -64,6 +65,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
     >
       <body>
         {children}
+        <Toaster position="top-right" richColors closeButton />
         <Analytics />
         {/* Load Google Analytics only once the page is idle so it never blocks
             the main thread during initial render / LCP. */}

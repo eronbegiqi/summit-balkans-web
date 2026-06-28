@@ -96,6 +96,14 @@ export async function toggleBlogPublished(id: number, published: boolean) {
     .set({ published, ...(published ? { publishedAt: new Date() } : {}) })
     .where(eq(blogPosts.id, id));
   revalidatePath('/admin/blog');
+  revalidatePath('/blog');
+}
+
+export async function deleteBlogPost(id: number) {
+  await requireAdmin();
+  await db.delete(blogPosts).where(eq(blogPosts.id, id));
+  revalidatePath('/admin/blog');
+  revalidatePath('/blog');
 }
 
 // ─── Reviews ─────────────────────────────────────────────────────────────────

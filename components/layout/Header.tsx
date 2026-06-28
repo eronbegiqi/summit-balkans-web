@@ -98,7 +98,7 @@ const navItems: NavItem[] = [
           heading: "Company",
           links: [
             { label: "Our Story", href: "/about" },
-            { label: "Our Guides", href: "/guides" },
+            // { label: "Our Guides", href: "/guides" },
             { label: "Contact", href: "/contact" },
           ],
         },
@@ -218,7 +218,7 @@ export function Header() {
           // other pages are a constant 64px. Animated by CSS, not JS.
           isHeroPage && !scrolled ? "h-24" : "h-16",
           solidState
-            ? "bg-bone/95 backdrop-blur-md border-b border-mist/60"
+            ? "bg-white backdrop-blur-md border-b border-mist/60"
             : "bg-transparent"
         )}
       >

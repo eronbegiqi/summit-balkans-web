@@ -1,10 +1,12 @@
 'use client';
 
 import { useState, useTransition } from 'react';
+import Link from 'next/link';
 import { toast } from 'sonner';
-import { saveBlogPost, toggleBlogPublished } from '@/lib/actions/content';
+import { saveBlogPost } from '@/lib/actions/content';
 import { RichTextEditor } from '@/components/admin/rich-text-editor';
 import { ImageUploader } from '@/components/admin/image-uploader';
+import { DeleteBlogPostButton } from '@/components/admin/blog/delete-blog-post-button';
 import type { BlogPostWithAuthor } from '@/lib/db/queries/blog';
 
 type Props = { post: BlogPostWithAuthor | null };
@@ -48,8 +50,15 @@ export function BlogForm({ post }: Props) {
 
   return (
     <div className="space-y-6">
-      <div className="flex items-center justify-between">
-        <h1 className="text-2xl font-bold tracking-tight text-gray-900">{post ? `Edit: ${post.title}` : 'New Post'}</h1>
+      <div className="flex items-center justify-between gap-4">
+        <div className="space-y-2">
+          {post && (
+            <Link href="/admin/blog" className="inline-flex items-center text-sm font-medium text-gray-500 hover:text-gray-900">
+              ← Back to blog posts
+            </Link>
+          )}
+          <h1 className="text-2xl font-bold tracking-tight text-gray-900">{post ? `Edit: ${post.title}` : 'New Post'}</h1>
+        </div>
         <button onClick={save} disabled={pending} className="rounded-lg px-5 py-2 text-sm font-semibold text-white disabled:opacity-60" style={{ backgroundColor: '#2e8a57' }}>
           {pending ? 'Saving…' : 'Save post'}
         </button>
@@ -108,6 +117,17 @@ export function BlogForm({ post }: Props) {
           <button onClick={save} disabled={pending} className="w-full rounded-lg py-3 text-sm font-semibold text-white disabled:opacity-60" style={{ backgroundColor: '#2e8a57' }}>
             {pending ? 'Saving…' : 'Save post'}
           </button>
+          {post && (
+            <div className="rounded-xl border border-red-100 bg-red-50 p-5">
+              <h3 className="text-sm font-semibold text-red-900">Danger zone</h3>
+              <p className="mt-1.5 text-sm leading-6 text-red-700/80">
+                Permanently delete this blog post from the site.
+              </p>
+              <div className="mt-4">
+                <DeleteBlogPostButton postId={post.id} title={post.title} redirectTo="/admin/blog" />
+              </div>
+            </div>
+          )}
         </div>
       </div>
     </div>

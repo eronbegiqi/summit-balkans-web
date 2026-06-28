@@ -20,6 +20,9 @@ function getDb(): AppDb {
     connectionLimit: 10,
     waitForConnections: true,
     queueLimit: 0,
+    // Fail fast when the DB is unreachable (e.g. internet dropped) so callers
+    // can fall back to cached snapshots quickly instead of hanging ~10s.
+    connectTimeout: 4000,
     // mysql2 prepared statements return JSON columns as raw strings.
     // This typeCast ensures JSON is always parsed into JS objects.
     typeCast: (field, next) => {

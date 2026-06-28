@@ -29,7 +29,7 @@ export function StagesItinerary() {
         </div>
 
         {/* Route overview strip */}
-        <div className="mb-8 overflow-x-auto">
+        {/* <div className="mb-8 overflow-x-auto">
           <div className="flex items-center gap-1 min-w-max pb-1">
             {itinerary.map((day, i) => (
               <div key={day.day} className="flex items-center gap-1">
@@ -46,7 +46,7 @@ export function StagesItinerary() {
               </div>
             ))}
           </div>
-        </div>
+        </div> */}
 
         <PoBItineraryAccordion forceOpen={allOpen} />
       </div>

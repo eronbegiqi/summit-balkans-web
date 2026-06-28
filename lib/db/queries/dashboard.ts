@@ -1,4 +1,5 @@
 import { db } from '@/lib/db/client';
+import { cachedQuery } from '@/lib/db/cache';
 import { bookings, departures, inquiries } from '@/lib/db/schema';
 import { and, count, eq, gte, inArray, lte, sql, sum } from 'drizzle-orm';
 
@@ -32,16 +33,11 @@ export type UpcomingDeparture = {
   status: string;
 };
 
-async function safeQuery<T>(fn: () => Promise<T>, fallback: T): Promise<T> {
-  try {
-    return await fn();
-  } catch {
-    return fallback;
-  }
-}
+// Offline-resilient: serves the last cached result when the DB is unreachable.
+const safeQuery = cachedQuery;
 
 export async function getNewBookingsCount(): Promise<number> {
-  return safeQuery(async () => {
+  return safeQuery('dashboard:newBookingsCount', async () => {
     const [row] = await db
       .select({ count: count() })
       .from(bookings)
@@ -51,7 +47,7 @@ export async function getNewBookingsCount(): Promise<number> {
 }
 
 export async function getNewInquiriesCount(): Promise<number> {
-  return safeQuery(async () => {
+  return safeQuery('dashboard:newInquiriesCount', async () => {
     const [row] = await db
       .select({ count: count() })
       .from(inquiries)
@@ -65,7 +61,7 @@ export async function getDashboardStats(): Promise<DashboardStats> {
   const startOfMonth = new Date(now.getFullYear(), now.getMonth(), 1);
   const thirtyDaysFromNow = new Date(now.getTime() + 30 * 24 * 60 * 60 * 1000);
 
-  return safeQuery(async () => {
+  return safeQuery('dashboard:stats', async () => {
     const [pending, revenue, upcoming, openInq] = await Promise.all([
       db.select({ count: count() }).from(bookings).where(eq(bookings.status, 'NEW')),
       db
@@ -92,7 +88,7 @@ export async function getDashboardStats(): Promise<DashboardStats> {
 }
 
 export async function getBookingsChartData(): Promise<MonthlyPoint[]> {
-  return safeQuery(async () => {
+  return safeQuery('dashboard:bookingsChart', async () => {
     const [rows] = await db.execute(sql`
       SELECT DATE_FORMAT(created_at, '%Y-%m') AS month, COUNT(*) AS value
       FROM bookings
@@ -106,7 +102,7 @@ export async function getBookingsChartData(): Promise<MonthlyPoint[]> {
 }
 
 export async function getRevenueChartData(): Promise<MonthlyPoint[]> {
-  return safeQuery(async () => {
+  return safeQuery('dashboard:revenueChart', async () => {
     const [rows] = await db.execute(sql`
       SELECT DATE_FORMAT(created_at, '%Y-%m') AS month, COALESCE(SUM(paid_amount_eur), 0) AS value
       FROM bookings
@@ -120,7 +116,7 @@ export async function getRevenueChartData(): Promise<MonthlyPoint[]> {
 }
 
 export async function getRecentBookings(): Promise<RecentBooking[]> {
-  return safeQuery(async () => {
+  return safeQuery('dashboard:recentBookings', async () => {
     const [rows] = await db.execute(sql`
       SELECT
         b.id,
@@ -144,7 +140,7 @@ export async function getRecentBookings(): Promise<RecentBooking[]> {
 }
 
 export async function getRecentInquiries() {
-  return safeQuery(async () => {
+  return safeQuery('dashboard:recentInquiries', async () => {
     const [rows] = await db.execute(sql`
       SELECT id, type, name, email, status, created_at AS createdAt
       FROM inquiries
@@ -163,7 +159,7 @@ export async function getRecentInquiries() {
 }
 
 export async function getUpcomingDepartures(): Promise<UpcomingDeparture[]> {
-  return safeQuery(async () => {
+  return safeQuery('dashboard:upcomingDepartures', async () => {
     const [rows] = await db.execute(sql`
       SELECT d.id, t.title AS tourTitle, d.start_date AS startDate, d.capacity, d.booked_count AS bookedCount, d.status
       FROM departures d
