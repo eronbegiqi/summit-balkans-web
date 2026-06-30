@@ -32,6 +32,10 @@ function useCounter(target: number, decimals: number, active: boolean) {
   const [count, setCount] = useState(0);
   useEffect(() => {
     if (!active) return;
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+      setCount(target);
+      return;
+    }
     const duration = 1600;
     const steps = 60;
     const increment = target / steps;
