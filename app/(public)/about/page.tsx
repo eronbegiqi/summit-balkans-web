@@ -158,7 +158,7 @@ style={{ backgroundImage: "url('/images/about-hero.webp')" }}        />
             <div className="rounded-card-hero overflow-hidden border-2 border-divider">
               {/* eslint-disable-next-line @next/next/no-img-element */}
               <img
-                src="https://images.unsplash.com/photo-1551632811-561732d1e306?w=800&q=85"
+                src="/images/about-us-img.webp"
                 alt="Summit Balkans guides on trail"
                 className="w-full h-full object-cover block"
               />
