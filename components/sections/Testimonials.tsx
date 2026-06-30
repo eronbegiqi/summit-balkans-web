@@ -74,7 +74,7 @@ function MobileCarousel({ reviews }: { reviews: Review[] }) {
             aria-selected={i === selected}
             aria-label={`Review ${i + 1}`}
             onClick={() => emblaApi?.scrollTo(i)}
-            className={`h-1.5 rounded-full transition-all duration-300 border-none cursor-pointer ${
+            className={`h-1.5 rounded-full transition-[width,background-color] duration-300 border-none cursor-pointer ${
               i === selected ? "w-6 bg-brand" : "w-1.5 bg-mist"
             }`}
           />

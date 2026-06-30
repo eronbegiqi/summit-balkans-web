@@ -58,15 +58,15 @@ export function Footer() {
               </p>
               <div className="flex gap-3">
                 <a href={CONTACT.instagram} target="_blank" rel="noopener noreferrer" aria-label="Instagram"
-                  className="w-9 h-9 border border-white/15 rounded-lg flex items-center justify-center text-white/40 hover:text-white hover:border-white/35 transition-all">
+                  className="w-9 h-9 border border-white/15 rounded-lg flex items-center justify-center text-white/40 hover:text-white hover:border-white/35 transition-[color,border-color]">
                   <Instagram className="w-4 h-4" strokeWidth={1.5} />
                 </a>
                 <a href={CONTACT.facebook} target="_blank" rel="noopener noreferrer" aria-label="Facebook"
-                  className="w-9 h-9 border border-white/15 rounded-lg flex items-center justify-center text-white/40 hover:text-white hover:border-white/35 transition-all">
+                  className="w-9 h-9 border border-white/15 rounded-lg flex items-center justify-center text-white/40 hover:text-white hover:border-white/35 transition-[color,border-color]">
                   <Facebook className="w-4 h-4" strokeWidth={1.5} />
                 </a>
                 <a href={CONTACT.youtube} target="_blank" rel="noopener noreferrer" aria-label="YouTube"
-                  className="w-9 h-9 border border-white/15 rounded-lg flex items-center justify-center text-white/40 hover:text-white hover:border-white/35 transition-all">
+                  className="w-9 h-9 border border-white/15 rounded-lg flex items-center justify-center text-white/40 hover:text-white hover:border-white/35 transition-[color,border-color]">
                   <Youtube className="w-4 h-4" strokeWidth={1.5} />
                 </a>
               </div>

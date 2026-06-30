@@ -112,7 +112,7 @@ export function UpcomingDepartures() {
             disabled={!canScrollLeft}
             aria-label="Scroll left"
             className={cn(
-              "w-12 h-12 rounded-full bg-bone/90 backdrop-blur-sm border-2 border-mist flex items-center justify-center transition-all",
+              "w-12 h-12 rounded-full bg-bone/90 backdrop-blur-sm border-2 border-mist flex items-center justify-center transition-[border-color,color]",
               canScrollLeft ? "text-ink hover:border-ink cursor-pointer" : "text-mist cursor-not-allowed opacity-40"
             )}
           >
@@ -123,7 +123,7 @@ export function UpcomingDepartures() {
             disabled={!canScrollRight}
             aria-label="Scroll right"
             className={cn(
-              "w-12 h-12 rounded-full bg-bone/90 backdrop-blur-sm border-2 border-mist flex items-center justify-center transition-all",
+              "w-12 h-12 rounded-full bg-bone/90 backdrop-blur-sm border-2 border-mist flex items-center justify-center transition-[border-color,color]",
               canScrollRight ? "text-ink hover:border-ink cursor-pointer" : "text-mist cursor-not-allowed opacity-40"
             )}
           >
@@ -171,7 +171,7 @@ export function UpcomingDepartures() {
               <div
                 key={dep.id}
                 role="listitem"
-                className="flex-none w-[260px] md:w-[300px] rounded-card border-2 border-divider bg-white overflow-hidden snap-start hover:border-brand hover:-translate-y-0.5 active:scale-[0.98] transition-all duration-200"
+                className="flex-none w-[260px] md:w-[300px] rounded-card border-2 border-divider bg-white overflow-hidden snap-start hover:border-brand hover:-translate-y-0.5 active:scale-[0.98] transition-[border-color,transform] duration-200"
               >
                 <div className="relative w-full h-[160px] md:h-[168px]">
                   <Image
@@ -217,7 +217,7 @@ export function UpcomingDepartures() {
                     </div>
                     <Link
                       href={`/tours/${dep.tourSlug}`}
-                      className="flex items-center gap-1 text-[13px] font-semibold text-brand no-underline border-2 border-brand px-3 py-1.5 rounded-lg hover:bg-brand hover:text-white transition-all whitespace-nowrap"
+                      className="flex items-center gap-1 text-[13px] font-semibold text-brand no-underline border-2 border-brand px-3 py-1.5 rounded-lg hover:bg-brand hover:text-white transition-[background-color,color] whitespace-nowrap"
                       aria-label={`Book ${dep.tourTitle}`}
                     >
                       Book
