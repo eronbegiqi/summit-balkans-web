@@ -167,7 +167,7 @@ export default async function TourDetailPage({ params }: { params: Promise<{ slu
             </section>
           )}
 
-          {/* Guided vs Self-Guided comparison */}
+          {/* Guided vs Self-Guided comparison
           {tour.selfGuidedPriceEur && (
             <section className="bg-bone rounded-2xl p-6 border-2 border-divider">
               <SectionLabel>How would you like to hike?</SectionLabel>
@@ -182,7 +182,7 @@ export default async function TourDetailPage({ params }: { params: Promise<{ slu
                 </div>
               </div>
             </section>
-          )}
+          )} */}
 
           {/* Dates & Prices */}
           <section id="departures">

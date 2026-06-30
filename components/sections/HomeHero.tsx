@@ -46,14 +46,14 @@ export function HomeHero() {
         <div className="flex gap-3.5 flex-wrap mb-10">
           <Link
             href="/tours"
-            className="flex items-center gap-2 bg-brand text-white px-7 py-4 rounded-xl font-semibold text-[15px] no-underline hover:opacity-90 hover:-translate-y-0.5 transition-all"
+            className="flex items-center gap-2 bg-brand text-white px-7 py-4 rounded-xl font-semibold text-[15px] no-underline hover:opacity-90 hover:-translate-y-0.5 transition-[opacity,transform]"
           >
             View Upcoming Tours
             <ArrowRight className="w-4 h-4" strokeWidth={1.5} />
           </Link>
           <Link
             href="/private-trips"
-            className="flex items-center gap-2 text-white border-2 border-white/45 px-7 py-4 rounded-xl font-medium text-[15px] no-underline hover:border-white/75 hover:bg-white/6 transition-all"
+            className="flex items-center gap-2 text-white border-2 border-white/45 px-7 py-4 rounded-xl font-medium text-[15px] no-underline hover:border-white/75 hover:bg-white/6 transition-[border-color,background-color]"
           >
             Plan a Private Trip
           </Link>

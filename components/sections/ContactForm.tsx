@@ -57,19 +57,23 @@ export function ContactForm() {
     <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-5" noValidate>
       <div className="grid grid-cols-2 gap-5">
         <div>
-          <label className="text-[13px] font-semibold block mb-1.5">Your name *</label>
+          <label htmlFor="contact-name" className="text-[13px] font-semibold block mb-1.5">Your name *</label>
           <input
             {...register("name")}
+            id="contact-name"
             type="text"
+            autoComplete="name"
             className="w-full px-3.5 py-[11px] border-2 border-divider rounded-lg font-inter text-[15px] bg-white outline-none focus:border-forest transition-colors"
           />
           {errors.name && <p className="text-xs text-red-600 mt-1">{errors.name.message}</p>}
         </div>
         <div>
-          <label className="text-[13px] font-semibold block mb-1.5">Email address *</label>
+          <label htmlFor="contact-email" className="text-[13px] font-semibold block mb-1.5">Email address *</label>
           <input
             {...register("email")}
+            id="contact-email"
             type="email"
+            autoComplete="email"
             className="w-full px-3.5 py-[11px] border-2 border-divider rounded-lg font-inter text-[15px] bg-white outline-none focus:border-forest transition-colors"
           />
           {errors.email && <p className="text-xs text-red-600 mt-1">{errors.email.message}</p>}
@@ -77,18 +81,21 @@ export function ContactForm() {
       </div>
 
       <div>
-        <label className="text-[13px] font-semibold block mb-1.5">Phone (optional)</label>
+        <label htmlFor="contact-phone" className="text-[13px] font-semibold block mb-1.5">Phone (optional)</label>
         <input
           {...register("phone")}
+          id="contact-phone"
           type="tel"
+          autoComplete="tel"
           className="w-full px-3.5 py-[11px] border-2 border-divider rounded-lg font-inter text-[15px] bg-white outline-none focus:border-forest transition-colors"
         />
       </div>
 
       <div>
-        <label className="text-[13px] font-semibold block mb-1.5">Subject *</label>
+        <label htmlFor="contact-subject" className="text-[13px] font-semibold block mb-1.5">Subject *</label>
         <select
           {...register("subject")}
+          id="contact-subject"
           className="w-full px-3.5 py-[11px] border-2 border-divider rounded-lg font-inter text-[15px] bg-white outline-none focus:border-forest transition-colors appearance-none"
           defaultValue=""
         >
@@ -101,9 +108,10 @@ export function ContactForm() {
       </div>
 
       <div>
-        <label className="text-[13px] font-semibold block mb-1.5">Message *</label>
+        <label htmlFor="contact-message" className="text-[13px] font-semibold block mb-1.5">Message *</label>
         <textarea
           {...register("message")}
+          id="contact-message"
           rows={5}
           className="w-full px-3.5 py-[11px] border-2 border-divider rounded-lg font-inter text-[15px] bg-white resize-y outline-none focus:border-forest transition-colors"
           placeholder="Tell us what you'd like to know…"
