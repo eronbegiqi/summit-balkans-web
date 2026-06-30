@@ -7,7 +7,7 @@ export function CTABand() {
     <section className="bg-dark py-24 text-center relative overflow-hidden">
       <div className="absolute inset-0 opacity-[0.12]">
         <Image
-          src="https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=1600&q=60"
+          src="/images/CTA bg image.webp"
           alt=""
           fill
           sizes="100vw"
