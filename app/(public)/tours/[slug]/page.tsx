@@ -251,7 +251,7 @@ export default async function TourDetailPage({ params }: { params: Promise<{ slu
                           <td className="py-4 pl-6 text-right whitespace-nowrap">
                             {soldOut ? null : (
                               <Link
-                                href={`/tours/book?tour=${tour.slug}`}
+                                href={`/tours/book?tour=${tour.slug}&departure=${dep.id}`}
                                 className="inline-flex items-center gap-1 bg-terra text-white px-4 py-2 rounded-lg text-xs font-semibold no-underline hover:opacity-90 transition-opacity"
                               >
                                 Book <ArrowRight className="w-3 h-3" strokeWidth={2} />

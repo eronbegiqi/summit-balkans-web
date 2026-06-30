@@ -2,7 +2,7 @@
 
 import { useActionState } from 'react';
 import { login } from '@/lib/auth/actions';
-import { Mountain } from 'lucide-react';
+import Image from 'next/image';
 
 export default function LoginPage() {
   const [state, action, pending] = useActionState(
@@ -17,18 +17,7 @@ export default function LoginPage() {
       <div className="w-full max-w-sm">
         {/* Logo */}
         <div className="mb-8 flex flex-col items-center gap-3">
-          <div
-            className="flex h-12 w-12 items-center justify-center rounded-xl"
-            style={{ backgroundColor: '#2e8a57' }}
-          >
-            <Mountain className="h-6 w-6 text-white" />
-          </div>
-          <div className="text-center">
-            <h1 className="text-xl font-bold tracking-tight" style={{ color: '#0E1310' }}>
-              Summit Balkans
-            </h1>
-            <p className="text-sm text-gray-500 mt-0.5">Admin Panel</p>
-          </div>
+            <Image src="/logo.svg" alt="Summit Balkans" width={130} height={100} />
         </div>
 
         {/* Card */}

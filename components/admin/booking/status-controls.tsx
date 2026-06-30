@@ -1,8 +1,9 @@
 'use client';
 
 import { useState, useTransition } from 'react';
+import { useRouter } from 'next/navigation';
 import { toast } from 'sonner';
-import { updateBookingStatus, cancelBooking, recordManualPayment } from '@/lib/actions/bookings';
+import { updateBookingStatus, cancelBooking, recordManualPayment, deleteBooking } from '@/lib/actions/bookings';
 import { ConfirmDialog } from '@/components/admin/confirm-dialog';
 import { StatusBadge } from '@/components/admin/status-badge';
 
@@ -27,8 +28,10 @@ export function BookingStatusControls({
   paidAmountEur,
   depositAmountEur,
 }: Props) {
+  const router = useRouter();
   const [pending, startTransition] = useTransition();
   const [cancelOpen, setCancelOpen] = useState(false);
+  const [deleteOpen, setDeleteOpen] = useState(false);
   const [paymentOpen, setPaymentOpen] = useState(false);
   const [payAmount, setPayAmount] = useState('');
   const [payMethod, setPayMethod] = useState<'BANK_TRANSFER' | 'CASH' | 'OTHER'>('BANK_TRANSFER');
@@ -55,6 +58,19 @@ export function BookingStatusControls({
       await cancelBooking(bookingId);
       setCancelOpen(false);
       toast.success('Booking cancelled');
+    });
+  }
+
+  function handleDelete() {
+    startTransition(async () => {
+      try {
+        await deleteBooking(bookingId);
+        setDeleteOpen(false);
+        toast.success('Booking deleted');
+        router.refresh();
+      } catch {
+        toast.error('Could not delete booking');
+      }
     });
   }
 
@@ -143,6 +159,12 @@ export function BookingStatusControls({
             Cancel booking
           </button>
         )}
+        <button
+          onClick={() => setDeleteOpen(true)}
+          className="mt-2 w-full rounded-lg border border-red-200 py-2 text-sm font-medium text-red-600 transition-colors hover:bg-red-50"
+        >
+          Delete booking
+        </button>
       </div>
 
       {/* Confirm cancel */}
@@ -154,6 +176,17 @@ export function BookingStatusControls({
         confirmLabel="Cancel Booking"
         variant="danger"
         onConfirm={handleCancel}
+        loading={pending}
+      />
+
+      <ConfirmDialog
+        open={deleteOpen}
+        onOpenChange={setDeleteOpen}
+        title="Delete this booking?"
+        description="This will permanently remove the booking and its related payments, gear reservations, and activity log."
+        confirmLabel="Delete Booking"
+        variant="danger"
+        onConfirm={handleDelete}
         loading={pending}
       />
 

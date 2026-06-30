@@ -35,3 +35,6 @@ yarn-error.log*
 
 # GraphQL generated
 lib/gql/
+
+# DB query snapshots (offline cache)
+.cache/

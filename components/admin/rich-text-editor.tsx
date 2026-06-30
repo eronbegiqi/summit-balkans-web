@@ -20,6 +20,7 @@ type Props = {
 
 export function RichTextEditor({ value, onChange, placeholder = 'Start writing…', className }: Props) {
   const editor = useEditor({
+    immediatelyRender: false,
     extensions: [
       StarterKit,
       Image.configure({ inline: false, allowBase64: false }),

@@ -97,19 +97,18 @@ export default async function AboutPage() {
       {/* Hero */}
       <section className="relative min-h-[65vh] flex items-center overflow-hidden">
         <div
-          className="absolute inset-0 bg-cover bg-center"
-          style={{ backgroundImage: "url('https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?w=1920&q=85')" }}
-        />
-        <div className="absolute inset-0 bg-dark/72" />
-        <div className="relative z-10 max-w-content mx-auto px-10 pt-[72px] w-full">
-          <div className="font-mono text-[11px] text-white/40 tracking-[0.14em] uppercase mb-4">Who We Are</div>
+          className="absolute inset-0 bg-cover bg-bottom"
+style={{ backgroundImage: "url('/images/about-hero.webp')" }}        />
+        <div className="absolute inset-0 bg-black/40" />
+        <div className="relative z-10 max-w-content mx-auto px-6 pt-[72px] w-full">
+          <div className="font-mono text-[11px] text-gold tracking-[0.14em] uppercase mb-4">Who We Are</div>
           <h1
             className="font-fraunces font-bold text-white tracking-tight leading-[1.0] max-w-[760px] mb-6"
             style={{ fontSize: "clamp(42px, 5.5vw, 80px)", fontVariationSettings: "'opsz' 72" }}
           >
             Summit Balkans
           </h1>
-          <p className="text-xl text-white/65 max-w-[620px] leading-relaxed">
+          <p className="text-xl text-white/80 max-w-[620px] leading-relaxed">
             A mountain adventure and trekking organisation based in the heart of the Western Balkans —
             dedicated to showcasing the region&apos;s most breathtaking landscapes, authentic cultures,
             and untouched natural heritage.
@@ -119,7 +118,7 @@ export default async function AboutPage() {
 
       {/* Who We Are */}
       <section className="py-24">
-        <div className="max-w-content mx-auto px-10">
+        <div className="max-w-content mx-auto px-6">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-start">
             <div>
               <SectionLabel>Our Story</SectionLabel>
@@ -170,7 +169,7 @@ export default async function AboutPage() {
 
       {/* What We Do */}
       <section className="py-24 bg-bone border-t-2 border-divider">
-        <div className="max-w-content mx-auto px-10">
+        <div className="max-w-content mx-auto px-6">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-start">
             <div>
               <SectionLabel>What We Do</SectionLabel>
@@ -196,7 +195,7 @@ export default async function AboutPage() {
 
       {/* What We Offer */}
       <section className="py-24 border-t-2 border-divider">
-        <div className="max-w-content mx-auto px-10">
+        <div className="max-w-content mx-auto px-6">
           <SectionLabel>What We Offer</SectionLabel>
           <h2 className="font-fraunces text-4xl font-bold tracking-tight mt-2 mb-10">
             Everything you need on the trail
@@ -216,7 +215,7 @@ export default async function AboutPage() {
 
       {/* What Makes Us Different */}
       <section className="py-24 bg-bone border-t-2 border-divider">
-        <div className="max-w-content mx-auto px-10">
+        <div className="max-w-content mx-auto px-6">
           <SectionLabel>What Makes Us Different</SectionLabel>
           <h2 className="font-fraunces text-4xl font-bold tracking-tight mt-2 mb-12">
             Not just where — but how
@@ -237,7 +236,7 @@ export default async function AboutPage() {
 
       {/* Vision + Mission */}
       <section className="py-24 bg-dark border-t-2 border-divider">
-        <div className="max-w-content mx-auto px-10">
+        <div className="max-w-content mx-auto px-6">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-12">
             <div>
               <SectionLabel light>Our Vision</SectionLabel>
@@ -271,7 +270,7 @@ export default async function AboutPage() {
       {/* Our Team — from DB */}
       {guideList.length > 0 && (
         <section className="py-24 border-t-2 border-divider">
-          <div className="max-w-content mx-auto px-10">
+          <div className="max-w-content mx-auto px-6">
             <SectionLabel>The Team</SectionLabel>
             <h2 className="font-fraunces text-4xl font-bold tracking-tight mb-12">Our guides</h2>
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">

@@ -2,6 +2,7 @@ import Link from 'next/link';
 import { getInquiries, getInquiryCountsByType } from '@/lib/db/queries/inquiries';
 import { StatusBadge } from '@/components/admin/status-badge';
 import { EmptyState } from '@/components/admin/empty-state';
+import { DeleteInquiryButton } from '@/components/admin/inquiry/delete-inquiry-button';
 import { Inbox } from 'lucide-react';
 
 export const dynamic = 'force-dynamic';
@@ -99,9 +100,12 @@ export default async function InquiriesPage({ searchParams }: Props) {
                     <td className="px-4 py-3 max-w-[200px] truncate text-gray-500">{inq.subject ?? inq.message?.slice(0, 50) ?? '—'}</td>
                     <td className="px-4 py-3"><StatusBadge status={inq.status ?? 'NEW'} /></td>
                     <td className="px-4 py-3">
-                      <Link href={`/admin/inquiries/${inq.id}`} className="text-xs font-medium text-emerald-600 hover:underline">
-                        View →
-                      </Link>
+                      <div className="flex items-center justify-end gap-3">
+                        <Link href={`/admin/inquiries/${inq.id}`} className="text-xs font-medium text-emerald-600 hover:underline">
+                          View →
+                        </Link>
+                        <DeleteInquiryButton inquiryId={inq.id} title={inq.subject ?? inq.name} redirectTo="/admin/inquiries" className="px-2 py-1 text-xs" />
+                      </div>
                     </td>
                   </tr>
                 ))}

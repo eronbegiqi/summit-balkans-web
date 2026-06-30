@@ -73,6 +73,18 @@ export async function saveInquiryNotes(inquiryId: number, notes: string) {
   revalidatePath(`/admin/inquiries/${inquiryId}`);
 }
 
+export async function deleteInquiry(inquiryId: number) {
+  await getAdminSession();
+
+  const [existing] = await db.select().from(inquiries).where(eq(inquiries.id, inquiryId)).limit(1);
+  if (!existing) throw new Error('Inquiry not found');
+
+  await db.delete(inquiries).where(eq(inquiries.id, inquiryId));
+
+  revalidatePath('/admin/inquiries');
+  revalidatePath(`/admin/inquiries/${inquiryId}`);
+}
+
 export async function convertInquiryToBookingDraft(inquiryId: number): Promise<{ bookingId: number }> {
   const session = await getAdminSession();
 

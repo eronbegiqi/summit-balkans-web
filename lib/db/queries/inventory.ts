@@ -1,4 +1,5 @@
 import { db } from '@/lib/db/client';
+import { cachedQuery } from '@/lib/db/cache';
 import { gearItems, gearUnits, gearRentals, bookings, customers } from '@/lib/db/schema';
 import { eq, sql } from 'drizzle-orm';
 
@@ -32,6 +33,7 @@ export type RentalForCalendar = {
 };
 
 export async function getGearItemsWithStats(): Promise<GearItemWithStats[]> {
+  return cachedQuery('inventory:gearItemsWithStats', async () => {
   const [rows] = await db.execute(sql`
     SELECT
       gi.*,
@@ -51,9 +53,11 @@ export async function getGearItemsWithStats(): Promise<GearItemWithStats[]> {
     rentedCount: Number(r.rented_count ?? 0),
     maintenanceCount: Number(r.maintenance_count ?? 0),
   })) as GearItemWithStats[];
+  }, []);
 }
 
 export async function getGearUnitsWithRentals(gearItemId?: number): Promise<GearUnitWithRental[]> {
+  return cachedQuery(`inventory:gearUnits:${gearItemId ?? 'all'}`, async () => {
   const [rows] = await db.execute(sql`
     SELECT
       gu.*,
@@ -110,17 +114,21 @@ export async function getGearUnitsWithRentals(gearItemId?: number): Promise<Gear
         }
       : null,
   })) as GearUnitWithRental[];
+  }, []);
 }
 
 export async function getGearUnitById(id: number) {
-  const [unit] = await db.select().from(gearUnits).where(eq(gearUnits.id, id)).limit(1);
-  if (!unit) return null;
-  const [item] = await db.select().from(gearItems).where(eq(gearItems.id, unit.gearItemId)).limit(1);
-  const rentals = await db.select().from(gearRentals).where(eq(gearRentals.gearUnitId, id));
-  return { ...unit, gearItem: item, rentals };
+  return cachedQuery(`inventory:gearUnit:${id}`, async () => {
+    const [unit] = await db.select().from(gearUnits).where(eq(gearUnits.id, id)).limit(1);
+    if (!unit) return null;
+    const [item] = await db.select().from(gearItems).where(eq(gearItems.id, unit.gearItemId)).limit(1);
+    const rentals = await db.select().from(gearRentals).where(eq(gearRentals.gearUnitId, id));
+    return { ...unit, gearItem: item, rentals };
+  }, null);
 }
 
 export async function getRentalsForCalendar(daysAhead = 60): Promise<RentalForCalendar[]> {
+  return cachedQuery(`inventory:rentalsCalendar:${daysAhead}`, async () => {
   const [rows] = await db.execute(sql`
     SELECT
       gu.id AS unit_id,
@@ -142,9 +150,11 @@ export async function getRentalsForCalendar(daysAhead = 60): Promise<RentalForCa
     ORDER BY gi.name ASC, gu.unit_code ASC, gr.rental_start_date ASC
   `);
   return rows as unknown as RentalForCalendar[];
+  }, []);
 }
 
 export async function getLateRentals() {
+  return cachedQuery('inventory:lateRentals', async () => {
   const [rows] = await db.execute(sql`
     SELECT
       gr.id,
@@ -175,4 +185,5 @@ export async function getLateRentals() {
     customer_name: string;
     customer_email: string;
   }>;
+  }, []);
 }

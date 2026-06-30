@@ -3,6 +3,7 @@ import Link from 'next/link';
 import { getInquiryById } from '@/lib/db/queries/inquiries';
 import { StatusBadge } from '@/components/admin/status-badge';
 import { InquiryControls } from '@/components/admin/inquiry/reply-modal';
+import { DeleteInquiryButton } from '@/components/admin/inquiry/delete-inquiry-button';
 import { ArrowLeft } from 'lucide-react';
 
 export const dynamic = 'force-dynamic';
@@ -51,7 +52,7 @@ export default async function InquiryDetailPage({ params }: Props) {
         <Link href="/admin/inquiries" className="mb-4 inline-flex items-center gap-1.5 text-sm text-gray-500 hover:text-gray-700">
           <ArrowLeft className="h-3.5 w-3.5" /> Back to inquiries
         </Link>
-        <div className="flex items-start justify-between">
+        <div className="flex items-start justify-between gap-4">
           <div>
             <div className="flex items-center gap-3">
               <h1 className="text-xl font-bold text-gray-900">Inquiry #{inquiry.id}</h1>
@@ -59,6 +60,7 @@ export default async function InquiryDetailPage({ params }: Props) {
             </div>
             <p className="mt-1 text-sm text-gray-500">{TYPE_LABELS[inquiry.type] ?? inquiry.type} from {inquiry.name}</p>
           </div>
+          <DeleteInquiryButton inquiryId={inquiry.id} title={inquiry.subject ?? inquiry.name} redirectTo="/admin/inquiries" />
         </div>
       </div>
 
