@@ -25,7 +25,7 @@ export default function NewGuidePage() {
           quote: (fd.get('quote') as string) || undefined,
           yearsExperience: parseInt(fd.get('yearsExperience') as string) || undefined,
           contactEmail: (fd.get('contactEmail') as string) || undefined,
-          published: false,
+          published: fd.get('published') === 'on',
           displayOrder: 0,
         });
         redirect('/admin/guides');
@@ -41,6 +41,10 @@ export default function NewGuidePage() {
           <div><label className={labelCls}>Years experience</label><input type="number" name="yearsExperience" className={inputCls} /></div>
           <div><label className={labelCls}>Email</label><input name="contactEmail" className={inputCls} /></div>
         </div>
+        <label className="flex items-center gap-2 text-sm font-medium text-gray-700">
+          <input type="checkbox" name="published" className="h-4 w-4 rounded border-gray-300" />
+          Publish immediately
+        </label>
         <button type="submit" className="rounded-lg px-6 py-2.5 text-sm font-semibold text-white" style={{ backgroundColor: '#2e8a57' }}>Create guide</button>
       </form>
     </div>
