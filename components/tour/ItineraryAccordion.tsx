@@ -28,7 +28,7 @@ export function ItineraryAccordion({ days }: ItineraryAccordionProps) {
                 "hover:bg-ink/[0.02]"
               )}
             >
-              <span className="font-mono text-xs font-medium bg-ink text-white px-2.5 py-1 rounded-md flex-shrink-0">
+              <span className="font-mono text-xs font-medium bg-white text-ink border-2 border-ink px-2.5 py-1 rounded-md flex-shrink-0">
                 Day {day.day}
               </span>
               <span className="font-fraunces text-lg font-semibold flex-1 tracking-tight">
