@@ -7,7 +7,7 @@ const exploreLinks = [
   { label: "All Tours", href: "/tours" },
   { label: "Destinations", href: "/destinations" },
   { label: "Private Trips", href: "/private-trips" },
-  { label: "Gear Rental", href: "/gear" },
+  // { label: "Gear Rental", href: "/gear" }, // hidden for now
   { label: "Offers & Discounts", href: "/offers" },
   { label: "Blog", href: "/blog" },
 ];

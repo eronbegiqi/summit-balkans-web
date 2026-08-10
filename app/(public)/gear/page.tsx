@@ -95,7 +95,7 @@ export default function GearPage() {
                   <Mountain className="w-6 h-6 mx-auto" strokeWidth={1.5} />
                 </div>
                 <div className="text-[13px] font-semibold text-white mb-0.5 break-words">{item.name}</div>
-                <div className="font-mono text-xs text-white/40">€{item.dayRate}/day</div>
+                <div className="font-fraunces text-xs text-white/40">€{item.dayRate}/day</div>
               </div>
             ))}
           </div>
