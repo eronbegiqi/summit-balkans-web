@@ -52,23 +52,21 @@ export function HowYouTravel() {
           {cards.map((card) => {
             const Icon = card.icon;
             return (
-              <div
+              <Link
                 key={card.title}
-                className="border-2 border-divider rounded-card bg-white p-6 hover:border-brand hover:-translate-y-0.5 active:scale-[0.98] transition-all duration-200 cursor-pointer"
+                href={card.href}
+                className="border-2 border-divider rounded-card bg-white p-6 hover:border-brand hover:-translate-y-0.5 active:scale-[0.98] transition-[border-color,transform] duration-200 no-underline block group"
               >
                 <Icon className="w-10 h-10 text-brand mb-5" strokeWidth={1.5} />
-                <h3 className="font-fraunces text-xl font-bold mb-2 tracking-tight">
+                <h3 className="font-fraunces text-xl font-bold mb-2 tracking-tight text-ink">
                   {card.title}
                 </h3>
                 <p className="text-sm text-ink/58 leading-[1.6] mb-5">{card.desc}</p>
-                <Link
-                  href={card.href}
-                  className="inline-flex items-center gap-1.5 text-[13px] font-semibold text-brand no-underline hover:gap-2.5 transition-all"
-                >
+                <span className="inline-flex items-center gap-1.5 text-[13px] font-semibold text-brand group-hover:gap-2.5 transition-[gap]">
                   {card.cta}
                   <ArrowRight className="w-3.5 h-3.5" strokeWidth={2} />
-                </Link>
-              </div>
+                </span>
+              </Link>
             );
           })}
         </div>

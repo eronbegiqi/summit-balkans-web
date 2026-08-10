@@ -95,7 +95,7 @@ export function PrivateTripsForm() {
   if (submitted) {
     return (
       <section id="enquiry" className="py-24">
-        <div className="max-w-content mx-auto px-10 max-w-2xl text-center">
+        <div className="max-w-content mx-auto px-10 text-center">
           <div className="w-16 h-16 rounded-full bg-forest flex items-center justify-center mx-auto mb-6">
             <Check className="w-8 h-8 text-white" strokeWidth={2} />
           </div>
@@ -133,11 +133,18 @@ export function PrivateTripsForm() {
             </h2>
 
             {/* Progress dots */}
-            <div className="flex gap-1.5 mb-10">
+            <div
+              className="flex gap-1.5 mb-10"
+              role="progressbar"
+              aria-valuenow={step + 1}
+              aria-valuemin={1}
+              aria-valuemax={5}
+              aria-label={`Step ${step + 1} of 5`}
+            >
               {[0, 1, 2, 3, 4].map((i) => (
                 <div
                   key={i}
-                  className={`h-[3px] flex-1 rounded-full transition-all duration-300 ${
+                  className={`h-[3px] flex-1 rounded-full transition-colors duration-300 ${
                     i < step ? "bg-forest" : i === step ? "bg-terra" : "bg-divider"
                   }`}
                 />
@@ -157,7 +164,7 @@ export function PrivateTripsForm() {
                     <button
                       key={d}
                       onClick={() => toggleDest(d)}
-                      className={`px-5 py-3 rounded-xl border-2 text-[15px] font-medium cursor-pointer transition-all ${
+                      className={`px-5 py-3 rounded-xl border-2 text-[15px] font-medium cursor-pointer transition-[border-color,background-color,color] ${
                         form.destinations.includes(d)
                           ? "border-forest bg-forest/6 text-forest"
                           : "border-divider bg-white text-ink hover:border-forest/40"
@@ -182,7 +189,7 @@ export function PrivateTripsForm() {
                   {["Spring (Apr–May)", "Summer (Jun–Aug)", "Autumn (Sep–Oct)", "Flexible"].map((opt) => (
                     <label
                       key={opt}
-                      className={`flex items-center gap-3.5 px-[18px] py-3.5 border-2 rounded-xl cursor-pointer transition-all bg-white ${
+                      className={`flex items-center gap-3.5 px-[18px] py-3.5 border-2 rounded-xl cursor-pointer transition-[border-color,background-color] bg-white ${
                         form.dateOption === opt ? "border-forest bg-forest/4" : "border-divider hover:border-forest/40"
                       }`}
                     >
@@ -199,20 +206,28 @@ export function PrivateTripsForm() {
                   ))}
                 </div>
                 <div className="flex gap-2.5">
-                  <input
-                    type="date"
-                    value={form.customFrom}
-                    onChange={(e) => setForm((p) => ({ ...p, customFrom: e.target.value }))}
-                    className="flex-1 px-3.5 py-[11px] border-2 border-divider rounded-lg font-inter text-sm bg-white outline-none focus:border-forest transition-colors"
-                    placeholder="From"
-                  />
-                  <input
-                    type="date"
-                    value={form.customTo}
-                    onChange={(e) => setForm((p) => ({ ...p, customTo: e.target.value }))}
-                    className="flex-1 px-3.5 py-[11px] border-2 border-divider rounded-lg font-inter text-sm bg-white outline-none focus:border-forest transition-colors"
-                    placeholder="To"
-                  />
+                  <div className="flex-1">
+                    <label htmlFor="date-from" className="sr-only">From date</label>
+                    <input
+                      id="date-from"
+                      type="date"
+                      value={form.customFrom}
+                      onChange={(e) => setForm((p) => ({ ...p, customFrom: e.target.value }))}
+                      className="w-full px-3.5 py-[11px] border-2 border-divider rounded-lg font-inter text-sm bg-white outline-none focus:border-forest transition-colors"
+                      aria-label="From date"
+                    />
+                  </div>
+                  <div className="flex-1">
+                    <label htmlFor="date-to" className="sr-only">To date</label>
+                    <input
+                      id="date-to"
+                      type="date"
+                      value={form.customTo}
+                      onChange={(e) => setForm((p) => ({ ...p, customTo: e.target.value }))}
+                      className="w-full px-3.5 py-[11px] border-2 border-divider rounded-lg font-inter text-sm bg-white outline-none focus:border-forest transition-colors"
+                      aria-label="To date"
+                    />
+                  </div>
                 </div>
               </div>
             )}
@@ -232,13 +247,16 @@ export function PrivateTripsForm() {
                   {form.groupSize} <span className="text-2xl font-normal text-ink/40 font-inter">people</span>
                 </div>
                 <p className="text-sm text-ink/45 mb-6">Including yourself</p>
+                <label htmlFor="group-size" className="sr-only">Number of people</label>
                 <input
+                  id="group-size"
                   type="range"
                   min={1}
                   max={12}
                   value={form.groupSize}
                   onChange={(e) => setForm((p) => ({ ...p, groupSize: parseInt(e.target.value) }))}
                   className="w-full h-1 rounded bg-divider appearance-none accent-brand cursor-pointer"
+                  aria-valuetext={`${form.groupSize} people`}
                 />
                 <div className="flex justify-between font-mono text-[11px] text-ink/35 mt-2">
                   <span>1</span><span>12</span>
@@ -259,7 +277,7 @@ export function PrivateTripsForm() {
                     <button
                       key={exp.id}
                       onClick={() => toggleExp(exp.id)}
-                      className={`rounded-xl overflow-hidden border-2 cursor-pointer text-left transition-all ${
+                      className={`rounded-xl overflow-hidden border-2 cursor-pointer text-left transition-[border-color] ${
                         form.experiences.includes(exp.id) ? "border-forest" : "border-divider hover:border-forest/40"
                       }`}
                     >
@@ -267,7 +285,7 @@ export function PrivateTripsForm() {
                       <img src={exp.image} alt={exp.label} className="w-full h-[140px] object-cover block" loading="lazy" />
                       <div className="px-3.5 py-3 bg-white flex items-center justify-between text-sm font-semibold">
                         {exp.label}
-                        <div className={`w-5 h-5 rounded-full border-2 flex items-center justify-center transition-all flex-shrink-0 ${
+                        <div className={`w-5 h-5 rounded-full border-2 flex items-center justify-center transition-[border-color,background-color] flex-shrink-0 ${
                           form.experiences.includes(exp.id) ? "bg-forest border-forest" : "border-divider"
                         }`}>
                           {form.experiences.includes(exp.id) && (
@@ -291,14 +309,16 @@ export function PrivateTripsForm() {
                 <p className="text-[15px] text-ink/50 mb-8">We&apos;ll use these to send you a custom proposal.</p>
                 <div className="flex flex-col gap-4">
                   {[
-                    { label: "Your name", key: "name", type: "text" },
-                    { label: "Email address", key: "email", type: "email" },
-                    { label: "Phone (WhatsApp preferred)", key: "phone", type: "tel" },
+                    { label: "Your name", key: "name", type: "text", autoComplete: "name" },
+                    { label: "Email address", key: "email", type: "email", autoComplete: "email" },
+                    { label: "Phone (WhatsApp preferred)", key: "phone", type: "tel", autoComplete: "tel" },
                   ].map((f) => (
                     <div key={f.key}>
-                      <label className="text-[13px] font-semibold block mb-1.5">{f.label}</label>
+                      <label htmlFor={`trip-${f.key}`} className="text-[13px] font-semibold block mb-1.5">{f.label}</label>
                       <input
+                        id={`trip-${f.key}`}
                         type={f.type}
+                        autoComplete={f.autoComplete}
                         value={form[f.key as keyof FormState] as string}
                         onChange={(e) => { setStepError(null); setForm((p) => ({ ...p, [f.key]: e.target.value })); }}
                         className="w-full px-3.5 py-3 border-2 border-divider rounded-lg font-inter text-[15px] bg-white outline-none focus:border-forest transition-colors"
@@ -306,8 +326,9 @@ export function PrivateTripsForm() {
                     </div>
                   ))}
                   <div>
-                    <label className="text-[13px] font-semibold block mb-1.5">Any notes or special requests</label>
+                    <label htmlFor="trip-notes" className="text-[13px] font-semibold block mb-1.5">Any notes or special requests</label>
                     <textarea
+                      id="trip-notes"
                       value={form.notes}
                       onChange={(e) => setForm((p) => ({ ...p, notes: e.target.value }))}
                       rows={3}

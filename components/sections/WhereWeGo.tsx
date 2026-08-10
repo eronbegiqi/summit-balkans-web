@@ -47,7 +47,7 @@ export function WhereWeGo() {
             <Link
               key={c.name}
               href={c.href}
-              className="relative rounded-card-hero overflow-hidden cursor-pointer border-2 border-transparent hover:-translate-y-1 hover:border-brand active:scale-[0.98] transition-all duration-200 no-underline group block"
+              className="relative rounded-card-hero overflow-hidden cursor-pointer border-2 border-transparent hover:-translate-y-1 hover:border-brand active:scale-[0.98] transition-[border-color,transform] duration-200 no-underline group block"
               style={{ aspectRatio: "16/10" }}
             >
               <div className="relative w-full h-full">
@@ -82,7 +82,7 @@ export function WhereWeGo() {
                   {c.name}
                 </div>
                 <div className="text-base md:text-lg text-white/85 leading-snug">{c.tag}</div>
-                <div className="flex items-center gap-1.5 text-[13px] font-semibold text-white mt-3 opacity-0 translate-y-1 group-hover:opacity-100 group-hover:translate-y-0 transition-all duration-200">
+                <div className="flex items-center gap-1.5 text-[13px] font-semibold text-white mt-3 opacity-0 translate-y-1 group-hover:opacity-100 group-hover:translate-y-0 transition-[opacity,transform] duration-200">
                   Explore {c.name}
                   <ArrowRight className="w-4 h-4" strokeWidth={1.5} />
                 </div>

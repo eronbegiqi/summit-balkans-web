@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect, useRef } from "react";
 import { X, ArrowRight, Mountain } from "lucide-react";
 import type { GearItem } from "@/lib/types";
 import { formatPrice } from "@/lib/utils";
@@ -8,13 +8,30 @@ import { formatPrice } from "@/lib/utils";
 export function GearDetailModal({ item }: { item: GearItem }) {
   const [open, setOpen] = useState(false);
   const [days, setDays] = useState(3);
+  const triggerRef = useRef<HTMLButtonElement>(null);
+  const modalTitleId = `gear-modal-${item.name.replace(/\s+/g, "-").toLowerCase()}`;
+
+  useEffect(() => {
+    if (!open) return;
+    const onKey = (e: KeyboardEvent) => { if (e.key === "Escape") setOpen(false); };
+    document.addEventListener("keydown", onKey);
+    return () => document.removeEventListener("keydown", onKey);
+  }, [open]);
+
+  const handleClose = () => {
+    setOpen(false);
+    triggerRef.current?.focus();
+  };
 
   return (
     <>
       {/* Card */}
-      <div
+      <button
+        ref={triggerRef}
         onClick={() => setOpen(true)}
-        className="bg-white border-2 border-divider rounded-2xl overflow-hidden cursor-pointer hover:border-terra hover:-translate-y-0.5 transition-all duration-200 group"
+        aria-haspopup="dialog"
+        aria-label={`View details for ${item.name}`}
+        className="w-full text-left bg-white border-2 border-divider rounded-2xl overflow-hidden cursor-pointer hover:border-terra hover:-translate-y-0.5 transition-[border-color,transform] duration-200 group"
       >
         <div className="overflow-hidden h-[200px]">
           {/* eslint-disable-next-line @next/next/no-img-element */}
@@ -40,13 +57,13 @@ export function GearDetailModal({ item }: { item: GearItem }) {
           </div>
           <div className="flex items-center justify-between pt-3.5 border-t border-divider">
             <div className="text-xs text-ink/40">Deposit: {formatPrice(item.deposit)}</div>
-            <div className="flex items-center gap-1 text-[13px] font-semibold text-terra group-hover:gap-2 transition-all">
+            <div className="flex items-center gap-1 text-[13px] font-semibold text-terra group-hover:gap-2 transition-[gap]">
               View details
               <ArrowRight className="w-3.5 h-3.5" strokeWidth={1.5} />
             </div>
           </div>
         </div>
-      </div>
+      </button>
 
       {/* Modal overlay */}
       {open && (
@@ -62,7 +79,8 @@ export function GearDetailModal({ item }: { item: GearItem }) {
                 <span className="font-semibold text-sm">Gear details</span>
               </div>
               <button
-                onClick={() => setOpen(false)}
+                onClick={handleClose}
+                aria-label="Close gear details"
                 className="w-9 h-9 border-2 border-divider rounded-lg flex items-center justify-center cursor-pointer bg-transparent hover:border-ink transition-colors"
               >
                 <X className="w-4 h-4" strokeWidth={1.5} />
@@ -118,15 +136,17 @@ export function GearDetailModal({ item }: { item: GearItem }) {
                     <div className="flex items-center border-2 border-divider rounded-lg overflow-hidden">
                       <button
                         onClick={() => setDays((d) => Math.max(1, d - 1))}
+                        aria-label="Decrease days"
                         className="w-9 h-9 bg-transparent border-none text-lg flex items-center justify-center cursor-pointer hover:bg-ink/5"
                       >
                         −
                       </button>
-                      <span className="w-10 text-center font-mono text-base font-medium border-x border-divider leading-[36px]">
+                      <span className="w-10 text-center font-mono text-base font-medium border-x border-divider leading-[36px]" aria-live="polite" aria-atomic="true">
                         {days}
                       </span>
                       <button
                         onClick={() => setDays((d) => d + 1)}
+                        aria-label="Increase days"
                         className="w-9 h-9 bg-transparent border-none text-lg flex items-center justify-center cursor-pointer hover:bg-ink/5"
                       >
                         +

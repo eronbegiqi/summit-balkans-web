@@ -1,18 +1,17 @@
-import { saveGuide } from '@/lib/actions/content';
+import { GuideForm } from '@/components/admin/guides/guide-form';
 import Link from 'next/link';
 import { ArrowLeft } from 'lucide-react';
-import { redirect } from 'next/navigation';
 
 export const dynamic = 'force-dynamic';
 export const revalidate = 0;
 
 export default function NewGuidePage() {
-  const inputCls = 'w-full rounded-lg border border-gray-200 px-3.5 py-2.5 text-sm outline-none focus:ring-2 focus:ring-emerald-500';
-  const labelCls = 'mb-1.5 block text-sm font-medium text-gray-700';
   return (
     <div className="space-y-6">
       <div>
-        <Link href="/admin/guides" className="mb-4 inline-flex items-center gap-1.5 text-sm text-gray-500"><ArrowLeft className="h-3.5 w-3.5" /> Guides</Link>
+        <Link href="/admin/guides" className="mb-4 inline-flex items-center gap-1.5 text-sm text-gray-500 hover:text-gray-700">
+          <ArrowLeft className="h-3.5 w-3.5" /> Guides
+        </Link>
         <h1 className="text-2xl font-bold tracking-tight text-gray-900">New Guide</h1>
       </div>
       <form action={async (fd: FormData) => {
