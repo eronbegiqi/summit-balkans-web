@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from "react";
 import Link from "next/link";
-import { Check, ChevronLeft, ChevronRight, Lock, Backpack, Car, BedDouble } from "lucide-react";
+import { Check, ChevronLeft, ChevronRight, Lock, Car, BedDouble } from "lucide-react";
 
 const STEP_LABELS = ["Select Departure", "Travellers", "Add-ons", "Your Details", "Review & Pay"];
 
@@ -70,7 +70,7 @@ export type BookingWizardServerData = {
 };
 
 const addOns = [
-  { id: "gear", icon: Backpack, title: "Gear Rental Pack", desc: "Trekking poles, sleeping bag, daypack & headlamp for your whole trip.", price: 45, unit: "/day" },
+  // { id: "gear", icon: Backpack, title: "Gear Rental Pack", desc: "Trekking poles, sleeping bag, daypack & headlamp for your whole trip.", price: 45, unit: "/day" }, // hidden for now
   { id: "transfer", icon: Car, title: "Airport Transfer", desc: "Private transfer from Prishtina, Tirana, or Podgorica airport.", price: 35, unit: "/person" },
   { id: "single", icon: BedDouble, title: "Single Supplement", desc: "Guaranteed private room throughout (subject to availability).", price: 180, unit: "" },
 ];

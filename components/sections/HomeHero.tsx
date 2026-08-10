@@ -36,7 +36,7 @@ export function HomeHero() {
           className="font-fraunces font-bold text-white leading-[1.0] tracking-[-0.03em] mb-6 max-w-[820px]"
           style={{ fontSize: "clamp(52px, 7vw, 96px)", fontVariationSettings: "'opsz' 72" }}
         >
-          Walk the Balkans with people who live here.
+          Your journey to the heart of the Balkans.
         </h1>
 
         <p className="text-xl text-white/80 mb-10 tracking-[0.01em]">
@@ -62,8 +62,6 @@ export function HomeHero() {
         {/* Trust line */}
         <div className="flex items-center gap-5 text-[13px] text-white/65 flex-wrap">
           <span className="text-gold text-sm tracking-[1px]">★★★★★ 5.0 ·</span>
-          <span className="w-[3px] h-[3px] rounded-full bg-white/35" />
-          <span> 200+ Travellers</span>
           <span className="w-[3px] h-[3px] rounded-full bg-white/35" />
           <span>Local Guides</span>
           <span className="w-[3px] h-[3px] rounded-full bg-white/35" />

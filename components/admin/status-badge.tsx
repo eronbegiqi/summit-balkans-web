@@ -21,6 +21,7 @@ const statusMap: Record<string, Variant> = {
   AVAILABLE: 'green',
   LIMITED: 'yellow',
   SOLD_OUT: 'red',
+  EXPIRED: 'gray',
   // Inquiry status (IN_PROGRESS already defined above)
   REPLIED: 'green',
   CLOSED: 'gray',

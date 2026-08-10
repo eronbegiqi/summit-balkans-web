@@ -145,8 +145,8 @@ style={{ backgroundImage: "url('/images/about-hero.webp')" }}        />
                 </p>
               </div>
 
-              <div className="grid grid-cols-5 gap-0 mt-12 border-t-2 border-divider pt-8">
-                {[["2018", "Founded"], ["200+", "Travellers"], ["60+", "Routes"], ["5.0", "Rating"], ["3", "Countries"]].map(([num, label]) => (
+              <div className="grid grid-cols-4 gap-0 mt-12 border-t-2 border-divider pt-8">
+                {[["2018", "Founded"], ["60+", "Routes"], ["5.0", "Rating"], ["3", "Countries"]].map(([num, label]) => (
                   <div key={label} className="text-center border-r border-divider last:border-0 px-4">
                     <div className="font-fraunces text-3xl font-bold mb-1">{num}</div>
                     <div className="font-mono text-[11px] text-ink/40 tracking-[0.08em] uppercase">{label}</div>

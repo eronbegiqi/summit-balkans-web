@@ -50,7 +50,6 @@ const navItems: NavItem[] = [
       stats: {
         items: [
           { value: "60+", label: "Routes" },
-          { value: "200+", label: "Travellers" },
           { value: "5.0★", label: "Average rating" },
         ],
       },
@@ -82,7 +81,7 @@ const navItems: NavItem[] = [
           heading: "Trip Planning",
           links: [
             { label: "Plan a Private Trip", href: "/private-trips" },
-            { label: "Gear Rental", href: "/gear" },
+            // { label: "Gear Rental", href: "/gear" }, // hidden for now
             { label: "Group Bookings (8+)", href: "/contact" },
           ],
         },

@@ -25,7 +25,7 @@ export function CTABand() {
           Tell us your dates and your level — we&apos;ll design the route.
         </h2>
         <p className="text-[17px] text-white/55 mb-10">
-          Private trips from 2 people. Response within 24 hours.
+          Private trips from 2-12 people. Response within 24 hours.
         </p>
 
         <div className="flex gap-3.5 justify-center flex-wrap">
