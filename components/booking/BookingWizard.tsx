@@ -2,9 +2,11 @@
 
 import { useState, useEffect } from "react";
 import Link from "next/link";
-import { Check, ChevronLeft, ChevronRight, Lock, Backpack, Car, BedDouble } from "lucide-react";
+import { Check, ChevronLeft, ChevronRight, Lock } from "lucide-react";
+import { bookingAddOns } from "@/data/gear";
 
-const STEP_LABELS = ["Select Departure", "Travellers", "Add-ons", "Your Details", "Review & Pay"];
+// "Add-ons" step is temporarily disabled — see notes near the `AddOnId` type below.
+const STEP_LABELS = ["Select Departure", "Travellers", "Your Details", "Review & Pay"];
 
 function BookingSteps({ step }: { step: number }) {
   return (
@@ -69,13 +71,17 @@ export type BookingWizardServerData = {
   departures: Departure[];
 };
 
-const addOns = [
-  { id: "gear", icon: Backpack, title: "Gear Rental Pack", desc: "Trekking poles, sleeping bag, daypack & headlamp for your whole trip.", price: 45, unit: "/day" },
-  { id: "transfer", icon: Car, title: "Airport Transfer", desc: "Private transfer from Prishtina, Tirana, or Podgorica airport.", price: 35, unit: "/person" },
-  { id: "single", icon: BedDouble, title: "Single Supplement", desc: "Guaranteed private room throughout (subject to availability).", price: 180, unit: "" },
-];
+// Add-ons (gear rental, airport transfer, single supplement) are temporarily disabled.
+// These are subject to real supplier availability and prices that need to be checked
+// manually before we can quote them up front. The catalog (names/prices/descriptions)
+// lives in `bookingAddOns` (data/gear.ts) — the single source of truth, also used by
+// the gear-rental pages — rather than being duplicated here.
+// To re-enable: uncomment the Step 3 JSX block, `toggleAddOn`, and the pricing lines
+// in the total calculation, and the related summary line items below. You'll also need
+// an icon per addon.icon key (e.g. `{ backpack: Backpack, car: Car, bed: BedDouble }`
+// from lucide-react) for the Step 3 cards.
 
-type AddOnId = "gear" | "transfer" | "single";
+type AddOnId = (typeof bookingAddOns)[number]["id"];
 
 interface BookingState {
   departureId: string | null;
@@ -163,18 +169,26 @@ export function BookingWizard({
   const basePrice = selectedDep?.price ?? serverData?.basePrice ?? 1290;
   const adultTotal = basePrice * state.adults;
   const childTotal = Math.round(basePrice * 0.85) * state.children;
-  const gearTotal = state.addOns.has("gear") ? 45 * 10 : 0;
-  const transferTotal = state.addOns.has("transfer") ? 35 * (state.adults + state.children) : 0;
-  const singleTotal = state.addOns.has("single") ? 180 : 0;
-  const grandTotal = adultTotal + childTotal + gearTotal + transferTotal + singleTotal;
+  // Add-ons disabled — see notes near the `AddOnId` type above.
+  // const GEAR_RENTAL_DAYS = 10; // matches the standard itinerary length
+  // const addOnsTotal = bookingAddOns
+  //   .filter((addon) => state.addOns.has(addon.id))
+  //   .reduce((sum, addon) => {
+  //     if (addon.priceType === "per-day") return sum + addon.price * GEAR_RENTAL_DAYS;
+  //     if (addon.priceType === "per-person") return sum + addon.price * (state.adults + state.children);
+  //     return sum + addon.price; // flat
+  //   }, 0);
+  const addOnsTotal = 0;
+  const grandTotal = adultTotal + childTotal + addOnsTotal;
 
-  const toggleAddOn = (id: AddOnId) => {
-    setState((prev) => {
-      const s = new Set(prev.addOns);
-      if (s.has(id)) { s.delete(id); } else { s.add(id); }
-      return { ...prev, addOns: s };
-    });
-  };
+  // Add-ons disabled — see notes near the `AddOnId` type above.
+  // const toggleAddOn = (id: AddOnId) => {
+  //   setState((prev) => {
+  //     const s = new Set(prev.addOns);
+  //     if (s.has(id)) { s.delete(id); } else { s.add(id); }
+  //     return { ...prev, addOns: s };
+  //   });
+  // };
 
   const [bookingRef, setBookingRef] = useState("");
 
@@ -182,9 +196,6 @@ export function BookingWizard({
     if (!state.agreeTerms || !selectedDep) return;
     setIsSubmitting(true);
     setBookingError(false);
-    const addOnLabels: Record<string, string> = {
-      gear: "Gear Rental Pack", transfer: "Airport Transfer", single: "Single Supplement",
-    };
     try {
       const res = await fetch("/api/book", {
         method: "POST",
@@ -197,7 +208,7 @@ export function BookingWizard({
           tourName: serverData?.tourTitle ?? "Peaks of the Balkans",
           adults: state.adults,
           children: state.children,
-          addOns: Array.from(state.addOns).map((id) => addOnLabels[id] ?? id),
+          addOns: Array.from(state.addOns).map((id) => bookingAddOns.find((a) => a.id === id)?.name ?? id),
           totalPrice: grandTotal,
           firstName: state.firstName,
           lastName: state.lastName,
@@ -362,7 +373,7 @@ export function BookingWizard({
           </div>
         )}
 
-        {/* Step 3 — Add-ons */}
+        {/* Step 3 — Add-ons (temporarily disabled, see notes near the `AddOnId` type above)
         {step === 2 && (
           <div>
             <div className="font-mono text-[11px] text-terra tracking-[0.12em] uppercase mb-2">Step 3</div>
@@ -370,13 +381,14 @@ export function BookingWizard({
             <p className="text-[15px] text-ink/55 mb-9">Optional extras to make your trip easier.</p>
 
             <div className="flex flex-col gap-3.5">
-              {addOns.map((addon) => {
-                const selected = state.addOns.has(addon.id as AddOnId);
-                const Icon = addon.icon;
+              {bookingAddOns.map((addon) => {
+                const selected = state.addOns.has(addon.id);
+                const Icon = { backpack: Backpack, car: Car, bed: BedDouble }[addon.icon];
+                const unit = { "per-day": "/day", "per-person": "/person", flat: "" }[addon.priceType];
                 return (
                   <button
                     key={addon.id}
-                    onClick={() => toggleAddOn(addon.id as AddOnId)}
+                    onClick={() => toggleAddOn(addon.id)}
                     className={`flex items-start gap-[18px] p-6 rounded-xl border-2 cursor-pointer text-left transition-all bg-transparent w-full ${
                       selected ? "border-forest bg-forest/4" : "border-divider bg-white hover:border-forest/40"
                     }`}
@@ -386,23 +398,23 @@ export function BookingWizard({
                     </div>
                     <Icon className="w-5 h-5 text-forest flex-shrink-0 mt-0.5" strokeWidth={1.5} />
                     <div className="flex-1">
-                      <div className="text-[15px] font-semibold mb-0.5">{addon.title}</div>
-                      <div className="text-[13px] text-ink/55 leading-[1.5]">{addon.desc}</div>
+                      <div className="text-[15px] font-semibold mb-0.5">{addon.name}</div>
+                      <div className="text-[13px] text-ink/55 leading-[1.5]">{addon.description}</div>
                     </div>
                     <div className="font-fraunces text-xl font-bold whitespace-nowrap">
-                      {formatPrice(addon.price)}<small className="font-inter text-xs font-normal text-ink/45">{addon.unit}</small>
+                      {formatPrice(addon.price)}<small className="font-inter text-xs font-normal text-ink/45">{unit}</small>
                     </div>
                   </button>
                 );
               })}
             </div>
           </div>
-        )}
+        )} */}
 
-        {/* Step 4 — Details */}
-        {step === 3 && (
+        {/* Step 3 — Details */}
+        {step === 2 && (
           <div>
-            <div className="font-mono text-[11px] text-terra tracking-[0.12em] uppercase mb-2">Step 4</div>
+            <div className="font-mono text-[11px] text-terra tracking-[0.12em] uppercase mb-2">Step 3</div>
             <h2 className="font-fraunces text-3xl font-bold tracking-tight mb-1.5">Your Details</h2>
             <p className="text-[15px] text-ink/55 mb-9">Lead traveller information for the booking.</p>
 
@@ -476,10 +488,10 @@ export function BookingWizard({
           </div>
         )}
 
-        {/* Step 5 — Review & Pay */}
-        {step === 4 && (
+        {/* Step 4 — Review & Pay */}
+        {step === 3 && (
           <div>
-            <div className="font-mono text-[11px] text-terra tracking-[0.12em] uppercase mb-2">Step 5</div>
+            <div className="font-mono text-[11px] text-terra tracking-[0.12em] uppercase mb-2">Step 4</div>
             <h2 className="font-fraunces text-3xl font-bold tracking-tight mb-1.5">Review &amp; Pay</h2>
             <p className="text-[15px] text-ink/55 mb-9">Check your booking details before payment.</p>
 
@@ -504,24 +516,19 @@ export function BookingWizard({
                     <span>{formatPrice(childTotal)}</span>
                   </div>
                 )}
-                {state.addOns.has("gear") && (
-                  <div className="flex justify-between text-sm py-2 border-b border-divider">
-                    <span>Gear Rental Pack (10 days)</span>
-                    <span>{formatPrice(gearTotal)}</span>
+                {/* Add-ons line items disabled — see notes near the `AddOnId` type above.
+                {bookingAddOns.filter((addon) => state.addOns.has(addon.id)).map((addon) => (
+                  <div key={addon.id} className="flex justify-between text-sm py-2 border-b border-divider">
+                    <span>{addon.name}{addon.priceType === "per-day" ? ` (${GEAR_RENTAL_DAYS} days)` : ""}</span>
+                    <span>
+                      {formatPrice(
+                        addon.priceType === "per-day" ? addon.price * GEAR_RENTAL_DAYS
+                        : addon.priceType === "per-person" ? addon.price * (state.adults + state.children)
+                        : addon.price
+                      )}
+                    </span>
                   </div>
-                )}
-                {state.addOns.has("transfer") && (
-                  <div className="flex justify-between text-sm py-2 border-b border-divider">
-                    <span>Airport Transfer</span>
-                    <span>{formatPrice(transferTotal)}</span>
-                  </div>
-                )}
-                {state.addOns.has("single") && (
-                  <div className="flex justify-between text-sm py-2 border-b border-divider">
-                    <span>Single Supplement</span>
-                    <span>{formatPrice(singleTotal)}</span>
-                  </div>
-                )}
+                ))} */}
                 <div className="flex justify-between font-fraunces text-2xl font-bold pt-4">
                   <span>Total</span>
                   <span>{formatPrice(grandTotal)}</span>
@@ -601,7 +608,7 @@ export function BookingWizard({
             Back
           </button>
 
-          {step < 4 && (
+          {step < 3 && (
             <button
               onClick={() => setStep((s) => s + 1)}
               disabled={step === 0 && !state.departureId}
@@ -634,12 +641,13 @@ export function BookingWizard({
               {state.children > 0 ? ` + ${state.children} child${state.children !== 1 ? "ren" : ""}` : ""}
             </span>
           </div>
+          {/* Add-ons summary disabled — see notes near the `addOns` catalog above.
           {state.addOns.size > 0 && (
             <div className="flex justify-between text-ink/50">
               <span>Add-ons</span>
               <span className="font-medium text-ink">{state.addOns.size}</span>
             </div>
-          )}
+          )} */}
         </div>
         <div className="px-6 py-4 bg-ink/[0.02] border-t border-divider">
           <div className="flex justify-between font-fraunces text-2xl font-bold">
