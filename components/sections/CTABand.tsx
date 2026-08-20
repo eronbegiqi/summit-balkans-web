@@ -7,7 +7,7 @@ export function CTABand() {
     <section className="bg-dark py-24 text-center relative overflow-hidden">
       <div className="absolute inset-0 opacity-[0.12]">
         <Image
-          src="https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=1600&q=60"
+          src="/images/CTA bg image.webp"
           alt=""
           fill
           sizes="100vw"
@@ -25,7 +25,7 @@ export function CTABand() {
           Tell us your dates and your level — we&apos;ll design the route.
         </h2>
         <p className="text-[17px] text-white/55 mb-10">
-          Private trips from 2 people. Response within 24 hours.
+          Private trips from 2-12 people. Response within 24 hours.
         </p>
 
         <div className="flex gap-3.5 justify-center flex-wrap">

@@ -23,7 +23,6 @@ const pillars = [
 ];
 
 const stats = [
-  { value: 200, suffix: "+", label: "Travellers", decimals: 0 },
   { value: 60, suffix: "+", label: "Routes", decimals: 0 },
   { value: 5, suffix: "★", label: "Avg. Rating", decimals: 1 },
 ];
@@ -117,8 +116,8 @@ export function WhySummitBalkans() {
         {/* Divider */}
         <div className="h-px bg-white/8 my-12 md:my-16" />
 
-        {/* Stats — 1 col mobile → 3 col desktop */}
-        <div className="grid grid-cols-1 md:grid-cols-3">
+        {/* Stats — 1 col mobile → 2 col desktop */}
+        <div className="grid grid-cols-1 md:grid-cols-2">
           {stats.map((s) => (
             <StatCounter key={s.label} {...s} />
           ))}

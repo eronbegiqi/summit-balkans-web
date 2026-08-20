@@ -73,7 +73,7 @@ export function PoBDepartures() {
             </h2>
             <div className="font-mono text-[13px] text-ink/45">
               From{" "}
-              <span className="font-semibold text-ink text-base">{formatPrice(lowestPrice)}</span>
+              <span className="font-fraunces font-semibold text-ink text-base">{formatPrice(lowestPrice)}</span>
               {" "}per person
             </div>
           </div>
@@ -130,7 +130,7 @@ export function PoBDepartures() {
                   <div>
                     <SpotsBadge spotsLeft={spotsLeft} spotsTotal={dep.capacity} />
                   </div>
-                  <div className="font-mono text-sm font-semibold">{formatPrice(price)}</div>
+                  <div className="font-fraunces text-sm font-semibold">{formatPrice(price)}</div>
                   <div>
                     {soldOut ? (
                       <span className="font-mono text-[11px] text-ink/35 uppercase tracking-wider">Sold Out</span>

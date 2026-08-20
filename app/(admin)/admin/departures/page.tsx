@@ -10,7 +10,8 @@ export const revalidate = 0;
 
 export default async function DeparturesPage() {
   const departures = await getDepartures();
-  const upcoming = departures.filter((d) => d.status !== 'CANCELLED');
+  const today = toDateInputValue(new Date());
+  const upcoming = departures.filter((d) => d.status !== 'CANCELLED' && toDateInputValue(d.endDate) >= today);
 
   return (
     <div className="space-y-6">
@@ -39,8 +40,9 @@ export default async function DeparturesPage() {
             <tbody className="divide-y divide-gray-50">
               {departures.map((d) => {
                 const spotsLeft = d.capacity - (d.bookedCount ?? 0);
+                const expired = toDateInputValue(d.endDate) < today;
                 return (
-                  <tr key={d.id} className="hover:bg-gray-50">
+                  <tr key={d.id} className={`hover:bg-gray-50 ${expired ? 'opacity-60' : ''}`}>
                     <td className="px-4 py-3 font-medium text-gray-900 max-w-[180px] truncate">{d.tour.title}</td>
                     <td className="px-4 py-3 text-gray-600 whitespace-nowrap">
                       {toDateInputValue(d.startDate)} → {toDateInputValue(d.endDate)}
@@ -53,7 +55,9 @@ export default async function DeparturesPage() {
                       </span>
                     </td>
                     <td className="px-4 py-3 text-gray-500">{d.guide?.name ?? '—'}</td>
-                    <td className="px-4 py-3"><StatusBadge status={d.status ?? 'AVAILABLE'} /></td>
+                    <td className="px-4 py-3">
+                      <StatusBadge status={expired ? 'EXPIRED' : (d.status ?? 'AVAILABLE')} />
+                    </td>
                     <td className="px-4 py-3">
                       <Link href={`/admin/departures/${d.id}`} className="text-xs font-medium text-emerald-600 hover:underline">Edit →</Link>
                     </td>

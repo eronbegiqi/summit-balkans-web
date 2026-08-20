@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { Users, User, Map, Backpack, ArrowRight } from "lucide-react";
+import { Users, User, Map, ArrowRight } from "lucide-react";
 import { SectionLabel } from "@/components/ui/SectionLabel";
 
 const cards = [
@@ -24,13 +24,7 @@ const cards = [
     href: "/tours?type=SELF_GUIDED",
     cta: "View self-guided",
   },
-  {
-    icon: Backpack,
-    title: "Gear Rental",
-    desc: "Quality tents, sleeping bags, poles and more. Rent what you need, travel light.",
-    href: "/gear",
-    cta: "Browse gear",
-  },
+  // { icon: Backpack, title: "Gear Rental", desc: "Quality tents, sleeping bags, poles and more. Rent what you need, travel light.", href: "/gear", cta: "Browse gear" }, // hidden for now
 ];
 
 export function HowYouTravel() {
@@ -47,8 +41,8 @@ export function HowYouTravel() {
           </h2>
         </div>
 
-        {/* 1 col → 2 col → 4 col */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-5">
+        {/* 1 col → 2 col → 3 col */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-5">
           {cards.map((card) => {
             const Icon = card.icon;
             return (

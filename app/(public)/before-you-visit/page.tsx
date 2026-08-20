@@ -1,5 +1,4 @@
 import type { Metadata } from "next";
-import Link from "next/link";
 import { ArrowRight } from "lucide-react";
 import { SectionLabel } from "@/components/ui/SectionLabel";
 import { EmergencyContactsSection } from "@/components/sections/EmergencyContacts";
@@ -179,6 +178,7 @@ export default function BeforeYouVisitPage() {
                 </ul>
               </div>
             ))}
+            {/* Gear rental card hidden for now
             <div className="bg-terra/8 border-2 border-terra/25 rounded-card p-6 flex flex-col justify-between">
               <div>
                 <h3 className="font-fraunces text-lg font-bold mb-2">Missing something?</h3>
@@ -188,6 +188,7 @@ export default function BeforeYouVisitPage() {
                 Browse gear rental <ArrowRight className="w-3.5 h-3.5" strokeWidth={2} />
               </Link>
             </div>
+            */}
           </div>
         </div>
       </section>
@@ -271,18 +272,7 @@ export default function BeforeYouVisitPage() {
         </div>
       </section>
 
-      {/* Gear rental banner */}
-      <div className=" bg-brand py-6">
-        <div className="max-w-content mx-auto px-6 flex flex-wrap items-center justify-between gap-8">
-          <div className="flex flex-col gap-1.5">
-            <span className="font-fraunces text-xl font-bold text-white mr-3">Missing something?</span>
-            <span className="text-white/55 text-sm">Rent quality kit directly from us in Prishtina.</span>
-          </div>
-          <Link href="/gear" className="inline-flex items-center gap-2 border border-white text-white px-5 py-2.5 rounded-lg font-semibold text-sm no-underline hover:opacity-90 flex-shrink-0">
-            Browse Gear <ArrowRight className="w-3.5 h-3.5" strokeWidth={1.5} />
-          </Link>
-        </div>
-      </div>
+      {/* Gear rental banner — hidden for now */}
 
       {/* Emergency contacts */}
       <EmergencyContactsSection />
