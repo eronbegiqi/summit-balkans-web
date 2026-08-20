@@ -125,7 +125,11 @@ export const gearItems: GearItem[] = [
   },
 ];
 
-export const bookingAddOns: BookingAddOn[] = [
+// Single source of truth for the booking add-on catalog (name, price, description).
+// Consumed by BookingWizard.tsx for the booking flow's add-on step (currently disabled
+// there — see the notes in that file). `as const satisfies` keeps `id` values as literal
+// types (for AddOnId in BookingWizard.tsx) while still checking the shape against BookingAddOn.
+export const bookingAddOns = [
   {
     id: "gear-pack",
     name: "Gear Rental Pack",
@@ -150,4 +154,4 @@ export const bookingAddOns: BookingAddOn[] = [
     priceType: "flat",
     icon: "bed",
   },
-];
+] as const satisfies BookingAddOn[];
