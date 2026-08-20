@@ -9,21 +9,21 @@ const countries = [
     tag: "Accursed Mountains & hidden valleys",
     code: "ALBANIA",
     href: "/destinations#albania",
-    image: "https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?w=900&q=85",
+    image: "/images/Albania.webp",
   },
   {
     name: "Montenegro",
     tag: "Montenegro peaks & Adriatic coast",
     code: "MONTENEGRO",
     href: "/destinations#montenegro",
-    image: "https://images.unsplash.com/photo-1531366936337-7c912a4589a7?w=900&q=85",
+    image: "/images/Montenegro.webp",
   },
   {
     name: "Kosovo",
     tag: "Rugova Canyon & Sharr Mountains",
     code: "KOSOVO",
     href: "/destinations#kosovo",
-    image: "https://images.unsplash.com/photo-1519681393784-d120267933ba?w=900&q=85",
+    image: "/images/Kosove.webp",
   },
 ];
 
