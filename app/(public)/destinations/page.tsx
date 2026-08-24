@@ -15,7 +15,7 @@ const countries = [
     code: "ALB",
     tagline: "Accursed Mountains & hidden valleys",
     description: "The Albanian Alps — locally called the Bjeshkët e Namuna or Accursed Mountains — are the wildest corner of the Balkans. Stone-built villages, glacial lakes, and trails that feel genuinely undiscovered.",
-    image: "https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?w=1200&q=85",
+    image: "/images/albanian-thumbs-img.webp",
     highlights: ["Peaks of the Balkans", "Theth & Valbona", "Albanian Alps Circuit"],
   },
   {
@@ -33,7 +33,7 @@ const countries = [
     code: "XK",
     tagline: "Rugova Canyon & Sharr Mountains",
     description: "Europe's newest country is also one of its most surprising. The Rugova Canyon cuts 1,000m through limestone above the city of Peja. The Sharr Mountains on the southern border offer solitude at altitude.",
-    image: "https://images.unsplash.com/photo-1519681393784-d120267933ba?w=1200&q=85",
+    image: "/images/kosova-thumbs-img.webp",
     highlights: ["Rugova Via Ferrata", "Peaks of the Balkans", "Sharr Mountains"],
   },
 ];
