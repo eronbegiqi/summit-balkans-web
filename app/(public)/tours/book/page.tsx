@@ -76,18 +76,18 @@ export default async function BookPage({ searchParams }: { searchParams: Promise
     <div className="min-h-screen bg-bone">
       {/* Booking nav */}
       <header className="fixed top-0 left-0 right-0 z-[100] h-16 px-6 md:px-10 flex items-center justify-between bg-bone border-b-2 border-divider">
-        <Link href="/" className="flex items-center no-underline">
+        <Link href="/" className="flex items-center no-underline md:mr-5">
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img src="/logo.svg" alt="Summit Balkans" width={148} height={36} className="h-8 w-auto" />
         </Link>
         <Link
           href="/tours"
-          className="flex items-center gap-1.5 text-sm text-ink/50 no-underline hover:text-ink transition-colors"
+          className="flex items-center gap-1.5 text-sm text-ink/50 no-underline hover:text-ink transition-colors md:w-full"
         >
           <ChevronLeft className="w-4 h-4" strokeWidth={1.5} />
           Back to tours
         </Link>
-        <div className="flex items-center gap-1.5 text-[13px] text-ink/45">
+        <div className="flex items-center gap-1.5 text-[13px] text-ink/45 whitespace-nowrap">
           <Lock className="w-3.5 h-3.5" strokeWidth={1.5} />
           Secured checkout
         </div>

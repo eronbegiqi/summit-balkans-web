@@ -2,6 +2,7 @@ import {
   Body, Container, Head, Heading, Hr, Html, Img,
   Link, Preview, Row, Column, Section, Text,
 } from "@react-email/components";
+import { BANK } from "@/lib/bank-details";
 
 const brand = {
   bone: "#F5F2EC",
@@ -23,6 +24,8 @@ export interface BookingConfirmationProps {
   children: number;
   addOns: string[];
   totalPrice: number;
+  paymentOption?: "deposit" | "full";
+  paymentAmount?: number;
   adminWhatsApp?: string;
 }
 
@@ -37,9 +40,15 @@ export function BookingConfirmation({
   children,
   addOns,
   totalPrice,
+  paymentOption = "deposit",
+  paymentAmount,
   adminWhatsApp = "38348300155",
 }: BookingConfirmationProps) {
-  const previewText = `Booking confirmed — ${tourName} · Ref ${bookingRef}`;
+  const depositAmt = paymentAmount ?? Math.ceil(totalPrice * 0.2);
+  const amountDue = paymentOption === "full" ? totalPrice : depositAmt;
+  const paymentLabel = paymentOption === "full" ? "Full payment" : "20% deposit";
+  const bankRef = BANK.referenceTemplate(bookingRef);
+  const previewText = `Spot reserved — ${tourName} · Send your bank transfer · Ref ${bookingRef}`;
 
   return (
     <Html>
@@ -61,10 +70,10 @@ export function BookingConfirmation({
           {/* Heading */}
           <Section style={{ padding: "40px 40px 0" }}>
             <Heading style={{ color: brand.ink, fontSize: "36px", fontWeight: "700", lineHeight: "1.1", letterSpacing: "-0.025em", margin: "0 0 12px" }}>
-              You&apos;re confirmed, {firstName}.
+              Spot reserved, {firstName}.
             </Heading>
             <Text style={{ color: `${brand.ink}99`, fontSize: "16px", lineHeight: "1.6", margin: "0 0 32px" }}>
-              We&apos;re looking forward to taking you through the Balkans. Here&apos;s everything you need for the trip.
+              Your spot is reserved. To confirm your booking, please complete your bank transfer using the details below. We&apos;ll confirm within 24 hours of receiving payment.
             </Text>
           </Section>
 
@@ -126,14 +135,57 @@ export function BookingConfirmation({
             </Section>
           )}
 
-          {/* Total */}
+          {/* Payment summary */}
           <Section style={{ padding: "24px 40px" }}>
-            <div style={{ borderTop: `2px solid ${brand.ink}`, paddingTop: "16px", display: "flex", justifyContent: "space-between", alignItems: "baseline" }}>
-              <Text style={{ color: brand.ink, fontSize: "16px", fontWeight: "700", margin: 0 }}>Total paid</Text>
-              <Text style={{ color: brand.ink, fontSize: "28px", fontWeight: "700", fontFamily: "Georgia, serif", letterSpacing: "-0.02em", margin: 0 }}>
-                €{totalPrice.toLocaleString()}
-              </Text>
+            <div style={{ borderTop: `2px solid ${brand.divider}`, paddingTop: "16px" }}>
+              <div style={{ display: "flex", justifyContent: "space-between", alignItems: "baseline", marginBottom: "8px" }}>
+                <Text style={{ color: brand.ink, fontSize: "15px", fontWeight: "700", margin: 0 }}>{paymentLabel} due now</Text>
+                <Text style={{ color: brand.terra, fontSize: "28px", fontWeight: "700", fontFamily: "Georgia, serif", letterSpacing: "-0.02em", margin: 0 }}>
+                  €{amountDue.toLocaleString()}
+                </Text>
+              </div>
+              {paymentOption === "deposit" && (
+                <Text style={{ color: `${brand.ink}66`, fontSize: "13px", margin: 0 }}>
+                  Remaining €{(totalPrice - amountDue).toLocaleString()} due 30 days before departure.
+                </Text>
+              )}
             </div>
+          </Section>
+
+          <Hr style={{ borderColor: brand.divider, margin: "0 40px" }} />
+
+          {/* Bank transfer details */}
+          <Section style={{ padding: "32px 40px" }}>
+            <Text style={{ color: brand.terra, fontSize: "11px", fontFamily: "monospace", letterSpacing: "0.14em", textTransform: "uppercase", margin: "0 0 16px" }}>
+              Bank Transfer Details
+            </Text>
+            <div style={{ backgroundColor: "#fff", border: `2px solid ${brand.divider}`, borderRadius: "12px", overflow: "hidden" }}>
+              {[
+                ["Account holder", BANK.accountHolder],
+                ["Bank", BANK.bank],
+                ["IBAN", BANK.iban],
+                ["BIC / SWIFT", BANK.bic],
+                ["Currency", BANK.currency],
+                ["Reference", bankRef],
+                ["Amount", `€${amountDue.toLocaleString()}`],
+              ].map(([label, value], i, arr) => (
+                <Row key={label} style={{ borderBottom: i < arr.length - 1 ? `1px solid ${brand.divider}` : "none", backgroundColor: label === "Reference" ? "#EFF6FF" : "transparent" }}>
+                  <Column style={{ padding: "12px 20px", width: "140px" }}>
+                    <Text style={{ color: `${brand.ink}66`, fontSize: "10px", fontFamily: "monospace", letterSpacing: "0.1em", textTransform: "uppercase", margin: 0 }}>
+                      {label}
+                    </Text>
+                  </Column>
+                  <Column style={{ padding: "12px 20px" }}>
+                    <Text style={{ color: label === "Reference" ? brand.terra : brand.ink, fontSize: "13px", fontWeight: "700", fontFamily: "monospace", margin: 0 }}>
+                      {value}
+                    </Text>
+                  </Column>
+                </Row>
+              ))}
+            </div>
+            <Text style={{ color: `${brand.ink}77`, fontSize: "13px", margin: "12px 0 0", lineHeight: "1.5" }}>
+              ⚠️ Always include your booking reference <strong>{bankRef}</strong> in the transfer description so we can match it to your booking.
+            </Text>
           </Section>
 
           <Hr style={{ borderColor: brand.divider, margin: "0 40px" }} />
@@ -144,9 +196,9 @@ export function BookingConfirmation({
               What Happens Next
             </Text>
             {[
-              ["1", "We'll send your full pre-trip information pack within 48 hours."],
-              ["2", "Your guide will message you on WhatsApp to introduce themselves."],
-              ["3", "Two weeks before departure you'll receive a final logistics briefing."],
+              ["1", "Complete your bank transfer using the details above — include your booking reference."],
+              ["2", "We'll confirm your booking within 24 hours of receiving payment."],
+              ["3", "Your guide will message you on WhatsApp to introduce themselves."],
               ["4", "Show up, walk, and let us handle the rest."],
             ].map(([num, text]) => (
               <Row key={num} style={{ marginBottom: "12px" }}>

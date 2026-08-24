@@ -48,7 +48,7 @@ export function StagesAccordion({ stages }: { stages: Stage[] }) {
       <div className="flex justify-end mb-3">
         <button
           onClick={toggleAll}
-          className="font-mono text-[11px] text-brand hover:underline tracking-wide"
+          className="font-mono text-[12.5px] text-brand hover:underline tracking-wide"
         >
           {allOpen ? "Close All" : "Open All"}
         </button>
@@ -61,7 +61,7 @@ export function StagesAccordion({ stages }: { stages: Stage[] }) {
             <div
               key={stage.id}
               className={cn(
-                "border-2 rounded-xl overflow-hidden transition-colors",
+                "border-2 rounded-xl overflow-hidden transition-colors bg-white",
                 isOpen ? "border-brand/30" : "border-divider"
               )}
             >
@@ -70,7 +70,7 @@ export function StagesAccordion({ stages }: { stages: Stage[] }) {
                 onClick={() => toggle(stage.dayNumber)}
                 className="w-full flex items-center gap-4 px-5 py-4 text-left hover:bg-ink/2 transition-colors"
               >
-                <span className="font-mono text-[11px] text-ink/40 tracking-widest shrink-0 w-10">
+                <span className="font-mono text-[12.5px] text-ink/40 tracking-widest shrink-0 w-10 whitespace-nowrap">
                   Day {stage.dayNumber}
                 </span>
                 <div className="flex-1 min-w-0">
@@ -84,7 +84,7 @@ export function StagesAccordion({ stages }: { stages: Stage[] }) {
                   )}
                 </div>
                 {/* Mini stats */}
-                <div className="hidden sm:flex items-center gap-4 text-xs text-ink/45 shrink-0">
+                <div className="hidden sm:flex items-center gap-4 text-sm text-ink/45 shrink-0">
                   {stage.distanceKm && (
                     <span>{Number(stage.distanceKm).toFixed(1)} km</span>
                   )}
