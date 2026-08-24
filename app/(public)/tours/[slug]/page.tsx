@@ -10,7 +10,7 @@ import { StagesAccordion } from "@/components/tour/StagesAccordion";
 import { EmergencyContactsCompact } from "@/components/sections/EmergencyContacts";
 import { formatPrice } from "@/lib/utils";
 import { parseJsonField } from "@/lib/db/utils";
-import { Clock, Mountain, Users, ArrowRight, MapPin, CheckCircle2, XCircle, Calendar } from "lucide-react";
+import { Clock, Mountain, Users, ArrowRight, MapPin, CheckCircle2, XCircle, Calendar, Backpack } from "lucide-react";
 
 export const revalidate = 300;
 
@@ -323,6 +323,39 @@ export default async function TourDetailPage({ params }: { params: Promise<{ slu
             </section>
           ) : null}
 
+          {/* What to pack */}
+          <section id="pack">
+            <div className="flex items-center justify-between flex-wrap gap-4 mb-6">
+              <div>
+                <SectionLabel>Gear</SectionLabel>
+                <h2 className="font-fraunces text-2xl md:text-3xl font-bold tracking-tight mt-2">What to pack</h2>
+              </div>
+              <Link
+                href="/before-you-visit#pack"
+                className="inline-flex items-center gap-1.5 text-brand font-semibold text-sm no-underline hover:gap-2.5 transition-all shrink-0"
+              >
+                Full packing guide <ArrowRight className="w-3.5 h-3.5" strokeWidth={2} />
+              </Link>
+            </div>
+            {tour.kitEssential?.length || tour.kitRecommended?.length || tour.kitProvided?.length ? (
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+                {tour.kitEssential && tour.kitEssential.length > 0 && (
+                  <KitList title="Essential" items={tour.kitEssential} />
+                )}
+                {tour.kitRecommended && tour.kitRecommended.length > 0 && (
+                  <KitList title="Recommended" items={tour.kitRecommended} />
+                )}
+                {tour.kitProvided && tour.kitProvided.length > 0 && (
+                  <KitList title="Provided by us" items={tour.kitProvided} />
+                )}
+              </div>
+            ) : (
+              <div className="bg-bone border-2 border-divider rounded-xl p-6 text-sm text-ink/60">
+                See our general packing checklist and seasonal gear guide for Balkans hiking.
+              </div>
+            )}
+          </section>
+
           {/* Min participants notice */}
           {tour.minParticipants && (
             <section className="bg-brand/5 border border-brand/20 rounded-xl p-5 text-sm text-ink/70">
@@ -376,6 +409,17 @@ export default async function TourDetailPage({ params }: { params: Promise<{ slu
             </Link>
             <p className="text-center text-xs text-ink/40 mt-2">Free cancellation · 20% deposit secures your spot</p>
 
+            <Link
+              href="/before-you-visit#pack"
+              className="mt-4 flex items-center justify-between gap-2 border-2 border-divider rounded-xl px-4 py-3 text-sm font-medium text-ink no-underline hover:border-ink transition-colors"
+            >
+              <span className="flex items-center gap-2">
+                <Backpack className="w-4 h-4 text-ink/50" strokeWidth={1.5} />
+                What to pack
+              </span>
+              <ArrowRight className="w-3.5 h-3.5 text-ink/40" strokeWidth={2} />
+            </Link>
+
             {/* Practical info */}
             <div className="mt-6 pt-5 border-t border-divider space-y-3 text-sm">
               {tour.meetingPoint && (
@@ -415,6 +459,22 @@ function Stat({ label, value }: { label: string; value: React.ReactNode }) {
     <div>
       <div className="font-mono text-[10px] text-white/40 uppercase tracking-wider mb-0.5">{label}</div>
       <div className="font-semibold text-sm">{value}</div>
+    </div>
+  );
+}
+
+function KitList({ title, items }: { title: string; items: string[] }) {
+  return (
+    <div className="bg-white border-2 border-divider rounded-card p-6">
+      <h3 className="font-fraunces text-lg font-bold mb-4">{title}</h3>
+      <ul className="list-none flex flex-col gap-2">
+        {items.map((item) => (
+          <li key={item} className="flex items-start gap-2 text-sm text-ink/70">
+            <span className="w-1.5 h-1.5 rounded-full bg-forest flex-shrink-0 mt-1.5" />
+            {item}
+          </li>
+        ))}
+      </ul>
     </div>
   );
 }
