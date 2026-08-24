@@ -197,8 +197,18 @@ export function BookingWizard({
 
   const [bookingRef, setBookingRef] = useState("");
 
+  const emailValid = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(state.email);
+  const detailsValid =
+    state.firstName.trim() !== "" &&
+    state.lastName.trim() !== "" &&
+    emailValid &&
+    state.phone.trim() !== "" &&
+    state.emergencyName.trim() !== "" &&
+    state.emergencyPhone.trim() !== "" &&
+    state.fitness !== "";
+
   const submitBooking = async () => {
-    if (!state.agreeTerms || !selectedDep) return;
+    if (!state.agreeTerms || !selectedDep || !detailsValid) return;
     setIsSubmitting(true);
     setBookingError(false);
     try {
@@ -483,18 +493,21 @@ export function BookingWizard({
             <p className="text-[15px] text-ink/55 mb-9">Lead traveller information for the booking.</p>
 
             <h3 className="font-fraunces text-xl font-bold mb-4">Lead traveller</h3>
-            <div className="grid grid-cols-2 gap-[18px] mb-8">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-[18px] mb-8">
               {[
-                { label: "First name", key: "firstName", type: "text", span: false },
-                { label: "Last name", key: "lastName", type: "text", span: false },
-                { label: "Email address", key: "email", type: "email", span: true },
-                { label: "Phone number", key: "phone", type: "tel", span: true },
-                { label: "Dietary requirements", key: "dietary", type: "text", span: true },
+                { label: "First name", key: "firstName", type: "text", span: false, required: true },
+                { label: "Last name", key: "lastName", type: "text", span: false, required: true },
+                { label: "Email address", key: "email", type: "email", span: true, required: true },
+                { label: "Phone number", key: "phone", type: "tel", span: true, required: true },
+                { label: "Dietary requirements", key: "dietary", type: "text", span: true, required: false },
               ].map((f) => (
-                <div key={f.key} className={f.span ? "col-span-2" : ""}>
-                  <label className="text-[13px] font-semibold block mb-1.5">{f.label}</label>
+                <div key={f.key} className={f.span ? "sm:col-span-2" : ""}>
+                  <label className="text-[13px] font-semibold block mb-1.5">
+                    {f.label}{f.required && <span className="text-terra"> *</span>}
+                  </label>
                   <input
                     type={f.type}
+                    required={f.required}
                     value={state[f.key as keyof BookingState] as string}
                     onChange={(e) => setState((p) => ({ ...p, [f.key]: e.target.value }))}
                     className="w-full px-3.5 py-[11px] border-2 border-divider rounded-lg font-inter text-[15px] bg-white text-ink outline-none focus:border-forest transition-colors"
@@ -504,15 +517,18 @@ export function BookingWizard({
             </div>
 
             <h3 className="font-fraunces text-xl font-bold mb-4 pt-8 border-t-2 border-divider">Emergency contact</h3>
-            <div className="grid grid-cols-2 gap-[18px] mb-8">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-[18px] mb-8">
               {[
                 { label: "Name", key: "emergencyName" },
                 { label: "Phone", key: "emergencyPhone" },
               ].map((f) => (
                 <div key={f.key}>
-                  <label className="text-[13px] font-semibold block mb-1.5">{f.label}</label>
+                  <label className="text-[13px] font-semibold block mb-1.5">
+                    {f.label}<span className="text-terra"> *</span>
+                  </label>
                   <input
                     type="text"
+                    required
                     value={state[f.key as keyof BookingState] as string}
                     onChange={(e) => setState((p) => ({ ...p, [f.key]: e.target.value }))}
                     className="w-full px-3.5 py-[11px] border-2 border-divider rounded-lg font-inter text-[15px] bg-white text-ink outline-none focus:border-forest transition-colors"
@@ -521,7 +537,9 @@ export function BookingWizard({
               ))}
             </div>
 
-            <h3 className="font-fraunces text-xl font-bold mb-4 pt-8 border-t-2 border-divider">Fitness self-assessment</h3>
+            <h3 className="font-fraunces text-xl font-bold mb-4 pt-8 border-t-2 border-divider">
+              Fitness self-assessment<span className="text-terra"> *</span>
+            </h3>
             <div className="flex flex-col gap-2.5">
               {[
                 { value: "active", label: "Regularly active", desc: "I hike or exercise 3+ times per week" },
@@ -537,6 +555,7 @@ export function BookingWizard({
                   <input
                     type="radio"
                     name="fitness"
+                    required
                     value={opt.value}
                     checked={state.fitness === opt.value}
                     onChange={() => setState((p) => ({ ...p, fitness: opt.value }))}
@@ -549,6 +568,9 @@ export function BookingWizard({
                 </label>
               ))}
             </div>
+            {!detailsValid && (
+              <p className="text-xs text-ink/40 mt-4">Fields marked <span className="text-terra">*</span> are required to continue.</p>
+            )}
           </div>
         )}
 
@@ -735,7 +757,7 @@ export function BookingWizard({
           {step < 3 && (
             <button
               onClick={() => setStep((s) => s + 1)}
-              disabled={step === 0 && !state.departureId}
+              disabled={(step === 0 && !state.departureId) || (step === 2 && !detailsValid)}
               className="flex items-center gap-2 bg-brand text-white px-6 py-3 rounded-xl text-sm font-semibold border-none cursor-pointer hover:opacity-90 transition-opacity disabled:opacity-40"
             >
               Continue

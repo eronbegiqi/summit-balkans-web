@@ -1,7 +1,5 @@
 import type { Metadata } from "next";
-import { db } from "@/lib/db/client";
-import { discounts } from "@/lib/db/schema";
-import { asc, eq } from "drizzle-orm";
+import { getActiveDiscounts } from "@/lib/db/queries/discounts";
 import { SectionLabel } from "@/components/ui/SectionLabel";
 import {
   Users, GraduationCap, Clock, Heart, Share2, Tag,
@@ -28,11 +26,7 @@ const ICON_MAP: Record<string, React.ReactNode> = {
 };
 
 export default async function OffersPage() {
-  const offers = await db
-    .select()
-    .from(discounts)
-    .where(eq(discounts.active, true))
-    .orderBy(asc(discounts.displayOrder));
+  const offers = await getActiveDiscounts();
 
   return (
     <>
