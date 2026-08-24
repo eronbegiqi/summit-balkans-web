@@ -2,8 +2,9 @@
 
 import { useState, useEffect } from "react";
 import Link from "next/link";
-import { Check, ChevronLeft, ChevronRight, Lock } from "lucide-react";
+import { Check, ChevronLeft, ChevronRight, Lock, Copy, CheckCheck, Building2 } from "lucide-react";
 import { bookingAddOns } from "@/data/gear";
+import { BANK, DEPOSIT_PERCENT } from "@/lib/bank-details";
 
 // "Add-ons" step is temporarily disabled — see notes near the `AddOnId` type below.
 const STEP_LABELS = ["Select Departure", "Travellers", "Your Details", "Review & Pay"];
@@ -96,6 +97,7 @@ interface BookingState {
   emergencyName: string;
   emergencyPhone: string;
   fitness: string;
+  paymentOption: "deposit" | "full";
   agreeTerms: boolean;
   agreeHealth: boolean;
 }
@@ -161,6 +163,7 @@ export function BookingWizard({
     addOns: new Set(),
     firstName: "", lastName: "", email: "", phone: "",
     dietary: "", emergencyName: "", emergencyPhone: "", fitness: "",
+    paymentOption: "deposit",
     agreeTerms: false,
     agreeHealth: false,
   });
@@ -180,6 +183,8 @@ export function BookingWizard({
   //   }, 0);
   const addOnsTotal = 0;
   const grandTotal = adultTotal + childTotal + addOnsTotal;
+  const depositAmount = Math.ceil(grandTotal * (DEPOSIT_PERCENT / 100));
+  const amountDue = state.paymentOption === "deposit" ? depositAmount : grandTotal;
 
   // Add-ons disabled — see notes near the `AddOnId` type above.
   // const toggleAddOn = (id: AddOnId) => {
@@ -210,6 +215,8 @@ export function BookingWizard({
           children: state.children,
           addOns: Array.from(state.addOns).map((id) => bookingAddOns.find((a) => a.id === id)?.name ?? id),
           totalPrice: grandTotal,
+          paymentOption: state.paymentOption,
+          paymentAmount: amountDue,
           firstName: state.firstName,
           lastName: state.lastName,
           email: state.email,
@@ -235,33 +242,90 @@ export function BookingWizard({
   };
 
   if (confirmed) {
+    const confirmedPaymentLabel = state.paymentOption === "deposit"
+      ? `${DEPOSIT_PERCENT}% deposit`
+      : "full payment";
     return (
-      <div className="min-h-[80vh] flex items-center justify-center">
-        <div className="text-center max-w-lg px-6">
-          <div className="w-20 h-20 rounded-full bg-forest flex items-center justify-center mx-auto mb-8">
-            <Check className="w-10 h-10 text-white" strokeWidth={2} />
+      <div className="max-w-2xl mx-auto py-8">
+        {/* Status badge */}
+        <div className="flex items-center gap-3 mb-8">
+          <div className="w-14 h-14 rounded-full bg-forest flex items-center justify-center shrink-0">
+            <Check className="w-7 h-7 text-white" strokeWidth={2.5} />
           </div>
-          <div className="font-mono text-xs text-terra tracking-[0.12em] uppercase mb-3">Booking Confirmed</div>
-          <h1 className="font-fraunces text-4xl font-bold tracking-tight mb-4">You&apos;re going!</h1>
-          <div className="bg-dark text-white font-mono text-lg font-medium px-6 py-3 rounded-lg inline-block mb-6">
-            {bookingRef}
+          <div>
+            <div className="font-mono text-xs text-terra tracking-[0.12em] uppercase mb-0.5">Spot Reserved</div>
+            <h1 className="font-fraunces text-3xl font-bold tracking-tight">Almost there — send your transfer</h1>
           </div>
-          <p className="text-ink/60 mb-8 leading-relaxed">
-            Confirmation and pre-trip information has been sent to <strong>{state.email}</strong>. Your guide will be in touch within 48 hours.
-          </p>
-          <div className="flex flex-col gap-3">
-            <Link href="/" className="bg-brand text-white px-6 py-3.5 rounded-xl font-semibold no-underline text-center hover:opacity-90">
-              Back to Summit Balkans
-            </Link>
-            <a
-              href="https://wa.me/38348300155"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="border-2 border-divider text-ink px-6 py-3.5 rounded-xl font-medium no-underline text-center hover:border-ink transition-colors"
-            >
-              Message Your Guide on WhatsApp
-            </a>
+        </div>
+
+        {/* Booking ref */}
+        <div className="bg-dark text-white rounded-2xl px-6 py-5 mb-6">
+          <div className="font-mono text-[10px] text-amber-400 tracking-[0.14em] uppercase mb-1.5">Booking Reference</div>
+          <div className="font-mono text-2xl font-bold tracking-wider mb-1">{bookingRef}</div>
+          <div className="font-mono text-xs text-white/40">A copy has been sent to {state.email}</div>
+        </div>
+
+        {/* Bank transfer instructions */}
+        <div className="bg-white border-2 border-divider rounded-2xl overflow-hidden mb-6">
+          <div className="px-6 py-4 border-b border-divider flex items-center gap-2.5">
+            <Building2 className="w-5 h-5 text-brand" strokeWidth={1.5} />
+            <div>
+              <div className="font-semibold text-[15px]">Bank Transfer Details</div>
+              <div className="text-xs text-ink/45 mt-0.5">Please transfer your {confirmedPaymentLabel} to secure your spot</div>
+            </div>
           </div>
+          <BankRow label="Account holder" value={BANK.accountHolder} />
+          <BankRow label="Bank" value={BANK.bank} />
+          <BankRow label="IBAN" value={BANK.iban} copyable />
+          <BankRow label="BIC / SWIFT" value={BANK.bic} copyable />
+          <BankRow label="Currency" value={BANK.currency} />
+          <BankRow label="Reference" value={BANK.referenceTemplate(bookingRef)} copyable highlight />
+          <div className="px-6 py-4 bg-amber-50 border-t border-amber-200">
+            <p className="text-sm text-amber-800 font-medium">
+              Amount due:{" "}
+              <span className="font-fraunces text-lg font-bold">
+                {formatPrice(amountDue)}
+              </span>
+              {state.paymentOption === "deposit" && (
+                <span className="text-amber-700 font-normal ml-1">(remaining {formatPrice(grandTotal - amountDue)} due 30 days before departure)</span>
+              )}
+            </p>
+          </div>
+        </div>
+
+        {/* What happens next */}
+        <div className="bg-bone border-2 border-divider rounded-2xl p-6 mb-6">
+          <div className="font-mono text-[11px] text-terra tracking-[0.12em] uppercase mb-4">What happens next</div>
+          <ol className="space-y-3">
+            {[
+              "Transfer your payment using the details above — include your booking reference.",
+              "We'll confirm your booking within 24 hours of receiving payment.",
+              "You'll receive your full pre-trip info pack once payment is verified.",
+              "Your guide will message you on WhatsApp to introduce themselves.",
+            ].map((text, i) => (
+              <li key={i} className="flex items-start gap-3 text-sm text-ink/70">
+                <span className="flex w-6 h-6 shrink-0 items-center justify-center rounded-full bg-dark font-mono text-xs font-bold text-white mt-0.5">
+                  {i + 1}
+                </span>
+                {text}
+              </li>
+            ))}
+          </ol>
+        </div>
+
+        <div className="flex flex-wrap gap-3">
+          <a
+            href="https://wa.me/38348300155"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="flex items-center gap-2 px-5 py-3 rounded-xl text-sm font-semibold text-white no-underline transition-opacity hover:opacity-90"
+            style={{ backgroundColor: "#25D366" }}
+          >
+            WhatsApp us
+          </a>
+          <Link href="/" className="flex items-center gap-2 border-2 border-divider text-ink px-5 py-3 rounded-xl text-sm font-medium no-underline hover:border-ink transition-colors">
+            Back to homepage
+          </Link>
         </div>
       </div>
     );
@@ -270,7 +334,7 @@ export function BookingWizard({
   return (
     <>
     <BookingSteps step={step} />
-    <div className="grid gap-12 items-start" style={{ gridTemplateColumns: "1fr 360px" }}>
+    <div className="grid grid-cols-1 lg:grid-cols-[1fr_360px] gap-8 lg:gap-12 items-start">
       {/* Main panel */}
       <div>
         {/* Step 1 — Departure */}
@@ -291,8 +355,8 @@ export function BookingWizard({
                       : "border-divider bg-white hover:border-ink/30"
                   }`}
                 >
-                  <div className="flex items-center justify-between">
-                    <div>
+                  <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2">
+                    <div className="min-w-0">
                       <div className="font-mono text-sm font-medium mb-0.5">
                         {formatShortDate(dep.date)} – {formatShortDate(dep.endDate)}
                       </div>
@@ -300,7 +364,7 @@ export function BookingWizard({
                         Guide: {dep.guide} · {dep.spots}/{dep.total} spots left
                       </div>
                     </div>
-                    <div className="flex items-center gap-3">
+                    <div className="flex items-center gap-3 flex-shrink-0">
                       {dep.low && (
                         <span className="font-mono text-[10px] bg-gold text-ink px-2 py-0.5 rounded font-medium">Low</span>
                       )}
@@ -574,6 +638,64 @@ export function BookingWizard({
               </label>
             </div>
 
+            {/* Payment option toggle */}
+            <div className="mb-6">
+              <div className="text-sm font-semibold mb-3">How much would you like to pay now?</div>
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                <button
+                  type="button"
+                  onClick={() => setState((p) => ({ ...p, paymentOption: "deposit" }))}
+                  className={`p-4 rounded-xl border-2 text-left cursor-pointer transition-all bg-transparent ${
+                    state.paymentOption === "deposit" ? "border-brand bg-brand/5" : "border-divider bg-white hover:border-ink/30"
+                  }`}
+                >
+                  <div className="flex items-center justify-between mb-1.5">
+                    <div className="text-xs font-mono font-semibold uppercase tracking-wider text-terra">
+                      {DEPOSIT_PERCENT}% Deposit
+                    </div>
+                    {state.paymentOption === "deposit" && (
+                      <div className="w-4 h-4 rounded-full bg-brand flex items-center justify-center">
+                        <Check className="w-2.5 h-2.5 text-white" strokeWidth={3} />
+                      </div>
+                    )}
+                  </div>
+                  <div className="font-fraunces text-2xl font-bold">{formatPrice(depositAmount)}</div>
+                  <div className="text-xs text-ink/45 mt-1">Remaining {formatPrice(grandTotal - depositAmount)} due 30 days before departure</div>
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setState((p) => ({ ...p, paymentOption: "full" }))}
+                  className={`p-4 rounded-xl border-2 text-left cursor-pointer transition-all bg-transparent ${
+                    state.paymentOption === "full" ? "border-brand bg-brand/5" : "border-divider bg-white hover:border-ink/30"
+                  }`}
+                >
+                  <div className="flex items-center justify-between mb-1.5">
+                    <div className="text-xs font-mono font-semibold uppercase tracking-wider text-terra">
+                      Full Payment
+                    </div>
+                    {state.paymentOption === "full" && (
+                      <div className="w-4 h-4 rounded-full bg-brand flex items-center justify-center">
+                        <Check className="w-2.5 h-2.5 text-white" strokeWidth={3} />
+                      </div>
+                    )}
+                  </div>
+                  <div className="font-fraunces text-2xl font-bold">{formatPrice(grandTotal)}</div>
+                  <div className="text-xs text-ink/45 mt-1">Pay everything now, nothing more to worry about</div>
+                </button>
+              </div>
+            </div>
+
+            {/* Bank transfer notice */}
+            <div className="bg-bone border-2 border-divider rounded-xl p-5 mb-6 flex items-start gap-3">
+              <Building2 className="w-5 h-5 text-brand shrink-0 mt-0.5" strokeWidth={1.5} />
+              <div className="text-sm">
+                <p className="font-semibold text-ink mb-0.5">Payment by bank transfer only</p>
+                <p className="text-ink/55 leading-relaxed">
+                  After you confirm, we&apos;ll send you the bank transfer details. Your spot is reserved for <strong>48 hours</strong> while your payment is processed. We&apos;ll confirm your booking within 24 hours of receiving it.
+                </p>
+              </div>
+            </div>
+
             {bookingError && (
               <p className="text-sm text-red-600 bg-red-50 border border-red-200 rounded-lg px-4 py-3 mb-4">
                 Something went wrong processing your booking. Please try again or message us on WhatsApp.
@@ -588,11 +710,13 @@ export function BookingWizard({
                   : "bg-brand/40 text-white cursor-not-allowed"
               }`}
             >
-              {isSubmitting ? "Confirming booking…" : `Pay ${formatPrice(grandTotal)} with Stripe`}
+              {isSubmitting
+                ? "Reserving your spot…"
+                : `Reserve Spot · Pay ${formatPrice(amountDue)} by Transfer`}
             </button>
             <div className="flex items-center justify-center gap-1.5 mt-3 text-xs text-ink/35">
               <Lock className="w-3 h-3" strokeWidth={1.5} />
-              Secured by Stripe · SSL encrypted
+              Booking confirmed within 24 hours of receiving payment
             </div>
           </div>
         )}
@@ -622,7 +746,7 @@ export function BookingWizard({
       </div>
 
       {/* Sidebar summary */}
-      <div className="sticky top-[148px] bg-white border-2 border-divider rounded-2xl overflow-hidden">
+      <div className="lg:sticky lg:top-[148px] bg-white border-2 border-divider rounded-2xl overflow-hidden">
         <div className="px-6 py-5 border-b border-divider">
           <div className="font-mono text-[11px] text-terra tracking-[0.1em] uppercase mb-1">Your booking</div>
           <div className="font-fraunces text-xl font-bold">Peaks of the Balkans</div>
@@ -654,10 +778,60 @@ export function BookingWizard({
             <span>Total</span>
             <span>{formatPrice(grandTotal)}</span>
           </div>
+          {step === 3 && grandTotal > 0 && (
+            <div className="flex justify-between text-sm text-brand font-semibold mt-1.5">
+              <span>Due now ({state.paymentOption === "deposit" ? `${DEPOSIT_PERCENT}% deposit` : "full"})</span>
+              <span>{formatPrice(amountDue)}</span>
+            </div>
+          )}
           <div className="text-[12px] text-ink/35 mt-1">Incl. all taxes &amp; fees</div>
         </div>
       </div>
     </div>
     </>
+  );
+}
+
+// ─── Helper: copyable bank transfer row ──────────────────────────────────────
+function BankRow({
+  label,
+  value,
+  copyable = false,
+  highlight = false,
+}: {
+  label: string;
+  value: string;
+  copyable?: boolean;
+  highlight?: boolean;
+}) {
+  const [copied, setCopied] = useState(false);
+
+  const copy = async () => {
+    await navigator.clipboard.writeText(value);
+    setCopied(true);
+    setTimeout(() => setCopied(false), 2000);
+  };
+
+  return (
+    <div className={`flex items-center justify-between px-6 py-3.5 border-b border-divider last:border-b-0 ${highlight ? "bg-brand/[0.04]" : ""}`}>
+      <div>
+        <div className="font-mono text-[10px] uppercase tracking-wider text-ink/40 mb-0.5">{label}</div>
+        <div className={`font-mono text-sm font-semibold ${highlight ? "text-brand" : "text-ink"}`}>{value}</div>
+      </div>
+      {copyable && (
+        <button
+          onClick={copy}
+          type="button"
+          className="flex items-center gap-1 text-xs text-ink/40 hover:text-brand transition-colors cursor-pointer bg-transparent border-none p-1 rounded"
+          aria-label={`Copy ${label}`}
+        >
+          {copied ? (
+            <CheckCheck className="w-4 h-4 text-forest" strokeWidth={2} />
+          ) : (
+            <Copy className="w-4 h-4" strokeWidth={1.5} />
+          )}
+        </button>
+      )}
+    </div>
   );
 }

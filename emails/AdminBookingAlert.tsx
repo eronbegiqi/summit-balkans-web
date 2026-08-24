@@ -15,7 +15,9 @@ interface AdminBookingAlertProps extends BookingConfirmationProps {
   emergencyPhone?: string;
 }
 
-export function AdminBookingAlert({ bookingRef, firstName, email, phone, tourName, departureDate, returnDate, guide, adults, children, addOns, totalPrice, dietary, fitness, emergencyName, emergencyPhone }: AdminBookingAlertProps) {
+export function AdminBookingAlert({ bookingRef, firstName, email, phone, tourName, departureDate, returnDate, guide, adults, children, addOns, totalPrice, paymentOption, paymentAmount, dietary, fitness, emergencyName, emergencyPhone }: AdminBookingAlertProps) {
+  const amountDue = paymentAmount ?? (paymentOption === "full" ? totalPrice : Math.ceil(totalPrice * 0.2));
+  const paymentLabel = paymentOption === "full" ? "Full payment" : "Deposit (20%)";
   return (
     <Html>
       <Head />
@@ -41,7 +43,9 @@ export function AdminBookingAlert({ bookingRef, firstName, email, phone, tourNam
               ["Guide assigned", guide],
               ["Adults", String(adults)],
               ["Children", String(children)],
-              ["Total", `€${totalPrice.toLocaleString()}`],
+              ["Total booking", `€${totalPrice.toLocaleString()}`],
+              ["Payment type", paymentLabel],
+              ["Amount due now", `€${amountDue.toLocaleString()} — AWAITING BANK TRANSFER`],
             ].map(([k, v], i, arr) => (
               <Row key={k} style={{ borderBottom: i < arr.length - 1 ? `1px solid ${brand.divider}` : "none" }}>
                 <Column style={{ width: "150px", padding: "10px 0" }}>
@@ -80,7 +84,7 @@ export function AdminBookingAlert({ bookingRef, firstName, email, phone, tourNam
 
           <Section style={{ backgroundColor: brand.bone, padding: "20px 40px", borderTop: `2px solid ${brand.divider}` }}>
             <Text style={{ color: `${brand.ink}77`, fontSize: "12px", fontFamily: "monospace", margin: 0 }}>
-              Log in to Airtable → Submissions to update status and add notes.
+              Confirm this booking in the admin panel once you verify the bank transfer has been received.
             </Text>
           </Section>
         </Container>
