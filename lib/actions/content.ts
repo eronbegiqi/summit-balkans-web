@@ -41,18 +41,21 @@ export async function saveGuide(id: number | null, data: Omit<typeof guides.$inf
     await db.insert(guides).values(data);
   }
   revalidatePath('/admin/guides');
+  revalidatePath('/about');
 }
 
 export async function toggleGuidePublished(id: number, published: boolean) {
   await requireAdmin();
   await db.update(guides).set({ published }).where(eq(guides.id, id));
   revalidatePath('/admin/guides');
+  revalidatePath('/about');
 }
 
 export async function deleteGuide(id: number) {
   await requireAdmin();
   await db.delete(guides).where(eq(guides.id, id));
   revalidatePath('/admin/guides');
+  revalidatePath('/about');
   redirect('/admin/guides');
 }
 

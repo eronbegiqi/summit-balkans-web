@@ -69,15 +69,9 @@ export function GearDetailModal({ item }: { item: GearItem }) {
       {open && (
         <div
           className="fixed inset-0 z-[300] flex items-stretch sm:items-center justify-center sm:p-5 bg-dark/65 backdrop-blur-sm"
-          onClick={(e) => { if (e.target === e.currentTarget) handleClose(); }}
+          onClick={(e) => { if (e.target === e.currentTarget) setOpen(false); }}
         >
-          <div
-            role="dialog"
-            aria-modal="true"
-            aria-labelledby={modalTitleId}
-            className="bg-bone w-full h-full sm:h-auto sm:max-h-[90vh] sm:max-w-[860px] sm:rounded-2xl overflow-y-auto"
-            style={{ scrollbarWidth: "thin" }}
-          >
+          <div className="bg-bone w-full h-full sm:h-auto sm:max-h-[90vh] sm:max-w-[860px] sm:rounded-2xl overflow-y-auto" style={{ scrollbarWidth: "thin" }}>
             {/* Header */}
             <div className="sticky top-0 z-10 bg-bone flex items-center justify-between px-5 sm:px-7 py-4 sm:py-6 border-b-2 border-divider">
               <div className="flex items-center gap-2">
@@ -118,7 +112,7 @@ export function GearDetailModal({ item }: { item: GearItem }) {
                 <span className="inline-block font-mono text-xs bg-gold text-ink px-2.5 py-1 rounded-md mb-3">
                   €{item.dayRate}/day
                 </span>
-                <h2 id={modalTitleId} className="font-fraunces font-bold tracking-tight mb-2.5" style={{ fontSize: "clamp(24px, 7vw, 28px)" }}>
+                <h2 className="font-fraunces font-bold tracking-tight mb-2.5" style={{ fontSize: "clamp(24px, 7vw, 28px)" }}>
                   {item.name}
                 </h2>
                 <p className="text-sm leading-[1.7] text-ink/65 mb-5">{item.description}</p>
