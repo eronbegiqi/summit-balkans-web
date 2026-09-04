@@ -4,7 +4,7 @@ import { useEffect, useState, useTransition } from 'react';
 import { useRouter } from 'next/navigation';
 import { ArrowDown, ArrowUp, ImageIcon, Trash2 } from 'lucide-react';
 import { toast } from 'sonner';
-import { GalleryUploader } from '@/components/admin/gallery/gallery-uploader';
+import { GalleryUploader, type UploadResult } from '@/components/admin/gallery/gallery-uploader';
 import { ConfirmDialog } from '@/components/admin/confirm-dialog';
 import { PublishToggle } from '@/components/admin/publish-toggle';
 import { EmptyState } from '@/components/admin/empty-state';
@@ -23,6 +23,7 @@ type Props = {
 export function GalleryManager({ images: initialImages }: Props) {
   const [images, setImages] = useState(initialImages);
   const [pendingDeleteId, setPendingDeleteId] = useState<number | null>(null);
+  const [deleting, setDeleting] = useState(false);
   const [, startTransition] = useTransition();
   const router = useRouter();
 
@@ -30,46 +31,97 @@ export function GalleryManager({ images: initialImages }: Props) {
   // router.refresh() picks up newly uploaded rows with their real ids).
   useEffect(() => setImages(initialImages), [initialImages]);
 
-  async function handleUploaded(uploaded: { imageUrl: string }[]) {
-    await createGalleryImages(uploaded);
-    toast.success(`Added ${uploaded.length} image${uploaded.length === 1 ? '' : 's'}`);
-    // createGalleryImages doesn't return the new rows' ids, so pull the fresh
-    // list (with real ids/order) from the server instead of guessing them.
-    router.refresh();
+  async function handleUploaded({ succeeded, failed }: UploadResult) {
+    if (succeeded.length > 0) {
+      try {
+        await createGalleryImages(succeeded);
+        router.refresh();
+      } catch (err) {
+        console.error('[gallery] failed to save uploaded images', err);
+        toast.error(
+          `${succeeded.length} photo${succeeded.length === 1 ? '' : 's'} uploaded but couldn't be saved to the gallery`,
+          { description: 'Please try again — nothing was added.' }
+        );
+        return;
+      }
+    }
+
+    if (failed.length === 0) {
+      toast.success(`Added ${succeeded.length} image${succeeded.length === 1 ? '' : 's'}`);
+    } else if (succeeded.length > 0) {
+      toast.warning(`Added ${succeeded.length} image${succeeded.length === 1 ? '' : 's'}, ${failed.length} failed`, {
+        description: failed.map((f) => `${f.name}: ${f.error}`).join('; '),
+      });
+    } else {
+      toast.error(`All ${failed.length} upload${failed.length === 1 ? '' : 's'} failed`, {
+        description: failed.map((f) => `${f.name}: ${f.error}`).join('; '),
+      });
+    }
   }
 
   function moveImage(index: number, direction: -1 | 1) {
     const target = index + direction;
     if (target < 0 || target >= images.length) return;
 
+    const previous = images;
     const next = [...images];
     [next[index], next[target]] = [next[target], next[index]];
     setImages(next);
 
     startTransition(async () => {
-      await reorderGalleryImages(next.map((img) => img.id));
+      try {
+        await reorderGalleryImages(next.map((img) => img.id));
+      } catch (err) {
+        console.error('[gallery] reorder failed', err);
+        setImages(previous);
+        toast.error('Could not save the new order — please try again.');
+      }
     });
   }
 
   function handleFieldBlur(id: number, field: 'title' | 'altText', value: string) {
     const trimmed = value.trim() || null;
+    const previous = images;
     setImages((prev) => prev.map((img) => (img.id === id ? { ...img, [field]: trimmed } : img)));
+
     startTransition(async () => {
-      await updateGalleryImage(id, { [field]: trimmed });
+      try {
+        await updateGalleryImage(id, { [field]: trimmed });
+      } catch (err) {
+        console.error('[gallery] field update failed', err);
+        setImages(previous);
+        toast.error(`Could not save the ${field === 'title' ? 'title' : 'alt text'} — please try again.`);
+      }
     });
   }
 
-  function handleTogglePublished(id: number, published: boolean) {
+  async function handleTogglePublished(id: number, published: boolean) {
+    const previous = images;
     setImages((prev) => prev.map((img) => (img.id === id ? { ...img, published } : img)));
-    return updateGalleryImage(id, { published });
+    try {
+      await updateGalleryImage(id, { published });
+    } catch (err) {
+      console.error('[gallery] publish toggle failed', err);
+      setImages(previous);
+      toast.error('Could not update the published status — please try again.');
+      throw err; // let PublishToggle know it failed so it won't show its own success toast
+    }
   }
 
   function handleDelete(id: number) {
+    setDeleting(true);
     startTransition(async () => {
-      await deleteGalleryImage(id);
-      setImages((prev) => prev.filter((img) => img.id !== id));
-      setPendingDeleteId(null);
-      toast.success('Image deleted');
+      try {
+        await deleteGalleryImage(id);
+        setImages((prev) => prev.filter((img) => img.id !== id));
+        setPendingDeleteId(null);
+        toast.success('Image deleted');
+      } catch (err) {
+        console.error('[gallery] delete failed', err);
+        toast.error('Could not delete the image — please try again.');
+      } finally {
+        setDeleting(false);
+      }
     });
   }
 
@@ -153,6 +205,7 @@ export function GalleryManager({ images: initialImages }: Props) {
         description="This permanently removes the image from the gallery and deletes the file from storage."
         confirmLabel="Delete Image"
         variant="danger"
+        loading={deleting}
         onConfirm={() => { if (pendingDeleteId !== null) handleDelete(pendingDeleteId); }}
       />
     </div>

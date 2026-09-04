@@ -11,10 +11,50 @@ type UploadedImage = {
   thumb: string;
 };
 
+export type UploadResult = {
+  succeeded: { imageUrl: string }[];
+  failed: { name: string; error: string }[];
+};
+
 type Props = {
-  onUploaded: (images: { imageUrl: string }[]) => void | Promise<void>;
+  onUploaded: (result: UploadResult) => void | Promise<void>;
   className?: string;
 };
+
+const MAX_FILE_SIZE = 20 * 1024 * 1024; // 20 MB, matches the single-image uploader
+// Sharp resize + 3 WebP variants + R2 upload per file is real server work, not
+// instant — a handful in flight at once is faster than one-at-a-time for large
+// batches, without piling every request onto the server simultaneously like a
+// plain Promise.all over everything would. A fixed "batch every 10s" delay was
+// considered and rejected: it either wastes time when the server keeps up, or
+// isn't enough breathing room when it doesn't. A sliding concurrency window
+// self-paces to whatever the server can actually handle.
+const CONCURRENCY = 4;
+
+type FileResult =
+  | { ok: true; imageUrl: string }
+  | { ok: false; name: string; error: string };
+
+async function uploadOne(file: File): Promise<FileResult> {
+  if (file.size > MAX_FILE_SIZE) {
+    return { ok: false, name: file.name, error: 'Over 20 MB' };
+  }
+
+  try {
+    const formData = new FormData();
+    formData.append('file', file);
+    formData.append('folder', 'gallery');
+    const res = await fetch('/api/upload', { method: 'POST', body: formData });
+    if (!res.ok) {
+      const data = await res.json().catch(() => null);
+      throw new Error(data?.error ?? 'Upload failed');
+    }
+    const data: UploadedImage = await res.json();
+    return { ok: true, imageUrl: data.large };
+  } catch (err) {
+    return { ok: false, name: file.name, error: err instanceof Error ? err.message : 'Upload failed' };
+  }
+}
 
 export function GalleryUploader({ onUploaded, className }: Props) {
   const [dragging, setDragging] = useState(false);
@@ -35,30 +75,28 @@ export function GalleryUploader({ onUploaded, className }: Props) {
       setUploading(true);
       setProgress({ done: 0, total: files.length });
 
-      const uploaded: { imageUrl: string }[] = [];
-      // Sequential, not parallel — keeps the (single) /api/upload route from
-      // being hit with a burst of large image-processing requests at once.
-      for (const file of files) {
-        try {
-          const formData = new FormData();
-          formData.append('file', file);
-          formData.append('folder', 'gallery');
-          const res = await fetch('/api/upload', { method: 'POST', body: formData });
-          if (!res.ok) {
-            const data = await res.json().catch(() => null);
-            throw new Error(data?.error ?? `Upload failed for ${file.name}`);
-          }
-          const data: UploadedImage = await res.json();
-          uploaded.push({ imageUrl: data.large });
-        } catch (err) {
-          setError(err instanceof Error ? err.message : 'Upload failed. Please try again.');
+      const results: FileResult[] = [];
+      let nextIndex = 0;
+
+      async function worker() {
+        while (nextIndex < files.length) {
+          const file = files[nextIndex++];
+          results.push(await uploadOne(file));
+          setProgress((p) => (p ? { ...p, done: p.done + 1 } : p));
         }
-        setProgress((p) => (p ? { ...p, done: p.done + 1 } : p));
       }
+
+      await Promise.all(
+        Array.from({ length: Math.min(CONCURRENCY, files.length) }, () => worker())
+      );
 
       setUploading(false);
       setProgress(null);
-      if (uploaded.length > 0) await onUploaded(uploaded);
+
+      await onUploaded({
+        succeeded: results.filter((r): r is Extract<FileResult, { ok: true }> => r.ok).map((r) => ({ imageUrl: r.imageUrl })),
+        failed: results.filter((r): r is Extract<FileResult, { ok: false }> => !r.ok).map((r) => ({ name: r.name, error: r.error })),
+      });
     },
     [onUploaded]
   );
@@ -79,6 +117,8 @@ export function GalleryUploader({ onUploaded, className }: Props) {
     },
     [uploadFiles]
   );
+
+  const pct = progress ? Math.round((progress.done / progress.total) * 100) : 0;
 
   return (
     <div className={className}>
@@ -104,11 +144,24 @@ export function GalleryUploader({ onUploaded, className }: Props) {
         )}
         <div className="text-center">
           <p className="text-sm font-medium text-gray-700">
-            {uploading && progress ? `Uploading ${progress.done + 1} of ${progress.total}…` : 'Drop images or click to browse'}
+            {uploading && progress ? `Uploading ${progress.done} of ${progress.total}…` : 'Drop images or click to browse'}
           </p>
           <p className="mt-0.5 text-xs text-gray-400">PNG, JPG, WebP — multiple files OK, converted to WebP automatically</p>
         </div>
       </button>
+
+      {uploading && progress && (
+        <div className="mt-3">
+          <div className="h-1.5 w-full overflow-hidden rounded-full bg-gray-100">
+            <div
+              className="h-full rounded-full bg-emerald-500 transition-[width] duration-200"
+              style={{ width: `${pct}%` }}
+            />
+          </div>
+          <p className="mt-1.5 text-center text-xs text-gray-400">{pct}%</p>
+        </div>
+      )}
+
       <input ref={inputRef} type="file" accept="image/*" multiple className="hidden" onChange={handleChange} />
       {error && <p className="mt-2 text-xs text-red-600">{error}</p>}
     </div>
