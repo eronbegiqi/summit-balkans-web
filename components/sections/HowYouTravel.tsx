@@ -1,6 +1,5 @@
 import Link from "next/link";
 import { Users, User, Map, ArrowRight } from "lucide-react";
-import { SectionLabel } from "@/components/ui/SectionLabel";
 
 const cards = [
   {
@@ -32,7 +31,6 @@ export function HowYouTravel() {
     <section className="bg-bone py-16 md:py-24 border-t-2 border-b-2 border-divider">
       <div className="max-w-content mx-auto px-4 md:px-10">
         <div className="mb-10 md:mb-12">
-          <SectionLabel>How You Travel</SectionLabel>
           <h2
             className="font-fraunces font-bold tracking-tight leading-[1.1]"
             style={{ fontSize: "clamp(28px, 4vw, 48px)" }}

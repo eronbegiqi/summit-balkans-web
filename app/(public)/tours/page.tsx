@@ -236,7 +236,7 @@ function TourCard({ tour, priority = false }: { tour: Tour; priority?: boolean }
         <div className="absolute top-3 left-3 flex gap-1.5">
           <span className={cn(
             "font-mono text-[10px] font-semibold px-2 py-1 rounded tracking-[0.06em] uppercase",
-            isGuided ? "bg-brand text-white" : "bg-accent text-ink"
+            isGuided ? "bg-brand text-white" : "bg-terra text-white"
           )}>
             {isGuided ? "Guided" : "Self-Guided"}
           </span>
