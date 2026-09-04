@@ -112,6 +112,7 @@ const navItems: NavItem[] = [
         {
           heading: "Useful Links",
           links: [
+            { label: "Gallery", href: "/gallery" },
             { label: "Blog", href: "/blog" },
             { label: "Before You Visit", href: "/before-you-visit" },
             { label: "FAQ", href: "/before-you-visit#faq" },

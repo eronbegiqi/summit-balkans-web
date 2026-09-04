@@ -528,6 +528,25 @@ export const tourStages = mysqlTable(
   ]
 );
 
+// ─── 19. GALLERY IMAGES ───────────────────────────────────────────────────────
+
+export const galleryImages = mysqlTable(
+  'gallery_images',
+  {
+    id: bigint('id', { mode: 'number' }).autoincrement().primaryKey(),
+    imageUrl: varchar('image_url', { length: 500 }).notNull(),
+    title: varchar('title', { length: 255 }),
+    altText: varchar('alt_text', { length: 255 }),
+    published: boolean('published').default(true),
+    displayOrder: int('display_order').default(0),
+    createdAt: timestamp('created_at').defaultNow().notNull(),
+    updatedAt: timestamp('updated_at').defaultNow().onUpdateNow().notNull(),
+  },
+  (t) => [
+    index('idx_gallery_published').on(t.published),
+  ]
+);
+
 // ─── RELATIONS ────────────────────────────────────────────────────────────────
 
 export const adminUsersRelations = relations(adminUsers, ({ many }) => ({

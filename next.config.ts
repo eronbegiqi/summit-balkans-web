@@ -24,7 +24,11 @@ const nextConfig: NextConfig = {
         hostname: "media.summitbalkans.com",
       },
       {
-        protocol: "https", hostname: "pub-84f4670fd13a4a1e978382d986a3ecad.r2.dev" 
+        protocol: "https", hostname: "pub-84f4670fd13a4a1e978382d986a3ecad.r2.dev"
+      },
+      {
+        // Placeholder gallery photos until real images are uploaded.
+        protocol: "https", hostname: "picsum.photos",
       },
     ],
   },
