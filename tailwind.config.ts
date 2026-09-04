@@ -20,13 +20,6 @@ const config: Config = {
           700: "#1F6741",
           900: "#0F3322",
         },
-        accent: {
-          DEFAULT: "#D4A574",
-          50: "#FAF3E9",
-          100: "#F0E0C9",
-          500: "#D4A574",
-          700: "#B0824F",
-        },
         difficulty: {
           1: "#65B741",
           2: "#A4C639",
@@ -47,7 +40,7 @@ const config: Config = {
         dark: "#0E1310",
       },
       fontFamily: {
-        fraunces: ["var(--font-inter)", "sans-serif"],
+        fraunces: ["var(--font-fraunces)", "serif"],
         inter: ["var(--font-inter)", "sans-serif"],
         mono: ["var(--font-mono)", "monospace"],
       },

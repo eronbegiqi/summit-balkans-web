@@ -3,22 +3,23 @@
 import { useEffect, useRef, useState } from "react";
 import { MapPin, Users, Receipt } from "lucide-react";
 import { SectionLabel } from "@/components/ui/SectionLabel";
+import { cn } from "@/lib/utils";
 
 const pillars = [
   {
     icon: MapPin,
     title: "Local guides, born here",
-    text: "Every guide grew up within a day's walk of the routes they lead. They know the terrain, the families, the shortcuts, and the stories. That's not something you can train — it's something you live.",
+    text: "Every guide grew up within a day's walk of the routes they lead. They know the terrain, the families, the shortcuts, and the stories. That's not something you can train. It's something you live.",
   },
   {
     icon: Users,
     title: "Small groups, real trails",
-    text: "Maximum 12 travellers. No herding, no rushing, no cutting corners to fit a schedule. Small groups move differently — they fit through village doorways and get invited in for coffee.",
+    text: "Maximum 12 travellers. No herding, no rushing, no cutting corners to fit a schedule. Small groups move differently: they fit through village doorways and get invited in for coffee.",
   },
   {
     icon: Receipt,
     title: "No hidden costs",
-    text: "The price we quote is the price you pay. Accommodation, meals, transfers, permits, guide — all in. We've built this way because we'd hate the alternative.",
+    text: "The price we quote is the price you pay. Accommodation, meals, transfers, permits, guide: all in. We've built this way because we'd hate the alternative.",
   },
 ];
 
@@ -47,6 +48,43 @@ function useCounter(target: number, decimals: number, active: boolean) {
     return () => clearInterval(timer);
   }, [active, target, decimals]);
   return count;
+}
+
+// Reveals each pillar in sequence as the row scrolls into view, so the three
+// differentiators read as discrete reasons rather than one flat block.
+// Same IntersectionObserver + staggered-delay approach already used for the
+// mobile nav reveal in Header.tsx.
+function PillarRow({ pillar, index }: { pillar: typeof pillars[0]; index: number }) {
+  const ref = useRef<HTMLDivElement>(null);
+  const [visible, setVisible] = useState(false);
+  const Icon = pillar.icon;
+
+  useEffect(() => {
+    const obs = new IntersectionObserver(
+      ([e]) => { if (e.isIntersecting) setVisible(true); },
+      { threshold: 0.3 }
+    );
+    if (ref.current) obs.observe(ref.current);
+    return () => obs.disconnect();
+  }, []);
+
+  return (
+    <div
+      ref={ref}
+      className={cn(
+        "flex flex-col md:flex-row md:items-start gap-3 md:gap-8 py-8 border-t border-white/10 first:border-t-0",
+        "transition-[opacity,transform] duration-700 ease-out",
+        visible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-3"
+      )}
+      style={{ transitionDelay: visible ? `${index * 90}ms` : "0s" }}
+    >
+      <div className="flex items-center gap-3 md:w-[280px] shrink-0">
+        <Icon className="w-6 h-6 text-warning shrink-0" strokeWidth={1.5} />
+        <h3 className="font-fraunces text-xl font-bold text-white">{pillar.title}</h3>
+      </div>
+      <p className="text-[15px] leading-[1.65] text-white/55 max-w-[560px]">{pillar.text}</p>
+    </div>
+  );
 }
 
 function StatCounter({ value, suffix, label, decimals }: typeof stats[0]) {
@@ -99,22 +137,15 @@ export function WhySummitBalkans() {
           Built differently, on purpose.
         </h2>
 
-        {/* Pillars — 1 col mobile → 3 col desktop */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-10 md:gap-12">
-          {pillars.map((p) => {
-            const Icon = p.icon;
-            return (
-              <div key={p.title} className="text-center md:text-left">
-                <Icon className="w-6 h-6 text-warning mb-4 mx-auto md:mx-0" strokeWidth={1.5} />
-                <h3 className="font-fraunces text-2xl font-bold text-white mb-3">{p.title}</h3>
-                <p className="text-[15px] leading-[1.65] text-white/55">{p.text}</p>
-              </div>
-            );
-          })}
+        {/* Pillars - divided horizontal rows, revealed in sequence on scroll */}
+        <div>
+          {pillars.map((p, i) => (
+            <PillarRow key={p.title} pillar={p} index={i} />
+          ))}
         </div>
 
         {/* Divider */}
-        <div className="h-px bg-white/8 my-12 md:my-16" />
+        <div className="h-px bg-white/8 mt-4 mb-12 md:mb-16" />
 
         {/* Stats — 1 col mobile → 2 col desktop */}
         <div className="grid grid-cols-1 md:grid-cols-2">

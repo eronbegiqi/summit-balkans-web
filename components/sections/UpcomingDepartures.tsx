@@ -5,7 +5,6 @@ import { useRef, useState, useEffect, useCallback } from "react";
 import Link from "next/link";
 import { ChevronLeft, ChevronRight, ArrowRight } from "lucide-react";
 import { formatPrice } from "@/lib/utils";
-import { SectionLabel } from "@/components/ui/SectionLabel";
 import { cn } from "@/lib/utils";
 
 const countryFlags: Record<string, string> = {
@@ -101,7 +100,6 @@ export function UpcomingDepartures() {
     <section className="bg-bone py-16 md:py-20 border-t-2 border-divider">
       <div className="max-w-content mx-auto px-4 md:px-10 mb-6 flex items-end justify-between gap-4">
         <div>
-          <SectionLabel>Next Departures</SectionLabel>
           <h2 className="font-fraunces text-2xl md:text-3xl font-bold tracking-tight">
             Join a scheduled group
           </h2>
