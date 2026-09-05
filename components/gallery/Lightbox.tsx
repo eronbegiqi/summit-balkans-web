@@ -93,7 +93,7 @@ export function Lightbox({ images, startIndex, onClose }: Props) {
                   fill
                   sizes="100vw"
                   className="object-contain"
-                  quality={85}
+                  unoptimized
                 />
               </div>
             ))}

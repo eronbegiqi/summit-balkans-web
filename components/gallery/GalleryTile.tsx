@@ -4,20 +4,22 @@ import Image from "next/image";
 import { cn } from "@/lib/utils";
 import type { GalleryImageListItem } from "@/lib/db/queries/gallery";
 
-// A 6-step span pattern, cycled by index, so a grid of any length reads as a
-// bento layout rather than a flat equal-tile grid. `grid-flow-dense` on the
-// container lets the browser pack around the varied spans with no gaps.
-const SPAN_PATTERN = [
-  "col-span-2 row-span-2",
-  "col-span-1 row-span-1",
-  "col-span-1 row-span-1",
-  "col-span-1 row-span-1",
-  "col-span-1 row-span-1",
-  "col-span-2 row-span-1",
+// A repeating height pattern, cycled by index, so a CSS-columns masonry grid
+// of any length reads with rhythm instead of uniform tiles. Columns-based
+// masonry (see FullGallery/PhotoGallery) stacks items top-down per column, so
+// unlike a spanned CSS grid it can never leave an empty cell regardless of
+// how many images there are.
+const HEIGHT_PATTERN = [
+  "h-[320px]",
+  "h-[220px]",
+  "h-[260px]",
+  "h-[240px]",
+  "h-[300px]",
+  "h-[220px]",
 ];
 
-export function spanForIndex(index: number): string {
-  return SPAN_PATTERN[index % SPAN_PATTERN.length];
+export function heightForIndex(index: number): string {
+  return HEIGHT_PATTERN[index % HEIGHT_PATTERN.length];
 }
 
 type Props = {
@@ -43,6 +45,7 @@ export function GalleryTile({ image, index, onOpen, className }: Props) {
         alt={image.altText ?? image.title ?? "Gallery photo"}
         fill
         sizes="(min-width: 1024px) 25vw, (min-width: 640px) 33vw, 50vw"
+        quality={85}
         className="object-cover transition-transform duration-500 group-hover:scale-[1.05]"
         loading="lazy"
       />
