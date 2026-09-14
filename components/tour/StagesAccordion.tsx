@@ -48,7 +48,7 @@ export function StagesAccordion({ stages }: { stages: Stage[] }) {
       <div className="flex justify-end mb-3">
         <button
           onClick={toggleAll}
-          className="font-mono text-[12.5px] text-brand hover:underline tracking-wide"
+          className="text-[12.5px] text-brand hover:underline tracking-wide"
         >
           {allOpen ? "Close All" : "Open All"}
         </button>
@@ -136,10 +136,10 @@ export function StagesAccordion({ stages }: { stages: Stage[] }) {
                         </span>
                       )}
                       {stage.terrain && (
-                        <span className="font-mono text-xs bg-ink/5 px-2 py-1 rounded">{stage.terrain}</span>
+                        <span className="text-xs bg-ink/5 px-2 py-1 rounded">{stage.terrain}</span>
                       )}
                       {stage.difficulty && (
-                        <span className="font-mono text-xs bg-brand/10 text-brand px-2 py-1 rounded">{stage.difficulty}</span>
+                        <span className="text-xs bg-brand/10 text-brand px-2 py-1 rounded">{stage.difficulty}</span>
                       )}
                     </div>
                   )}
@@ -153,7 +153,7 @@ export function StagesAccordion({ stages }: { stages: Stage[] }) {
                       <p className="font-semibold text-xs text-ink/50 uppercase tracking-wider mb-2">Highlights</p>
                       <ul className="flex flex-wrap gap-1.5">
                         {stage.highlights.map((h) => (
-                          <li key={h} className="font-mono text-[11px] bg-brand/8 text-brand px-2.5 py-1 rounded-full">
+                          <li key={h} className="text-[11px] bg-brand/8 text-brand px-2.5 py-1 rounded-full">
                             {h}
                           </li>
                         ))}

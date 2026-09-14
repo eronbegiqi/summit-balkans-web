@@ -14,7 +14,7 @@ export function PoBIntro() {
         <div className="grid grid-cols-1 lg:grid-cols-[1fr_340px] gap-14 lg:gap-20 items-start">
           {/* Left — prose */}
           <div>
-            <div className="font-mono text-[11px] font-medium tracking-[0.14em] uppercase text-terra mb-4">
+            <div className="text-[11px] font-medium tracking-[0.14em] uppercase text-terra mb-4">
               The Trail
             </div>
             <div className="prose prose-lg max-w-none text-ink/80 leading-[1.85]">
@@ -55,7 +55,7 @@ export function PoBIntro() {
               <div className="divide-y divide-divider">
                 {stats.map(({ label, value }) => (
                   <div key={label} className="px-6 py-4 flex justify-between items-baseline gap-4">
-                    <span className="font-mono text-[11px] uppercase tracking-[0.1em] text-ink/45 shrink-0">
+                    <span className="text-[11px] uppercase tracking-[0.1em] text-ink/45 shrink-0">
                       {label}
                     </span>
                     <span className="font-mono text-sm font-semibold text-ink text-right">

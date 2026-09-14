@@ -24,7 +24,7 @@ export function PrivateTripsHero() {
         className="relative z-10 max-w-content mx-auto px-6 sm:px-8 lg:px-10 pt-[68px] w-full grid grid-cols-1 lg:grid-cols-[1fr_420px] items-center gap-20"
       >
         <div>
-          <div className="flex items-center gap-2 font-mono text-[11px] text-gold tracking-[0.14em] uppercase mb-5">
+          <div className="flex items-center gap-2 text-[11px] text-gold tracking-[0.14em] uppercase mb-5">
             <span className="block w-5 h-px bg-gold" />
             Private &amp; Custom Trips
           </div>
@@ -65,7 +65,7 @@ export function PrivateTripsHero() {
               key={card.label}
               className="bg-dark/55 backdrop-blur-xl border border-white/10 rounded-xl p-5"
             >
-              <div className="font-mono text-[10px] text-white/40 tracking-[0.1em] uppercase mb-1.5">
+              <div className="text-[10px] text-white/40 tracking-[0.1em] uppercase mb-1.5">
                 {card.label}
               </div>
               <div className="font-fraunces text-lg font-bold text-white mb-0.5">{card.value}</div>

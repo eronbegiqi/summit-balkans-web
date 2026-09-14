@@ -190,11 +190,11 @@ export default async function TourDetailPage({ params }: { params: Promise<{ slu
         <div className="absolute inset-0 bg-gradient-to-t from-dark/90 via-dark/30 to-dark/10" />
         <div className="absolute bottom-0 left-0 right-0 max-w-content mx-auto px-6 md:px-10 pb-10">
           <div className="flex gap-2 mb-3">
-            <span className="font-mono text-[11px] font-semibold px-2 py-1 rounded tracking-[0.06em] uppercase bg-brand text-white">
+            <span className="text-[11px] font-semibold px-2 py-1 rounded tracking-[0.06em] uppercase bg-brand text-white">
               {typeLabel}
             </span>
             {variantLabel && (
-              <span className="font-mono text-[11px] font-medium px-2 py-1 rounded tracking-[0.06em] uppercase bg-white/15 text-white">
+              <span className="text-[11px] font-medium px-2 py-1 rounded tracking-[0.06em] uppercase bg-white/15 text-white">
                 {variantLabel}
               </span>
             )}
@@ -261,11 +261,11 @@ export default async function TourDetailPage({ params }: { params: Promise<{ slu
                 <table className="w-full text-sm border-collapse">
                   <thead>
                     <tr className="border-b-2 border-divider text-left">
-                      <th className="pb-3 pr-6 font-mono text-[11px] uppercase tracking-[0.08em] text-ink/45 whitespace-nowrap">Dates</th>
-                      <th className="pb-3 pr-6 font-mono text-[11px] uppercase tracking-[0.08em] text-ink/45 whitespace-nowrap">Type</th>
-                      <th className="pb-3 pr-6 font-mono text-[11px] uppercase tracking-[0.08em] text-ink/45 whitespace-nowrap">Guide</th>
-                      <th className="pb-3 pr-6 font-mono text-[11px] uppercase tracking-[0.08em] text-ink/45 whitespace-nowrap">Availability</th>
-                      <th className="pb-3 font-mono text-[11px] uppercase tracking-[0.08em] text-ink/45 whitespace-nowrap text-right">Price</th>
+                      <th className="pb-3 pr-6 text-[11px] uppercase tracking-[0.08em] text-ink/45 whitespace-nowrap">Dates</th>
+                      <th className="pb-3 pr-6 text-[11px] uppercase tracking-[0.08em] text-ink/45 whitespace-nowrap">Type</th>
+                      <th className="pb-3 pr-6 text-[11px] uppercase tracking-[0.08em] text-ink/45 whitespace-nowrap">Guide</th>
+                      <th className="pb-3 pr-6 text-[11px] uppercase tracking-[0.08em] text-ink/45 whitespace-nowrap">Availability</th>
+                      <th className="pb-3 text-[11px] uppercase tracking-[0.08em] text-ink/45 whitespace-nowrap text-right">Price</th>
                       <th className="pb-3 pl-6"></th>
                     </tr>
                   </thead>
@@ -287,11 +287,11 @@ export default async function TourDetailPage({ params }: { params: Promise<{ slu
                           </td>
                           <td className="py-4 pr-6 whitespace-nowrap">
                             <div className="flex flex-wrap gap-1">
-                              <span className="font-mono text-[10px] font-semibold px-2 py-0.5 rounded tracking-[0.06em] uppercase bg-brand/10 text-brand">
+                              <span className="text-[10px] font-semibold px-2 py-0.5 rounded tracking-[0.06em] uppercase bg-brand/10 text-brand">
                                 {typeLabel}
                               </span>
                               {variantLabel && (
-                                <span className="font-mono text-[10px] px-2 py-0.5 rounded tracking-[0.06em] uppercase bg-ink/8 text-ink/60">
+                                <span className="text-[10px] px-2 py-0.5 rounded tracking-[0.06em] uppercase bg-ink/8 text-ink/60">
                                   {variantLabel}
                                 </span>
                               )}
@@ -300,7 +300,7 @@ export default async function TourDetailPage({ params }: { params: Promise<{ slu
                           <td className="py-4 pr-6 text-ink/60 whitespace-nowrap">{dep.guideName ?? "TBC"}</td>
                           <td className="py-4 pr-6 whitespace-nowrap">
                             {soldOut ? (
-                              <span className="font-mono text-[11px] text-ink/35">Sold out</span>
+                              <span className="text-[11px] text-ink/35">Sold out</span>
                             ) : (
                               <span className={`font-mono text-[11px] font-medium ${low ? "text-amber-600" : "text-forest"}`}>
                                 {spots}/{dep.capacity} spots
@@ -523,7 +523,7 @@ export default async function TourDetailPage({ params }: { params: Promise<{ slu
 function Stat({ label, value }: { label: string; value: React.ReactNode }) {
   return (
     <div>
-      <div className="font-mono text-[10px] text-white/40 uppercase tracking-wider mb-0.5">{label}</div>
+      <div className="text-[10px] text-white/40 uppercase tracking-wider mb-0.5">{label}</div>
       <div className="font-semibold text-sm">{value}</div>
     </div>
   );

@@ -4,7 +4,7 @@ export function PoBCTABand() {
   return (
     <section className="bg-ink py-20 md:py-28">
       <div className="max-w-content mx-auto px-5 md:px-10 text-center">
-        <div className="font-mono text-[11px] tracking-[0.22em] uppercase text-white/35 mb-5">
+        <div className="text-[11px] tracking-[0.22em] uppercase text-white/35 mb-5">
           ★ Flagship Experience
         </div>
         <h2

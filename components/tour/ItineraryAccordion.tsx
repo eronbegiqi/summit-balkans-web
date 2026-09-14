@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { ChevronDown } from "lucide-react";
+import { ChevronDown, Route, TrendingUp } from "lucide-react";
 import { cn } from "@/lib/utils";
 import type { ItineraryDay } from "@/lib/types";
 
@@ -37,17 +37,13 @@ export function ItineraryAccordion({ days }: ItineraryAccordionProps) {
               <div className="flex gap-4 flex-shrink-0">
                 {day.distance > 0 && (
                   <span className="font-mono text-[11px] text-ink/40 flex items-center gap-1">
-                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
-                      <path d="M3 12h18M9 6l-6 6 6 6"/>
-                    </svg>
+                    <Route className="w-3 h-3" strokeWidth={1.5} aria-hidden="true" />
                     {day.distance} km
                   </span>
                 )}
                 {day.elevation > 0 && (
                   <span className="font-mono text-[11px] text-ink/40 flex items-center gap-1">
-                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
-                      <polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/>
-                    </svg>
+                    <TrendingUp className="w-3 h-3" strokeWidth={1.5} aria-hidden="true" />
                     +{day.elevation}m
                   </span>
                 )}
@@ -62,7 +58,7 @@ export function ItineraryAccordion({ days }: ItineraryAccordionProps) {
               <div className="px-6 pb-6 pl-[72px]">
                 <p className="text-[15px] leading-[1.7] text-ink/68">{day.description}</p>
                 {day.accommodation && (
-                  <p className="mt-3 text-xs text-ink/40 font-mono">
+                  <p className="mt-3 text-xs text-ink/40">
                     Accommodation: {day.accommodation}
                   </p>
                 )}

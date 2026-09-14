@@ -10,7 +10,7 @@ interface SpotsBadgeProps {
 export function SpotsBadge({ spotsLeft, spotsTotal, className }: SpotsBadgeProps) {
   if (spotsLeft === 0) {
     return (
-      <span className={cn("font-mono text-[10px] font-medium px-2 py-0.5 rounded bg-ink/10 text-ink/50 tracking-[0.04em]", className)}>
+      <span className={cn("text-[10px] font-medium px-2 py-0.5 rounded bg-ink/10 text-ink/50 tracking-[0.04em]", className)}>
         Sold out
       </span>
     );

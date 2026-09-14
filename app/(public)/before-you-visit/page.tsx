@@ -104,7 +104,7 @@ export default function BeforeYouVisitPage() {
             </div>
             {/* Jump links */}
             <nav className="border-2 border-divider rounded-card bg-white p-6 self-start">
-              <div className="font-mono text-[11px] text-ink/40 tracking-[0.1em] uppercase mb-4">On this page</div>
+              <div className="text-[11px] text-ink/40 tracking-[0.1em] uppercase mb-4">On this page</div>
               {[
                 ["#difficulty", "01 Fitness & Difficulty"],
                 ["#pack", "02 What to Pack"],
@@ -144,7 +144,7 @@ export default function BeforeYouVisitPage() {
                   <div className="flex-1">
                     <div className="font-fraunces text-xl font-bold mb-1">{d.name}</div>
                     <p className="text-sm text-ink/65 mb-3">{d.desc}</p>
-                    <div className="flex gap-6 text-xs text-ink/45 font-mono">
+                    <div className="flex gap-6 text-xs text-ink/45">
                       <span>Example: {d.example}</span>
                       <span>Suits: {d.suits}</span>
                     </div>
@@ -202,9 +202,9 @@ export default function BeforeYouVisitPage() {
             <table className="w-full border-collapse text-sm">
               <thead>
                 <tr>
-                  <th className="text-left font-mono text-[11px] text-ink/40 tracking-[0.08em] uppercase pb-3 pr-6">Country / Route</th>
+                  <th className="text-left text-[11px] text-ink/40 tracking-[0.08em] uppercase pb-3 pr-6">Country / Route</th>
                   {seasonal.months.map((m) => (
-                    <th key={m} className="font-mono text-[11px] text-ink/40 tracking-[0.06em] uppercase pb-3 px-1 text-center">{m}</th>
+                    <th key={m} className="text-[11px] text-ink/40 tracking-[0.06em] uppercase pb-3 px-1 text-center">{m}</th>
                   ))}
                 </tr>
               </thead>
@@ -214,7 +214,7 @@ export default function BeforeYouVisitPage() {
                     <td className="text-sm font-medium pr-6 py-2 whitespace-nowrap">{row.name}</td>
                     {row.data.map((status, i) => (
                       <td key={i} className="px-0.5 py-2">
-                        <div className={`rounded-md px-1 py-1.5 text-center font-mono text-[9px] font-medium ${seasonColors[status]}`}>
+                        <div className={`rounded-md px-1 py-1.5 text-center text-[9px] font-medium ${seasonColors[status]}`}>
                           {seasonLabels[status]}
                         </div>
                       </td>

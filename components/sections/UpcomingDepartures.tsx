@@ -186,7 +186,7 @@ export function UpcomingDepartures() {
                     {countries.map((c) => (
                       <span
                         key={c}
-                        className="font-mono text-[10px] md:text-xs font-medium px-2 py-0.5 rounded border border-mist tracking-[0.06em] uppercase"
+                        className="text-[10px] md:text-xs font-medium px-2 py-0.5 rounded border border-mist tracking-[0.06em] uppercase"
                       >
                         {countryFlags[c] ?? ""} {c.slice(0, 3).toUpperCase()}
                       </span>

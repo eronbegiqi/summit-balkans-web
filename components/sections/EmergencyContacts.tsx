@@ -67,7 +67,7 @@ export function EmergencyContactsSection() {
         <div className="bg-red-500/10 border border-red-500/30 rounded-2xl p-6 md:p-8 text-center mb-10">
           <div className="flex items-center justify-center gap-2 mb-2">
             <Phone className="w-5 h-5 text-red-400" strokeWidth={1.5} />
-            <span className="font-mono text-sm text-red-300 uppercase tracking-widest">Universal emergency</span>
+            <span className="text-sm text-red-300 uppercase tracking-widest">Universal emergency</span>
           </div>
           <div className="font-fraunces text-5xl md:text-6xl font-bold text-white mb-2">112</div>
           <p className="text-white/60 text-sm">Works everywhere in Albania, Kosovo &amp; Montenegro.<br />Call this first for any life-threatening emergency.</p>
@@ -129,7 +129,7 @@ export function EmergencyContactsCompact() {
       <summary className="flex items-center gap-3 px-5 py-4 cursor-pointer hover:bg-ink/3 transition-colors list-none">
         <AlertTriangle className="w-4 h-4 text-red-500 shrink-0" strokeWidth={1.5} />
         <span className="font-semibold text-sm">Emergency contacts on the trail</span>
-        <span className="ml-auto font-mono text-xs text-ink/40">Expand</span>
+        <span className="ml-auto text-xs text-ink/40">Expand</span>
       </summary>
       <div className="px-5 pb-5 border-t border-divider">
         <div className="py-4">

@@ -64,7 +64,7 @@ export function PoBDepartures() {
     <section id="dates" className="py-20 md:py-28 bg-white">
       <div className="max-w-content mx-auto px-5 md:px-10">
         <div className="mb-10">
-          <div className="font-mono text-[11px] font-medium tracking-[0.14em] uppercase text-terra mb-3">
+          <div className="text-[11px] font-medium tracking-[0.14em] uppercase text-terra mb-3">
             Dates & Prices
           </div>
           <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4">
@@ -84,7 +84,7 @@ export function PoBDepartures() {
         <div className="border-2 border-divider rounded-card-hero overflow-hidden">
           <div className="hidden md:grid grid-cols-[1fr_130px_100px_80px_140px] gap-4 px-6 py-3.5 border-b-2 border-divider bg-bone">
             {['Dates', 'Guide', 'Spots', 'Price', ''].map((h) => (
-              <div key={h} className="font-mono text-[10px] uppercase tracking-[0.12em] text-ink/40">
+              <div key={h} className="text-[10px] uppercase tracking-[0.12em] text-ink/40">
                 {h}
               </div>
             ))}
@@ -105,7 +105,7 @@ export function PoBDepartures() {
             ))
           ) : departures.length === 0 ? (
             <div className="px-6 py-12 text-center">
-              <p className="font-mono text-sm text-ink/40">No upcoming departures. Contact us for custom dates.</p>
+              <p className="text-sm text-ink/40">No upcoming departures. Contact us for custom dates.</p>
             </div>
           ) : (
             departures.map((dep, i) => {
@@ -133,7 +133,7 @@ export function PoBDepartures() {
                   <div className="font-fraunces text-sm font-semibold">{formatPrice(price)}</div>
                   <div>
                     {soldOut ? (
-                      <span className="font-mono text-[11px] text-ink/35 uppercase tracking-wider">Sold Out</span>
+                      <span className="text-[11px] text-ink/35 uppercase tracking-wider">Sold Out</span>
                     ) : (
                       <Link
                         href="/tours/book"
@@ -149,7 +149,7 @@ export function PoBDepartures() {
           )}
         </div>
 
-        <p className="mt-4 font-mono text-[12px] text-ink/40 text-center">
+        <p className="mt-4 text-[12px] text-ink/40 text-center">
           Prices include guide, accommodation, daily breakfast & dinner, border permits, and all national park fees.
         </p>
       </div>

@@ -53,7 +53,7 @@ export function MegaMenuPanel({ data, visible }: MegaMenuPanelProps) {
             {data.columns.map((col, colIndex) => (
               <div key={`${col.heading ?? "column"}-${colIndex}`} className="min-w-[140px]">
                 {col.heading && (
-                  <div className="font-mono text-[10px] uppercase tracking-[0.14em] text-ink/35 mb-3">
+                  <div className="text-[10px] uppercase tracking-[0.14em] text-ink/35 mb-3">
                     {col.heading}
                   </div>
                 )}
@@ -97,13 +97,13 @@ export function MegaMenuPanel({ data, visible }: MegaMenuPanelProps) {
                   className="w-full h-32 object-cover transition-transform duration-300 group-hover:scale-[1.04]"
                 />
                 <div className="p-3 bg-white">
-                  <div className="font-mono text-[10px] uppercase tracking-[0.1em] text-terra mb-1">
+                  <div className="text-[10px] uppercase tracking-[0.1em] text-terra mb-1">
                     Featured
                   </div>
                   <div className="font-fraunces text-base font-bold text-ink group-hover:text-brand transition-colors leading-tight">
                     {data.featured.title}
                   </div>
-                  <div className="font-mono text-[11px] text-ink/45 mt-1 leading-snug">
+                  <div className="text-[11px] text-ink/45 mt-1 leading-snug">
                     {data.featured.tagline}
                   </div>
                 </div>
@@ -117,7 +117,7 @@ export function MegaMenuPanel({ data, visible }: MegaMenuPanelProps) {
               {data.stats.items.map(({ value, label }) => (
                 <div key={label}>
                   <div className="font-mono text-xl font-bold text-ink">{value}</div>
-                  <div className="font-mono text-[10px] text-ink/40 uppercase tracking-wider mt-0.5">
+                  <div className="text-[10px] text-ink/40 uppercase tracking-wider mt-0.5">
                     {label}
                   </div>
                 </div>

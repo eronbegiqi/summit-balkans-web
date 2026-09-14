@@ -1,7 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { verifySession } from '@/lib/auth/session';
-
-const COOKIE_NAME = 'summit_admin_session';
+import { createSession, verifySession, SESSION_COOKIE_NAME, SESSION_TTL_SECONDS } from '@/lib/auth/session';
 
 export async function proxy(request: NextRequest) {
   const { pathname } = request.nextUrl;
@@ -11,7 +9,7 @@ export async function proxy(request: NextRequest) {
     return NextResponse.next();
   }
 
-  const token = request.cookies.get(COOKIE_NAME)?.value;
+  const token = request.cookies.get(SESSION_COOKIE_NAME)?.value;
 
   if (!token) {
     return NextResponse.redirect(new URL('/admin/login', request.url));
@@ -20,7 +18,7 @@ export async function proxy(request: NextRequest) {
   const session = await verifySession(token);
   if (!session) {
     const response = NextResponse.redirect(new URL('/admin/login', request.url));
-    response.cookies.delete(COOKIE_NAME);
+    response.cookies.delete(SESSION_COOKIE_NAME);
     return response;
   }
 
@@ -30,7 +28,21 @@ export async function proxy(request: NextRequest) {
   requestHeaders.set('x-admin-email', session.email);
   requestHeaders.set('x-admin-name', session.name);
 
-  return NextResponse.next({ request: { headers: requestHeaders } });
+  const response = NextResponse.next({ request: { headers: requestHeaders } });
+
+  // Sliding session — every active request renews the cookie's expiration,
+  // so an admin who uses the panel at least once every 30 days never gets
+  // signed out mid-use (previously a fixed 7-day expiry from login time).
+  const freshToken = await createSession(session);
+  response.cookies.set(SESSION_COOKIE_NAME, freshToken, {
+    httpOnly: true,
+    secure: process.env.NODE_ENV === 'production',
+    sameSite: 'lax',
+    maxAge: SESSION_TTL_SECONDS,
+    path: '/',
+  });
+
+  return response;
 }
 
 export const config = {

@@ -66,7 +66,7 @@ export default function DestinationsPage() {
                 <img src={country.image} alt={country.name} className="w-full h-full object-cover block" loading="lazy" />
               </div>
               <div className={i % 2 === 1 ? "[direction:ltr]" : ""}>
-                <div className="font-mono text-[11px] text-terra tracking-[0.14em] uppercase mb-3">{country.code}</div>
+                <div className="text-[11px] text-terra tracking-[0.14em] uppercase mb-3">{country.code}</div>
                 <h2 className="font-fraunces text-5xl font-bold tracking-tight mb-3">{country.name}</h2>
                 <p className="text-lg text-ink/55 mb-6">{country.tagline}</p>
                 <p className="text-base leading-[1.7] text-ink/70 mb-8">{country.description}</p>

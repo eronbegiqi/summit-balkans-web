@@ -65,18 +65,18 @@ export default async function BookingConfirmationPage({ params }: Props) {
 
         {/* Booking reference */}
         <div className="mb-6 rounded-2xl bg-[#0E1310] p-6">
-          <p className="mb-1 font-mono text-xs uppercase tracking-widest text-amber-400">
+          <p className="mb-1 text-xs uppercase tracking-widest text-amber-400">
             Booking Reference
           </p>
           <p className="font-mono text-3xl font-bold tracking-wider text-white">{reference}</p>
-          <p className="mt-1 font-mono text-sm text-white/40">Keep this for your records</p>
+          <p className="mt-1 text-sm text-white/40">Keep this for your records</p>
         </div>
 
         {/* Details grid */}
         <div className="mb-6 grid gap-4 sm:grid-cols-2">
           {tour && (
             <div className="rounded-2xl border-2 border-[#C9CFC8] bg-white p-5">
-              <div className="mb-3 flex items-center gap-2 text-xs font-mono uppercase tracking-wider text-[#2e8a57]">
+              <div className="mb-3 flex items-center gap-2 text-xs uppercase tracking-wider text-[#2e8a57]">
                 <Mountain className="h-3.5 w-3.5" /> Tour
               </div>
               <p className="font-bold text-[#0E1310]">{tour.title}</p>
@@ -86,7 +86,7 @@ export default async function BookingConfirmationPage({ params }: Props) {
 
           {departure && (
             <div className="rounded-2xl border-2 border-[#C9CFC8] bg-white p-5">
-              <div className="mb-3 flex items-center gap-2 text-xs font-mono uppercase tracking-wider text-[#2e8a57]">
+              <div className="mb-3 flex items-center gap-2 text-xs uppercase tracking-wider text-[#2e8a57]">
                 <Calendar className="h-3.5 w-3.5" /> Dates
               </div>
               <p className="font-bold text-[#0E1310]">{String(departure.startDate).split('T')[0]}</p>
@@ -95,7 +95,7 @@ export default async function BookingConfirmationPage({ params }: Props) {
           )}
 
           <div className="rounded-2xl border-2 border-[#C9CFC8] bg-white p-5">
-            <div className="mb-3 flex items-center gap-2 text-xs font-mono uppercase tracking-wider text-[#2e8a57]">
+            <div className="mb-3 flex items-center gap-2 text-xs uppercase tracking-wider text-[#2e8a57]">
               <Users className="h-3.5 w-3.5" /> Travellers
             </div>
             <p className="font-bold text-[#0E1310]">
@@ -105,7 +105,7 @@ export default async function BookingConfirmationPage({ params }: Props) {
           </div>
 
           <div className="rounded-2xl border-2 border-[#C9CFC8] bg-white p-5">
-            <div className="mb-3 text-xs font-mono uppercase tracking-wider text-[#2e8a57]">Payment</div>
+            <div className="mb-3 text-xs uppercase tracking-wider text-[#2e8a57]">Payment</div>
             <p className="text-2xl font-bold text-[#0E1310]">
               €{isDeposit ? depositEur.toLocaleString() : totalEur.toLocaleString()}
             </p>

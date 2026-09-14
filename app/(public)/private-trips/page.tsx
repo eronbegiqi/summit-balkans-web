@@ -130,7 +130,7 @@ export default function PrivateTripsPage() {
                   <p className="text-[13px] text-white/50 leading-[1.55] mb-3.5">{ex.desc}</p>
                   <div className="flex gap-2 flex-wrap">
                     {ex.tags.map((tag) => (
-                      <span key={tag} className="font-mono text-[10px] px-2 py-0.5 rounded border border-white/15 text-white/50 tracking-[0.06em] uppercase">
+                      <span key={tag} className="text-[10px] px-2 py-0.5 rounded border border-white/15 text-white/50 tracking-[0.06em] uppercase">
                         {tag}
                       </span>
                     ))}
@@ -157,7 +157,7 @@ export default function PrivateTripsPage() {
                 </div>
                 <div>
                   <div className="text-sm font-semibold">{r.name}</div>
-                  <div className="text-xs text-ink/40 font-mono">{r.meta}</div>
+                  <div className="text-xs text-ink/40">{r.meta}</div>
                 </div>
               </div>
             </div>

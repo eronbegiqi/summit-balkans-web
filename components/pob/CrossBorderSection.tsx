@@ -14,7 +14,7 @@ export function CrossBorderSection() {
             <div className="absolute inset-0 bg-gradient-to-t from-ink/40 to-transparent" />
             <div className="absolute bottom-5 left-5 right-5">
               <div className="bg-white/15 backdrop-blur-sm border border-white/25 rounded-xl px-4 py-3">
-                <p className="font-mono text-[11px] text-white/80 leading-snug">
+                <p className="text-[11px] text-white/80 leading-snug">
                   Čakor Pass, 1,849 m — Kosovo / Montenegro border
                 </p>
               </div>
@@ -23,7 +23,7 @@ export function CrossBorderSection() {
 
           {/* Content */}
           <div>
-            <div className="font-mono text-[11px] font-medium tracking-[0.14em] uppercase text-terra mb-4">
+            <div className="text-[11px] font-medium tracking-[0.14em] uppercase text-terra mb-4">
               Unique Feature
             </div>
             <h2 className="font-fraunces text-[clamp(2rem,4vw,2.8rem)] font-bold tracking-tight leading-tight mb-6">
@@ -65,7 +65,7 @@ export function CrossBorderSection() {
               {["Kosovo", "Albania", "Montenegro"].map((c) => (
                 <span
                   key={c}
-                  className="font-mono text-[11px] uppercase tracking-[0.1em] bg-white border-2 border-divider text-ink/70 px-3 py-1.5 rounded-full"
+                  className="text-[11px] uppercase tracking-[0.1em] bg-white border-2 border-divider text-ink/70 px-3 py-1.5 rounded-full"
                 >
                   {c}
                 </span>

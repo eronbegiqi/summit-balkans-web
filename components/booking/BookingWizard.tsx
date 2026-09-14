@@ -263,16 +263,16 @@ export function BookingWizard({
             <Check className="w-7 h-7 text-white" strokeWidth={2.5} />
           </div>
           <div>
-            <div className="font-mono text-xs text-terra tracking-[0.12em] uppercase mb-0.5">Spot Reserved</div>
+            <div className="text-xs text-terra tracking-[0.12em] uppercase mb-0.5">Spot Reserved</div>
             <h1 className="font-fraunces text-3xl font-bold tracking-tight">Almost there — send your transfer</h1>
           </div>
         </div>
 
         {/* Booking ref */}
         <div className="bg-dark text-white rounded-2xl px-6 py-5 mb-6">
-          <div className="font-mono text-[10px] text-amber-400 tracking-[0.14em] uppercase mb-1.5">Booking Reference</div>
+          <div className="text-[10px] text-amber-400 tracking-[0.14em] uppercase mb-1.5">Booking Reference</div>
           <div className="font-mono text-2xl font-bold tracking-wider mb-1">{bookingRef}</div>
-          <div className="font-mono text-xs text-white/40">A copy has been sent to {state.email}</div>
+          <div className="text-xs text-white/40">A copy has been sent to {state.email}</div>
         </div>
 
         {/* Bank transfer instructions */}
@@ -305,7 +305,7 @@ export function BookingWizard({
 
         {/* What happens next */}
         <div className="bg-bone border-2 border-divider rounded-2xl p-6 mb-6">
-          <div className="font-mono text-[11px] text-terra tracking-[0.12em] uppercase mb-4">What happens next</div>
+          <div className="text-[11px] text-terra tracking-[0.12em] uppercase mb-4">What happens next</div>
           <ol className="space-y-3">
             {[
               "Transfer your payment using the details above — include your booking reference.",
@@ -376,7 +376,7 @@ export function BookingWizard({
                     </div>
                     <div className="flex items-center gap-3 flex-shrink-0">
                       {dep.low && (
-                        <span className="font-mono text-[10px] bg-gold text-ink px-2 py-0.5 rounded font-medium">Low</span>
+                        <span className="text-[10px] bg-gold text-ink px-2 py-0.5 rounded font-medium">Low</span>
                       )}
                       <div className="font-fraunces text-xl font-bold">{formatPrice(dep.price)}</div>
                     </div>
@@ -692,7 +692,7 @@ export function BookingWizard({
                   }`}
                 >
                   <div className="flex items-center justify-between mb-1.5">
-                    <div className="text-xs font-mono font-semibold uppercase tracking-wider text-terra">
+                    <div className="text-xs font-semibold uppercase tracking-wider text-terra">
                       Full Payment
                     </div>
                     {state.paymentOption === "full" && (
@@ -770,7 +770,7 @@ export function BookingWizard({
       {/* Sidebar summary */}
       <div className="lg:sticky lg:top-[148px] bg-white border-2 border-divider rounded-2xl overflow-hidden">
         <div className="px-6 py-5 border-b border-divider">
-          <div className="font-mono text-[11px] text-terra tracking-[0.1em] uppercase mb-1">Your booking</div>
+          <div className="text-[11px] text-terra tracking-[0.1em] uppercase mb-1">Your booking</div>
           <div className="font-fraunces text-xl font-bold">Peaks of the Balkans</div>
         </div>
         <div className="px-6 py-5 text-[13px] space-y-2">

@@ -92,7 +92,7 @@ export function AdminSidebar({ newBookingsCount, newInquiriesCount }: Props) {
 
       {/* Admin badge */}
       <div className="shrink-0 border-t border-white/10 px-4 py-3">
-        <p className="text-[10px] font-mono text-white/25 tracking-widest uppercase">Admin Panel v1</p>
+        <p className="text-[10px] text-white/25 tracking-widest uppercase">Admin Panel v1</p>
       </div>
     </aside>
   );

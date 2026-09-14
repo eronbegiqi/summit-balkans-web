@@ -127,7 +127,7 @@ export function HistoricalTimeline() {
       {/* ── Desktop: GSAP horizontal scroll ── */}
       <div ref={pinRef} className="py-20 md:py-28 hidden md:block overflow-hidden">
         <div className="max-w-content mx-auto px-5 md:px-10 mb-12">
-          <div className="font-mono text-[11px] font-medium tracking-[0.14em] uppercase text-terra mb-3">
+          <div className="text-[11px] font-medium tracking-[0.14em] uppercase text-terra mb-3">
             The Story
           </div>
           <h2 className="font-fraunces text-[clamp(2rem,4vw,2.8rem)] font-bold tracking-tight text-white">
@@ -144,7 +144,7 @@ export function HistoricalTimeline() {
 
         <div className="flex items-center gap-2 px-10 mt-2">
           <div className="w-12 h-px bg-white/20" />
-          <span className="font-mono text-[10px] text-white/25 uppercase tracking-widest">
+          <span className="text-[10px] text-white/25 uppercase tracking-widest">
             Scroll to explore
           </span>
         </div>
@@ -153,7 +153,7 @@ export function HistoricalTimeline() {
       {/* ── Mobile: vertical stack ── */}
       <div className="md:hidden py-16 px-5">
         <div className="mb-10">
-          <div className="font-mono text-[11px] font-medium tracking-[0.14em] uppercase text-terra mb-3">
+          <div className="text-[11px] font-medium tracking-[0.14em] uppercase text-terra mb-3">
             The Story
           </div>
           <h2 className="font-fraunces text-[clamp(2rem,8vw,2.8rem)] font-bold tracking-tight text-white">

@@ -101,7 +101,7 @@ export default function ContactPage() {
                       <Icon className="w-4 h-4 text-brand" strokeWidth={1.5} />
                     </div>
                     <div>
-                      <div className="font-mono text-[11px] text-ink/40 tracking-[0.08em] uppercase mb-0.5">{item.label}</div>
+                      <div className="text-[11px] text-ink/40 tracking-[0.08em] uppercase mb-0.5">{item.label}</div>
                       <div className="text-sm font-semibold text-ink leading-relaxed">{item.value}</div>
                     </div>
                   </div>

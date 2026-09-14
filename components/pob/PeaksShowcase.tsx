@@ -34,7 +34,7 @@ export function PeaksShowcase() {
     <section id="highlights" className="py-20 md:py-28 bg-white">
       <div className="max-w-content mx-auto px-5 md:px-10">
         <div className="mb-12">
-          <div className="font-mono text-[11px] font-medium tracking-[0.14em] uppercase text-terra mb-3">
+          <div className="text-[11px] font-medium tracking-[0.14em] uppercase text-terra mb-3">
             Iconic Peaks
           </div>
           <h2 className="font-fraunces text-[clamp(2rem,4vw,2.8rem)] font-bold tracking-tight">
@@ -67,7 +67,7 @@ export function PeaksShowcase() {
 
               {/* Content */}
               <div className="p-5">
-                <div className="font-mono text-[10px] uppercase tracking-[0.12em] text-terra mb-1.5">
+                <div className="text-[10px] uppercase tracking-[0.12em] text-terra mb-1.5">
                   {peak.country}
                 </div>
                 <h3 className="font-fraunces text-xl font-bold tracking-tight mb-2">

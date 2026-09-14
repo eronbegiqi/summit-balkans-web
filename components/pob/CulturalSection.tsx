@@ -39,7 +39,7 @@ export function CulturalSection() {
               <p className="font-fraunces text-[1.5rem] leading-[1.4] font-medium text-ink/80 italic mb-3">
                 &ldquo;Generations of families maintaining ancient lifestyles.&rdquo;
               </p>
-              <cite className="font-mono text-[11px] text-ink/40 not-italic uppercase tracking-[0.12em]">
+              <cite className="text-[11px] text-ink/40 not-italic uppercase tracking-[0.12em]">
                 From the trail guidebook
               </cite>
             </blockquote>
@@ -47,7 +47,7 @@ export function CulturalSection() {
 
           {/* Right — three pillars */}
           <div>
-            <div className="font-mono text-[11px] font-medium tracking-[0.14em] uppercase text-terra mb-4">
+            <div className="text-[11px] font-medium tracking-[0.14em] uppercase text-terra mb-4">
               Cultural Experience
             </div>
             <h2 className="font-fraunces text-[clamp(2rem,4vw,2.8rem)] font-bold tracking-tight mb-6 leading-tight">

@@ -49,7 +49,7 @@ export function PoBFAQ() {
         <div className="grid grid-cols-1 lg:grid-cols-[280px_1fr] gap-12 lg:gap-20">
           {/* Left sticky label */}
           <div className="lg:sticky lg:top-[128px] lg:self-start">
-            <div className="font-mono text-[11px] font-medium tracking-[0.14em] uppercase text-terra mb-3">
+            <div className="text-[11px] font-medium tracking-[0.14em] uppercase text-terra mb-3">
               FAQ
             </div>
             <h2 className="font-fraunces text-[clamp(1.8rem,3vw,2.4rem)] font-bold tracking-tight leading-tight mb-5">

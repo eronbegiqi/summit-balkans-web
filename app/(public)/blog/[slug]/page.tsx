@@ -93,7 +93,7 @@ export default async function BlogPostPage({
           </Link>
 
           <div className="flex items-center gap-3 mb-4">
-            <span className="font-mono text-[10px] px-2 py-0.5 rounded border border-divider text-terra tracking-[0.06em] uppercase">
+            <span className="text-[10px] px-2 py-0.5 rounded border border-divider text-terra tracking-[0.06em] uppercase">
               {CATEGORY_LABELS[post.category] ?? post.category}
             </span>
             {post.readingTimeMinutes && (

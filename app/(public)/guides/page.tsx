@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import { Users } from "lucide-react";
 import { SectionLabel } from "@/components/ui/SectionLabel";
 
 export const metadata: Metadata = {
@@ -29,12 +30,7 @@ export default function GuidesPage() {
         <div className="max-w-content mx-auto px-10">
           <div className="border-2 border-divider rounded-card-hero bg-white p-16 text-center max-w-2xl mx-auto">
             <div className="w-16 h-16 bg-forest/10 rounded-full flex items-center justify-center mx-auto mb-6">
-              <svg className="w-8 h-8 text-forest" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
-                <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/>
-                <circle cx="9" cy="7" r="4"/>
-                <path d="M23 21v-2a4 4 0 0 0-3-3.87"/>
-                <path d="M16 3.13a4 4 0 0 1 0 7.75"/>
-              </svg>
+              <Users className="w-8 h-8 text-forest" strokeWidth={1.5} />
             </div>
             <h2 className="font-fraunces text-3xl font-bold tracking-tight mb-4">Guide profiles coming soon</h2>
             <p className="text-ink/55 mb-8 leading-relaxed">
