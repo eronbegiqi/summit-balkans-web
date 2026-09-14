@@ -126,6 +126,11 @@ export default async function TourDetailPage({ params }: { params: Promise<{ slu
       ? tour.tourVariant.charAt(0) + tour.tourVariant.slice(1).toLowerCase()
       : null;
 
+  // Admin's FAQ editor can leave a blank {question:"", answer:""} row when a
+  // field is added but never filled in — filter those out before deciding
+  // whether the FAQ section has anything to show.
+  const faqItems = tour.faq?.filter((item) => item.question.trim() && item.answer.trim()) ?? [];
+
   const tourUrl = `${SITE_URL}/tours/${tour.slug}`;
   const offers =
     deps.length > 0
@@ -171,17 +176,17 @@ export default async function TourDetailPage({ params }: { params: Promise<{ slu
           { name: tour.title, url: tourUrl },
         ])}
       />
-      {tour.faq && tour.faq.length > 0 && <JsonLd data={faqJsonLd(tour.faq)} />}
+      {faqItems.length > 0 && <JsonLd data={faqJsonLd(faqItems)} />}
 
       {/* Hero */}
       <section className="relative h-[55vh] min-h-[400px] bg-dark overflow-hidden pt-[72px]">
         {/* eslint-disable-next-line @next/next/no-img-element */}
         <img
-          src={tour.featuredImageUrl ? `${tour.featuredImageUrl}&w=1400` : "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=1400&q=80"}
+          src={tour.featuredImageUrl || "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=1400&q=80"}
           alt={tour.title}
-          className="absolute inset-0 w-full h-full object-cover opacity-60"
+          className="absolute inset-0 w-full h-full object-cover"
         />
-        <div className="absolute inset-0 bg-gradient-to-t from-dark/80 via-dark/20 to-transparent" />
+        <div className="absolute inset-0 bg-gradient-to-t from-dark/90 via-dark/30 to-dark/10" />
         <div className="absolute bottom-0 left-0 right-0 max-w-content mx-auto px-6 md:px-10 pb-10">
           <div className="flex gap-2 mb-3">
             <span className="font-mono text-[11px] font-semibold px-2 py-1 rounded tracking-[0.06em] uppercase bg-brand text-white">
@@ -430,11 +435,11 @@ export default async function TourDetailPage({ params }: { params: Promise<{ slu
           <EmergencyContactsCompact />
 
           {/* FAQ */}
-          {tour.faq && tour.faq.length > 0 && (
+          {faqItems.length > 0 && (
             <section>
               <SectionLabel>FAQ</SectionLabel>
               <div className="space-y-4 mt-4">
-                {tour.faq.map((item, i) => (
+                {faqItems.map((item, i) => (
                   <div key={i} className="border-b border-divider pb-4">
                     <p className="font-semibold mb-1">{item.question}</p>
                     <p className="text-sm text-ink/70">{item.answer}</p>
