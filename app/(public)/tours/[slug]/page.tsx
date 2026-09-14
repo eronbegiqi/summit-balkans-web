@@ -127,9 +127,10 @@ export default async function TourDetailPage({ params }: { params: Promise<{ slu
       : null;
 
   // Admin's FAQ editor can leave a blank {question:"", answer:""} row when a
-  // field is added but never filled in — filter those out before deciding
-  // whether the FAQ section has anything to show.
-  const faqItems = tour.faq?.filter((item) => item.question.trim() && item.answer.trim()) ?? [];
+  // field is added but never filled in, and some older rows are missing a
+  // key entirely — filter those out before deciding whether the FAQ section
+  // has anything to show.
+  const faqItems = tour.faq?.filter((item) => item?.question?.trim() && item?.answer?.trim()) ?? [];
 
   const tourUrl = `${SITE_URL}/tours/${tour.slug}`;
   const offers =
