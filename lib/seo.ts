@@ -29,6 +29,10 @@ export function organizationJsonLd() {
   };
 }
 
+export function toISODate(value: Date | string): string {
+  return (value instanceof Date ? value : new Date(value)).toISOString().slice(0, 10);
+}
+
 export function breadcrumbJsonLd(items: { name: string; url: string }[]) {
   return {
     "@context": "https://schema.org",
