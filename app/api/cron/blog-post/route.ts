@@ -9,6 +9,7 @@ import { blogPosts } from "@/lib/db/schema";
 import { desc, eq } from "drizzle-orm";
 import { BlogDraftReady } from "@/emails/BlogDraftReady";
 import { SITE_URL } from "@/lib/seo";
+import { estimateReadingMinutes } from "@/lib/utils";
 
 const getResend = () => new Resend(process.env.RESEND_API_KEY ?? '');
 const FROM = process.env.RESEND_FROM ?? "Summit Balkans <info@summitbalkans.com>";
@@ -82,11 +83,6 @@ async function uniqueSlug(base: string): Promise<string> {
     slug = `${base}-${i++}`;
   }
   return slug;
-}
-
-function estimateReadingMinutes(html: string): number {
-  const words = html.replace(/<[^>]+>/g, " ").split(/\s+/).filter(Boolean).length;
-  return Math.max(3, Math.round(words / 200));
 }
 
 const WEB_SEARCH_TOOL = { type: "web_search_20260209" as const, name: "web_search" as const, max_uses: 8 };

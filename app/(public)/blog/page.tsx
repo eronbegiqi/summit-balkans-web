@@ -8,6 +8,8 @@ export const metadata: Metadata = {
   description: "Stories, guides, and trail reports from Summit Balkans guides and travellers.",
 };
 
+export const revalidate = 300;
+
 const CATEGORY_LABELS: Record<string, string> = {
   TRAVEL_TIPS: "Travel Tips",
   DESTINATION_GUIDE: "Destination Guide",
