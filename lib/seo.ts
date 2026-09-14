@@ -15,8 +15,10 @@ export function organizationJsonLd() {
       "Small group guided hiking tours in Albania, Montenegro & Kosovo. Local guides, real trails, no hidden costs.",
     address: {
       "@type": "PostalAddress",
-      streetAddress: CONTACT.address,
-      addressCountry: "Kosovo",
+      streetAddress: "Evlia Qelebia",
+      addressLocality: "Mitrovica e Veriut",
+      postalCode: "40000",
+      addressCountry: "XK",
     },
     geo: {
       "@type": "GeoCoordinates",
@@ -25,8 +27,13 @@ export function organizationJsonLd() {
     },
     telephone: CONTACT.phone,
     email: CONTACT.email,
+    priceRange: "€€",
     sameAs: [CONTACT.instagram, CONTACT.facebook, CONTACT.youtube, CONTACT.googleReviewsUrl],
   };
+}
+
+export function toISODate(value: Date | string): string {
+  return (value instanceof Date ? value : new Date(value)).toISOString().slice(0, 10);
 }
 
 export function breadcrumbJsonLd(items: { name: string; url: string }[]) {

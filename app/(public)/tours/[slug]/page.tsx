@@ -12,7 +12,7 @@ import { formatPrice } from "@/lib/utils";
 import { parseJsonField } from "@/lib/db/utils";
 import { Clock, Mountain, Users, ArrowRight, MapPin, CheckCircle2, XCircle, Calendar, Backpack } from "lucide-react";
 import { JsonLd } from "@/components/seo/JsonLd";
-import { SITE_URL, breadcrumbJsonLd, faqJsonLd } from "@/lib/seo";
+import { SITE_URL, breadcrumbJsonLd, faqJsonLd, toISODate } from "@/lib/seo";
 
 export const revalidate = 300;
 
@@ -136,7 +136,7 @@ export default async function TourDetailPage({ params }: { params: Promise<{ slu
           priceCurrency: "EUR",
           availability:
             dep.status === "SOLD_OUT" ? "https://schema.org/SoldOut" : "https://schema.org/InStock",
-          validThrough: String(dep.startDate),
+          validThrough: toISODate(dep.startDate),
         }))
       : [
           {
