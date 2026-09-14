@@ -133,7 +133,15 @@ export function Footer() {
           {/* Bottom bar */}
           <div className="border-t border-white/20 pt-6 flex flex-col sm:flex-row items-center justify-between gap-3">
             <p className="text-xs text-white/25 font-mono order-2 sm:order-1">
-              © {new Date().getFullYear()} Summit Balkans. All rights reserved.
+              © {new Date().getFullYear()} Summit Balkans. All rights reserved. Site by{" "}
+              <a
+                href="https://www.eronworks.xyz/"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-white/40 hover:text-white/70 transition-colors"
+              >
+                Eron Works
+              </a>
             </p>
             <div className="flex flex-wrap gap-4 order-1 sm:order-2 items-center">
               <Link href="/legal/booking-terms" className="text-xs text-white/25 no-underline hover:text-white/55 transition-colors font-mono">
