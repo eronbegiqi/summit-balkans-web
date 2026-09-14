@@ -72,7 +72,7 @@ export default async function BlogPage() {
                   )}
                   <div className="p-6">
                     <div className="flex items-center gap-3 mb-3">
-                      <span className="font-mono text-[10px] px-2 py-0.5 rounded border border-divider text-terra tracking-[0.06em] uppercase">
+                      <span className="text-[10px] px-2 py-0.5 rounded border border-divider text-terra tracking-[0.06em] uppercase">
                         {CATEGORY_LABELS[post.category] ?? post.category}
                       </span>
                       {post.publishedAt && (

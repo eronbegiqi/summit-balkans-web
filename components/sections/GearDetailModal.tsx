@@ -50,7 +50,7 @@ export function GearDetailModal({ item }: { item: GearItem }) {
           <p className="text-[13px] text-ink/55 leading-[1.5] mb-3.5">{item.description.slice(0, 60)}…</p>
           <div className="flex gap-2 flex-wrap mb-4">
             {item.tags.map((tag) => (
-              <span key={tag} className="font-mono text-[10px] px-2 py-0.5 rounded border border-divider text-ink/45 tracking-[0.05em] uppercase">
+              <span key={tag} className="text-[10px] px-2 py-0.5 rounded border border-divider text-ink/45 tracking-[0.05em] uppercase">
                 {tag}
               </span>
             ))}
@@ -125,7 +125,7 @@ export function GearDetailModal({ item }: { item: GearItem }) {
 
                 {/* Specs */}
                 <div className="mb-5">
-                  <div className="font-mono text-[11px] text-ink/40 tracking-[0.1em] uppercase mb-2.5">Specs</div>
+                  <div className="text-[11px] text-ink/40 tracking-[0.1em] uppercase mb-2.5">Specs</div>
                   {Object.entries(item.specs).map(([k, v]) => (
                     <div key={k} className="flex justify-between py-2 border-b border-divider last:border-0 text-[13px]">
                       <span className="text-ink/50">{k}</span>
@@ -136,7 +136,7 @@ export function GearDetailModal({ item }: { item: GearItem }) {
 
                 {/* Day rate calculator */}
                 <div className="bg-white border-2 border-divider rounded-xl p-4 sm:p-5 mt-5">
-                  <div className="font-mono text-[11px] text-ink/40 tracking-[0.1em] uppercase mb-3.5">Day Rate Calculator</div>
+                  <div className="text-[11px] text-ink/40 tracking-[0.1em] uppercase mb-3.5">Day Rate Calculator</div>
                   <div className="flex items-center gap-3 mb-3.5">
                     <span className="text-sm flex-1">Number of days</span>
                     <div className="flex items-center border-2 border-divider rounded-lg overflow-hidden">

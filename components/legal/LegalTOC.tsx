@@ -34,7 +34,7 @@ export function LegalTOC({ headings }: Props) {
 
   return (
     <nav className="sticky top-28 sticky-toc hidden xl:block" aria-label="Table of contents">
-      <p className="font-mono text-[10px] uppercase tracking-[0.12em] text-ink/35 mb-4">
+      <p className="text-[10px] uppercase tracking-[0.12em] text-ink/35 mb-4">
         On this page
       </p>
       <ul className="list-none space-y-1.5">

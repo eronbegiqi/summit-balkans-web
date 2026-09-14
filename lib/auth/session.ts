@@ -1,8 +1,11 @@
 import { SignJWT, jwtVerify } from 'jose';
 import { cookies } from 'next/headers';
 
-const COOKIE_NAME = 'summit_admin_session';
-const TTL_SECONDS = 60 * 60 * 24 * 7; // 7 days
+export const SESSION_COOKIE_NAME = 'summit_admin_session';
+export const SESSION_TTL_SECONDS = 60 * 60 * 24 * 30; // 30 days, renewed on every request while active (see proxy.ts)
+
+const COOKIE_NAME = SESSION_COOKIE_NAME;
+const TTL_SECONDS = SESSION_TTL_SECONDS;
 
 function getSecret() {
   const secret = process.env.ADMIN_JWT_SECRET;

@@ -77,7 +77,7 @@ export default async function OffersPage() {
 
                   <h3 className="font-fraunces text-xl font-bold tracking-tight mb-1">{offer.name}</h3>
                   {offer.tagline && (
-                    <p className="font-mono text-xs text-brand uppercase tracking-wider mb-3">{offer.tagline}</p>
+                    <p className="text-xs text-brand uppercase tracking-wider mb-3">{offer.tagline}</p>
                   )}
                   {offer.description && (
                     <p className="text-sm text-ink/65 leading-relaxed mb-5 flex-1">{offer.description}</p>

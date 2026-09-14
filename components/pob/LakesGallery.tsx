@@ -28,7 +28,7 @@ export function LakesGallery() {
   return (
     <section className="py-20 md:py-28 bg-bone overflow-hidden">
       <div className="max-w-content mx-auto px-5 md:px-10 mb-10">
-        <div className="font-mono text-[11px] font-medium tracking-[0.14em] uppercase text-terra mb-3">
+        <div className="text-[11px] font-medium tracking-[0.14em] uppercase text-terra mb-3">
           Lakes & Valleys
         </div>
         <div className="flex items-end justify-between gap-4">
@@ -70,7 +70,7 @@ export function LakesGallery() {
               />
               <div className="absolute inset-0 bg-gradient-to-t from-ink/60 to-transparent pointer-events-none" />
               <div className="absolute bottom-5 left-5">
-                <div className="font-mono text-[10px] uppercase tracking-[0.14em] text-white/55 mb-1">
+                <div className="text-[10px] uppercase tracking-[0.14em] text-white/55 mb-1">
                   {slide.country}
                 </div>
                 <div className="font-fraunces text-xl font-bold text-white">{slide.caption}</div>

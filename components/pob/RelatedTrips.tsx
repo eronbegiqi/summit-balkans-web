@@ -10,7 +10,7 @@ export function RelatedTrips() {
     <section className="py-20 md:py-28 bg-white">
       <div className="max-w-content mx-auto px-5 md:px-10">
         <div className="mb-10">
-          <div className="font-mono text-[11px] font-medium tracking-[0.14em] uppercase text-terra mb-3">
+          <div className="text-[11px] font-medium tracking-[0.14em] uppercase text-terra mb-3">
             Also Consider
           </div>
           <h2 className="font-fraunces text-[clamp(2rem,4vw,2.8rem)] font-bold tracking-tight">
@@ -34,7 +34,7 @@ export function RelatedTrips() {
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-ink/60 to-transparent" />
                 <div className="absolute bottom-3 left-4">
-                  <span className="font-mono text-[10px] text-white/60 uppercase tracking-wider">
+                  <span className="text-[10px] text-white/60 uppercase tracking-wider">
                     {tour.country.join(" · ")}
                   </span>
                 </div>
@@ -57,7 +57,7 @@ export function RelatedTrips() {
           {/* Custom itinerary CTA */}
           <div className="rounded-card-hero border-2 border-dashed border-divider bg-bone p-6 flex flex-col justify-between">
             <div>
-              <div className="font-mono text-[11px] uppercase tracking-[0.12em] text-terra mb-3">
+              <div className="text-[11px] uppercase tracking-[0.12em] text-terra mb-3">
                 Custom Option
               </div>
               <h3 className="font-fraunces text-xl font-bold tracking-tight mb-3">

@@ -12,6 +12,8 @@ export const metadata: Metadata = {
   description: "Summit Balkans is a mountain adventure and trekking organisation based in the heart of the Western Balkans.",
 };
 
+export const revalidate = 300;
+
 const WHAT_WE_DO = [
   "Guided multi-day trekking tours led by experienced local guides who combine safety, knowledge, and storytelling",
   "Self-guided trekking packages designed for independent hikers who want flexibility with structured logistical support",
@@ -101,7 +103,7 @@ export default async function AboutPage() {
 style={{ backgroundImage: "url('/images/about-hero.webp')" }}        />
         <div className="absolute inset-0 bg-black/40" />
         <div className="relative z-10 max-w-content mx-auto px-6 pt-[72px] w-full">
-          <div className="font-mono text-[11px] text-gold tracking-[0.14em] uppercase mb-4">Who We Are</div>
+          <div className="text-[11px] text-gold tracking-[0.14em] uppercase mb-4">Who We Are</div>
           <h1
             className="font-fraunces font-bold text-white tracking-tight leading-[1.0] max-w-[760px] mb-6"
             style={{ fontSize: "clamp(42px, 5.5vw, 80px)", fontVariationSettings: "'opsz' 72" }}
@@ -149,7 +151,7 @@ style={{ backgroundImage: "url('/images/about-hero.webp')" }}        />
                 {[["2018", "Founded"], ["60+", "Routes"], ["5.0", "Rating"], ["3", "Countries"]].map(([num, label]) => (
                   <div key={label} className="text-center border-r border-divider last:border-0 px-4">
                     <div className="font-fraunces text-3xl font-bold mb-1">{num}</div>
-                    <div className="font-mono text-[11px] text-ink/40 tracking-[0.08em] uppercase">{label}</div>
+                    <div className="text-[11px] text-ink/40 tracking-[0.08em] uppercase">{label}</div>
                   </div>
                 ))}
               </div>
@@ -290,7 +292,7 @@ style={{ backgroundImage: "url('/images/about-hero.webp')" }}        />
                       {g.name.trim().charAt(0).toUpperCase()}
                     </div>
                   )}
-                  <div className="font-mono text-[10px] text-terra mb-1 tracking-[0.06em]">
+                  <div className="text-[10px] text-terra mb-1 tracking-[0.06em]">
                     {COUNTRY_FLAG[g.country] ?? ""} {g.country}
                   </div>
                   <h3 className="font-fraunces text-lg font-bold mb-0.5">{g.name}</h3>
@@ -300,14 +302,14 @@ style={{ backgroundImage: "url('/images/about-hero.webp')" }}        />
                   {g.languages && g.languages.length > 0 && (
                     <div className="flex gap-1.5 flex-wrap mb-3">
                       {g.languages.map((l) => (
-                        <span key={l} className="text-[10px] px-2 py-0.5 rounded border border-divider text-ink/50 font-mono">{l}</span>
+                        <span key={l} className="text-[10px] px-2 py-0.5 rounded border border-divider text-ink/50">{l}</span>
                       ))}
                     </div>
                   )}
                   {g.certifications && g.certifications.length > 0 && (
                     <div className="flex gap-1.5 flex-wrap mb-4">
                       {g.certifications.map((c) => (
-                        <span key={c} className="text-[10px] px-2 py-0.5 rounded bg-forest/10 text-forest font-mono font-medium">{c}</span>
+                        <span key={c} className="text-[10px] px-2 py-0.5 rounded bg-forest/10 text-forest font-medium">{c}</span>
                       ))}
                     </div>
                   )}

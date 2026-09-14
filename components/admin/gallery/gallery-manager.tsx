@@ -2,7 +2,7 @@
 
 import { useEffect, useState, useTransition } from 'react';
 import { useRouter } from 'next/navigation';
-import { ArrowDown, ArrowUp, ImageIcon, Trash2 } from 'lucide-react';
+import { ArrowDown, ArrowUp, ImageIcon, LayoutGrid, List, Trash2 } from 'lucide-react';
 import { toast } from 'sonner';
 import { GalleryUploader } from '@/components/admin/gallery/gallery-uploader';
 import { ConfirmDialog } from '@/components/admin/confirm-dialog';
@@ -23,6 +23,7 @@ type Props = {
 export function GalleryManager({ images: initialImages }: Props) {
   const [images, setImages] = useState(initialImages);
   const [pendingDeleteId, setPendingDeleteId] = useState<number | null>(null);
+  const [viewMode, setViewMode] = useState<'grid' | 'list'>('grid');
   const [, startTransition] = useTransition();
   const router = useRouter();
 
@@ -84,34 +85,118 @@ export function GalleryManager({ images: initialImages }: Props) {
           description="Upload photos above — they'll show up here and on the homepage/gallery page."
         />
       ) : (
-        <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-3">
-          {images.map((img, index) => (
-            <div key={img.id} className="overflow-hidden rounded-xl border border-gray-200 bg-white">
-              {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img src={img.imageUrl} alt={img.altText ?? ''} className="h-44 w-full object-cover" />
+        <>
+          <div className="flex items-center justify-end gap-1 rounded-lg border border-gray-200 bg-white p-1 w-fit ml-auto">
+            <button
+              type="button"
+              onClick={() => setViewMode('grid')}
+              aria-label="Grid view"
+              aria-pressed={viewMode === 'grid'}
+              className={`flex h-8 w-8 items-center justify-center rounded-md ${viewMode === 'grid' ? 'bg-emerald-50 text-emerald-700' : 'text-gray-400 hover:bg-gray-50'}`}
+            >
+              <LayoutGrid className="h-4 w-4" />
+            </button>
+            <button
+              type="button"
+              onClick={() => setViewMode('list')}
+              aria-label="List view"
+              aria-pressed={viewMode === 'list'}
+              className={`flex h-8 w-8 items-center justify-center rounded-md ${viewMode === 'list' ? 'bg-emerald-50 text-emerald-700' : 'text-gray-400 hover:bg-gray-50'}`}
+            >
+              <List className="h-4 w-4" />
+            </button>
+          </div>
 
-              <div className="space-y-2 p-4">
-                <input
-                  defaultValue={img.title ?? ''}
-                  placeholder="Title (optional)"
-                  onBlur={(e) => handleFieldBlur(img.id, 'title', e.target.value)}
-                  className="w-full rounded-lg border border-gray-200 px-2.5 py-1.5 text-sm text-gray-900 focus:border-emerald-400 focus:outline-none"
-                />
-                <input
-                  defaultValue={img.altText ?? ''}
-                  placeholder="Alt text (for accessibility & SEO)"
-                  onBlur={(e) => handleFieldBlur(img.id, 'altText', e.target.value)}
-                  className="w-full rounded-lg border border-gray-200 px-2.5 py-1.5 text-xs text-gray-500 focus:border-emerald-400 focus:outline-none"
-                />
+          {viewMode === 'grid' ? (
+            <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-3">
+              {images.map((img, index) => (
+                <div key={img.id} className="overflow-hidden rounded-xl border border-gray-200 bg-white">
+                  {/* eslint-disable-next-line @next/next/no-img-element */}
+                  <img src={img.imageUrl} alt={img.altText ?? ''} className="h-44 w-full object-cover" />
 
-                <PublishToggle
-                  published={img.published ?? false}
-                  onToggle={(published) => handleTogglePublished(img.id, published)}
-                  label="Published"
-                />
+                  <div className="space-y-2 p-4">
+                    <input
+                      defaultValue={img.title ?? ''}
+                      placeholder="Title (optional)"
+                      onBlur={(e) => handleFieldBlur(img.id, 'title', e.target.value)}
+                      className="w-full rounded-lg border border-gray-200 px-2.5 py-1.5 text-sm text-gray-900 focus:border-emerald-400 focus:outline-none"
+                    />
+                    <input
+                      defaultValue={img.altText ?? ''}
+                      placeholder="Alt text (for accessibility & SEO)"
+                      onBlur={(e) => handleFieldBlur(img.id, 'altText', e.target.value)}
+                      className="w-full rounded-lg border border-gray-200 px-2.5 py-1.5 text-xs text-gray-500 focus:border-emerald-400 focus:outline-none"
+                    />
 
-                <div className="flex items-center justify-between pt-1">
-                  <div className="flex gap-1">
+                    <PublishToggle
+                      published={img.published ?? false}
+                      onToggle={(published) => handleTogglePublished(img.id, published)}
+                      label="Published"
+                    />
+
+                    <div className="flex items-center justify-between pt-1">
+                      <div className="flex gap-1">
+                        <button
+                          type="button"
+                          onClick={() => moveImage(index, -1)}
+                          disabled={index === 0}
+                          aria-label="Move earlier"
+                          className="flex h-8 w-8 items-center justify-center rounded-lg border border-gray-200 text-gray-500 hover:bg-gray-50 disabled:cursor-not-allowed disabled:opacity-30"
+                        >
+                          <ArrowUp className="h-4 w-4" />
+                        </button>
+                        <button
+                          type="button"
+                          onClick={() => moveImage(index, 1)}
+                          disabled={index === images.length - 1}
+                          aria-label="Move later"
+                          className="flex h-8 w-8 items-center justify-center rounded-lg border border-gray-200 text-gray-500 hover:bg-gray-50 disabled:cursor-not-allowed disabled:opacity-30"
+                        >
+                          <ArrowDown className="h-4 w-4" />
+                        </button>
+                      </div>
+                      <button
+                        type="button"
+                        onClick={() => setPendingDeleteId(img.id)}
+                        className="flex h-8 w-8 items-center justify-center rounded-lg border border-red-200 text-red-600 hover:bg-red-50"
+                        aria-label="Delete image"
+                      >
+                        <Trash2 className="h-4 w-4" />
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
+          ) : (
+            <div className="divide-y divide-gray-100 rounded-xl border border-gray-200 bg-white">
+              {images.map((img, index) => (
+                <div key={img.id} className="flex items-center gap-4 p-3">
+                  {/* eslint-disable-next-line @next/next/no-img-element */}
+                  <img src={img.imageUrl} alt={img.altText ?? ''} className="h-14 w-14 shrink-0 rounded-lg object-cover" />
+
+                  <div className="grid flex-1 grid-cols-2 gap-2 min-w-0">
+                    <input
+                      defaultValue={img.title ?? ''}
+                      placeholder="Title (optional)"
+                      onBlur={(e) => handleFieldBlur(img.id, 'title', e.target.value)}
+                      className="w-full rounded-lg border border-gray-200 px-2.5 py-1.5 text-sm text-gray-900 focus:border-emerald-400 focus:outline-none"
+                    />
+                    <input
+                      defaultValue={img.altText ?? ''}
+                      placeholder="Alt text (for accessibility & SEO)"
+                      onBlur={(e) => handleFieldBlur(img.id, 'altText', e.target.value)}
+                      className="w-full rounded-lg border border-gray-200 px-2.5 py-1.5 text-xs text-gray-500 focus:border-emerald-400 focus:outline-none"
+                    />
+                  </div>
+
+                  <PublishToggle
+                    published={img.published ?? false}
+                    onToggle={(published) => handleTogglePublished(img.id, published)}
+                    label="Published"
+                  />
+
+                  <div className="flex shrink-0 gap-1">
                     <button
                       type="button"
                       onClick={() => moveImage(index, -1)}
@@ -130,20 +215,20 @@ export function GalleryManager({ images: initialImages }: Props) {
                     >
                       <ArrowDown className="h-4 w-4" />
                     </button>
+                    <button
+                      type="button"
+                      onClick={() => setPendingDeleteId(img.id)}
+                      className="flex h-8 w-8 items-center justify-center rounded-lg border border-red-200 text-red-600 hover:bg-red-50"
+                      aria-label="Delete image"
+                    >
+                      <Trash2 className="h-4 w-4" />
+                    </button>
                   </div>
-                  <button
-                    type="button"
-                    onClick={() => setPendingDeleteId(img.id)}
-                    className="flex h-8 w-8 items-center justify-center rounded-lg border border-red-200 text-red-600 hover:bg-red-50"
-                    aria-label="Delete image"
-                  >
-                    <Trash2 className="h-4 w-4" />
-                  </button>
                 </div>
-              </div>
+              ))}
             </div>
-          ))}
-        </div>
+          )}
+        </>
       )}
 
       <ConfirmDialog

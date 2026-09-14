@@ -39,7 +39,7 @@ export function PoBHero() {
       {/* Content */}
       <div className="relative z-10 max-w-content mx-auto px-5 md:px-10 w-full flex flex-col items-center text-center">
         {/* Eyebrow */}
-        <div className="font-mono text-[11px] tracking-[0.22em] uppercase text-white/65 mb-5">
+        <div className="text-[11px] tracking-[0.22em] uppercase text-white/65 mb-5">
           ★ Flagship Experience
         </div>
 
@@ -69,7 +69,7 @@ export function PoBHero() {
               <span className="font-mono text-sm font-semibold text-white tracking-wider">
                 {value}
               </span>
-              <span className="font-mono text-[10px] text-white/50 uppercase tracking-widest mt-0.5">
+              <span className="text-[10px] text-white/50 uppercase tracking-widest mt-0.5">
                 {label}
               </span>
             </div>

@@ -72,7 +72,7 @@ export function WhereWeGo() {
 
               {/* Text */}
               <div className="absolute bottom-0 left-0 right-0 p-5 md:p-7">
-                <div className="font-mono text-[11px] text-warning tracking-[0.14em] uppercase mb-1.5">
+                <div className="text-[11px] text-warning tracking-[0.14em] uppercase mb-1.5">
                   {c.code}
                 </div>
                 <div

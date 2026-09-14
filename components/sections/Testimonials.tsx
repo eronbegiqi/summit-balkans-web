@@ -23,7 +23,7 @@ function TestiCard({ review }: { review: Review }) {
         </div>
         <div>
           <div className="text-sm font-semibold">{review.name}</div>
-          {meta && <div className="text-xs text-ink/45 font-mono">{meta}</div>}
+          {meta && <div className="text-xs text-ink/45">{meta}</div>}
         </div>
       </div>
       {review.reviewUrl && review.source === "GOOGLE" && (
@@ -89,8 +89,7 @@ function DesktopMarquee({ reviews }: { reviews: Review[] }) {
   return (
     <div className="relative overflow-hidden">
       <div
-        className="flex gap-5 w-max"
-        style={{ animation: "marquee 40s linear infinite" }}
+        className="flex gap-5 w-max animate-marquee"
         onMouseEnter={(e) => { (e.currentTarget as HTMLElement).style.animationPlayState = "paused"; }}
         onMouseLeave={(e) => { (e.currentTarget as HTMLElement).style.animationPlayState = "running"; }}
         aria-live="off"
@@ -129,7 +128,7 @@ export function Testimonials({ reviews }: { reviews: Review[] }) {
 
       <style>{`
         @media (prefers-reduced-motion: reduce) {
-          [style*="marquee"] { animation: none !important; }
+          .animate-marquee { animation: none !important; }
         }
       `}</style>
     </section>

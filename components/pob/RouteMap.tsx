@@ -164,7 +164,7 @@ export function RouteMap() {
     <section id="route" className="py-20 md:py-28 bg-bone isolate">
       <div className="max-w-content mx-auto px-5 md:px-10">
         <div className="mb-10">
-          <div className="font-mono text-[11px] font-medium tracking-[0.14em] uppercase text-terra mb-3">
+          <div className="text-[11px] font-medium tracking-[0.14em] uppercase text-terra mb-3">
             The Route
           </div>
           <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4">
@@ -177,7 +177,7 @@ export function RouteMap() {
                 <button
                   key={type}
                   onClick={() => setFilter(type)}
-                  className={`font-mono text-[11px] uppercase tracking-wider px-3 py-1.5 rounded-full border transition-all cursor-pointer ${
+                  className={`text-[11px] uppercase tracking-wider px-3 py-1.5 rounded-full border transition-all cursor-pointer ${
                     filter === type
                       ? "bg-ink text-white border-ink"
                       : "bg-transparent text-ink/55 border-divider hover:border-ink/40"
@@ -195,7 +195,7 @@ export function RouteMap() {
           <div ref={mapRef} className="w-full h-[480px] md:h-[560px]" />
           {!loaded && (
             <div className="absolute inset-0 bg-bone flex items-center justify-center">
-              <div className="font-mono text-sm text-ink/40 animate-pulse">Loading map…</div>
+              <div className="text-sm text-ink/40 animate-pulse">Loading map…</div>
             </div>
           )}
         </div>
@@ -208,14 +208,14 @@ export function RouteMap() {
                 className="w-3 h-3 rounded-full border-2 border-white shadow-sm"
                 style={{ background: color }}
               />
-              <span className="font-mono text-[11px] text-ink/50 uppercase tracking-wider capitalize">
+              <span className="text-[11px] text-ink/50 uppercase tracking-wider capitalize">
                 {type}
               </span>
             </div>
           ))}
           <div className="flex items-center gap-2">
             <div className="w-6 h-0.5 border-t-2 border-dashed border-forest" />
-            <span className="font-mono text-[11px] text-ink/50 uppercase tracking-wider">Trail</span>
+            <span className="text-[11px] text-ink/50 uppercase tracking-wider">Trail</span>
           </div>
         </div>
 
@@ -228,11 +228,11 @@ export function RouteMap() {
             { name: "Plav", country: "Montenegro" },
           ].map(({ name, country }) => (
             <div key={name} className="border-2 border-divider rounded-card p-4 bg-white">
-              <div className="font-mono text-[10px] uppercase tracking-[0.12em] text-terra mb-1">
+              <div className="text-[10px] uppercase tracking-[0.12em] text-terra mb-1">
                 {country}
               </div>
               <div className="font-fraunces text-base font-semibold">{name}</div>
-              <div className="font-mono text-[11px] text-ink/40 mt-1">Starting point</div>
+              <div className="text-[11px] text-ink/40 mt-1">Starting point</div>
             </div>
           ))}
         </div>

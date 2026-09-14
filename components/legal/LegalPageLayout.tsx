@@ -17,7 +17,7 @@ export function LegalPageLayout({ title, lastUpdated, headings, children }: Prop
       <div className="max-w-5xl mx-auto px-4 md:px-8 py-16 md:py-24">
         {/* Hero */}
         <div className="mb-10">
-          <div className="font-mono text-[11px] uppercase tracking-[0.14em] text-brand mb-3">
+          <div className="text-[11px] uppercase tracking-[0.14em] text-brand mb-3">
             Legal
           </div>
           <div className="flex items-start justify-between gap-4 flex-wrap">
@@ -57,15 +57,15 @@ export function LegalPageLayout({ title, lastUpdated, headings, children }: Prop
             </Link>
           </p>
           <div className="flex items-center gap-2 mt-3">
-            <Link href="/legal/booking-terms" className="text-xs text-ink/35 hover:text-ink font-mono transition-colors no-underline">
+            <Link href="/legal/booking-terms" className="text-xs text-ink/35 hover:text-ink transition-colors no-underline">
               Booking Terms
             </Link>
-            <span className="text-ink/20 font-mono">·</span>
-            <Link href="/legal/privacy-policy" className="text-xs text-ink/35 hover:text-ink font-mono transition-colors no-underline">
+            <span className="text-ink/20">·</span>
+            <Link href="/legal/privacy-policy" className="text-xs text-ink/35 hover:text-ink transition-colors no-underline">
               Privacy Policy
             </Link>
-            <span className="text-ink/20 font-mono">·</span>
-            <Link href="/legal/cookie-policy" className="text-xs text-ink/35 hover:text-ink font-mono transition-colors no-underline">
+            <span className="text-ink/20">·</span>
+            <Link href="/legal/cookie-policy" className="text-xs text-ink/35 hover:text-ink transition-colors no-underline">
               Cookie Policy
             </Link>
           </div>

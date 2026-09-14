@@ -412,7 +412,7 @@ export function PrivateTripsForm() {
 
           {/* Sidebar */}
           <div className="relative lg:sticky lg:top-24 bg-dark rounded-2xl p-8 text-white">
-            <div className="font-mono text-[11px] text-white/35 tracking-[0.1em] uppercase mb-4">
+            <div className="text-[11px] text-white/35 tracking-[0.1em] uppercase mb-4">
               What&apos;s included
             </div>
             <ul className="list-none flex flex-col gap-2.5 text-sm text-white/65 mb-8">
@@ -432,7 +432,7 @@ export function PrivateTripsForm() {
             </ul>
 
             <div className="border-t border-white/10 pt-6">
-              <div className="font-mono text-[11px] text-white/35 tracking-[0.1em] uppercase mb-3">
+              <div className="text-[11px] text-white/35 tracking-[0.1em] uppercase mb-3">
                 Indicative pricing
               </div>
               <div className="flex flex-col gap-2 text-sm text-white/50">

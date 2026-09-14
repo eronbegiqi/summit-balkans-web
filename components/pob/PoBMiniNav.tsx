@@ -82,7 +82,7 @@ export function PoBMiniNav() {
               key={id}
               onClick={() => scrollTo(id)}
               className={cn(
-                "font-mono text-[11px] tracking-wider uppercase px-4 py-3.5 border-b-2 transition-all duration-200 bg-transparent border-x-0 border-t-0 cursor-pointer whitespace-nowrap",
+                "text-[11px] tracking-wider uppercase px-4 py-3.5 border-b-2 transition-all duration-200 bg-transparent border-x-0 border-t-0 cursor-pointer whitespace-nowrap",
                 active === id
                   ? "border-b-brand text-brand font-semibold"
                   : "border-b-transparent text-ink/45 hover:text-ink"

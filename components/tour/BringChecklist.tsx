@@ -106,7 +106,7 @@ export function BringChecklist() {
     <div className="mt-14">
       <div className="flex items-end justify-between flex-wrap gap-4 mb-2">
         <div>
-          <div className="font-mono text-[11px] font-medium tracking-[0.14em] uppercase text-terra mb-2.5">
+          <div className="text-[11px] font-medium tracking-[0.14em] uppercase text-terra mb-2.5">
             Pack List
           </div>
           <h3 className="font-fraunces text-[26px] font-bold tracking-tight">

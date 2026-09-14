@@ -11,7 +11,7 @@ export async function PoBReviews() {
     <section className="py-20 md:py-28 bg-bone">
       <div className="max-w-content mx-auto px-5 md:px-10">
         <div className="mb-12">
-          <div className="font-mono text-[11px] font-medium tracking-[0.14em] uppercase text-terra mb-3">
+          <div className="text-[11px] font-medium tracking-[0.14em] uppercase text-terra mb-3">
             Reviews
           </div>
           <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4">
@@ -50,13 +50,13 @@ export async function PoBReviews() {
               {/* Author */}
               <div className="flex items-center gap-3 pt-4 border-t border-divider">
                 <div className="w-9 h-9 rounded-full bg-forest/10 flex items-center justify-center flex-shrink-0">
-                  <span className="font-mono text-[13px] font-bold text-forest">
+                  <span className="text-[13px] font-bold text-forest">
                     {r.avatarInitial}
                   </span>
                 </div>
                 <div className="flex-1">
                   <div className="text-sm font-semibold">{r.name}</div>
-                  {r.country && <div className="font-mono text-[11px] text-ink/40">{r.country}</div>}
+                  {r.country && <div className="text-[11px] text-ink/40">{r.country}</div>}
                 </div>
                 {r.reviewUrl && r.source === "GOOGLE" && (
                   <GoogleReviewBadge href={r.reviewUrl} />

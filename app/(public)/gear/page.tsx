@@ -43,7 +43,7 @@ export default function GearPage() {
         />
         <div className="relative z-10 max-w-content mx-auto px-5 sm:px-6 lg:px-6 py-14 sm:py-16 lg:py-[72px] lg:pb-20 grid grid-cols-1 lg:grid-cols-[minmax(0,1fr)_minmax(320px,480px)] items-center gap-10 sm:gap-12 lg:gap-20">
           <div className="min-w-0">
-            <div className="flex items-center gap-2 font-mono text-[11px] text-gold tracking-[0.14em] uppercase mb-[18px]">
+            <div className="flex items-center gap-2 text-[11px] text-gold tracking-[0.14em] uppercase mb-[18px]">
               <span className="block w-5 h-px bg-gold" />
               Gear Rental
             </div>
@@ -193,7 +193,7 @@ export default function GearPage() {
         <div className="max-w-content mx-auto px-6">
           <div className="bg-forest rounded-2xl px-5 py-8 sm:px-8 sm:py-10 lg:px-14 lg:py-[52px] grid grid-cols-1 lg:grid-cols-[minmax(0,1fr)_auto] items-start lg:items-center gap-8 lg:gap-12">
             <div>
-              <div className="font-mono text-[11px] text-white/45 tracking-[0.12em] uppercase mb-3.5">Bundle Deal</div>
+              <div className="text-[11px] text-white/45 tracking-[0.12em] uppercase mb-3.5">Bundle Deal</div>
               <h3
                 className="font-fraunces font-bold text-white tracking-normal leading-[1.1] mb-3"
                 style={{ fontSize: "clamp(26px, 7vw, 34px)", fontVariationSettings: "'opsz' 32" }}

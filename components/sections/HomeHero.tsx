@@ -27,7 +27,7 @@ export function HomeHero() {
 
       {/* Content */}
       <div className="relative z-10 max-w-content mx-auto px-10 pt-[72px] w-full">
-        <div className="font-mono text-xs font-medium text-gold tracking-[0.12em] uppercase mb-6 flex items-center gap-2">
+        <div className="text-xs font-medium text-gold tracking-[0.12em] uppercase mb-6 flex items-center gap-2">
           <span className="block w-6 h-px bg-gold" />
           Albania · Montenegro · Kosovo
         </div>

@@ -199,7 +199,7 @@ export default function ToursPage() {
 
           {/* Private trips teaser */}
           <div className="mt-16 border-2 border-divider rounded-card-hero overflow-hidden bg-dark p-8 md:p-12 text-center">
-            <div className="font-mono text-[11px] text-gold tracking-[0.12em] uppercase mb-4">Don&apos;t see the right trip?</div>
+            <div className="text-[11px] text-gold tracking-[0.12em] uppercase mb-4">Don&apos;t see the right trip?</div>
             <h2 className="font-fraunces text-3xl md:text-4xl font-bold text-white tracking-tight mb-4">Design your own.</h2>
             <p className="text-base text-white/55 max-w-md mx-auto mb-8">
               Private trips from 2 people, any duration, any destination in the region. We reply within 24 hours.
@@ -235,18 +235,18 @@ function TourCard({ tour, priority = false }: { tour: Tour; priority?: boolean }
         {/* Badges */}
         <div className="absolute top-3 left-3 flex gap-1.5">
           <span className={cn(
-            "font-mono text-[10px] font-semibold px-2 py-1 rounded tracking-[0.06em] uppercase",
+            "text-[10px] font-semibold px-2 py-1 rounded tracking-[0.06em] uppercase",
             isGuided ? "bg-brand text-white" : "bg-terra text-white"
           )}>
             {isGuided ? "Guided" : "Self-Guided"}
           </span>
           {variant && (
-            <span className="font-mono text-[10px] font-medium px-2 py-1 rounded tracking-[0.06em] uppercase bg-ink/70 text-white">
+            <span className="text-[10px] font-medium px-2 py-1 rounded tracking-[0.06em] uppercase bg-ink/70 text-white">
               {variant}
             </span>
           )}
           {tour.isFlagship && (
-            <span className="font-mono text-[10px] font-medium px-2 py-1 rounded tracking-[0.06em] uppercase bg-gold text-ink">
+            <span className="text-[10px] font-medium px-2 py-1 rounded tracking-[0.06em] uppercase bg-gold text-ink">
               Popular
             </span>
           )}
@@ -260,25 +260,27 @@ function TourCard({ tour, priority = false }: { tour: Tour; priority?: boolean }
           <p className="text-sm md:text-base text-ink/60 leading-relaxed mb-5 line-clamp-2">{tour.excerpt}</p>
         )}
 
-        <div className="flex flex-wrap gap-4 mb-5 text-sm text-ink/50">
-          <div className="flex items-center gap-1.5">
-            <Clock className="w-3.5 h-3.5" strokeWidth={1.5} />
+        <div className="flex flex-wrap gap-2 mb-5" role="list" aria-label="Tour details">
+          <span role="listitem" className="inline-flex items-center gap-1.5 rounded-full border border-divider bg-bone px-3 py-1 text-xs font-medium text-ink/60">
+            <Clock className="w-3.5 h-3.5 shrink-0" strokeWidth={1.5} aria-hidden="true" />
             {tour.durationDays} days
-          </div>
+          </span>
           {tour.totalDistanceKm && (
-            <div className="flex items-center gap-1.5">
-              <Mountain className="w-3.5 h-3.5" strokeWidth={1.5} />
+            <span role="listitem" className="inline-flex items-center gap-1.5 rounded-full border border-divider bg-bone px-3 py-1 text-xs font-medium text-ink/60">
+              <Mountain className="w-3.5 h-3.5 shrink-0" strokeWidth={1.5} aria-hidden="true" />
               {Number(tour.totalDistanceKm).toFixed(0)} km
-            </div>
+            </span>
           )}
           {tour.minParticipants && (
-            <div className="flex items-center gap-1.5">
-              <Users className="w-3.5 h-3.5" strokeWidth={1.5} />
+            <span role="listitem" className="inline-flex items-center gap-1.5 rounded-full border border-divider bg-bone px-3 py-1 text-xs font-medium text-ink/60">
+              <Users className="w-3.5 h-3.5 shrink-0" strokeWidth={1.5} aria-hidden="true" />
               Min. {tour.minParticipants} pax
-            </div>
+            </span>
           )}
           {tour.bestSeasonStart && tour.bestSeasonEnd && (
-            <span className="font-mono text-xs">{tour.bestSeasonStart}–{tour.bestSeasonEnd}</span>
+            <span role="listitem" className="inline-flex items-center rounded-full border border-divider bg-bone px-3 py-1 font-mono text-xs font-medium text-ink/60">
+              {tour.bestSeasonStart}–{tour.bestSeasonEnd}
+            </span>
           )}
         </div>
 

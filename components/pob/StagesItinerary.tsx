@@ -13,7 +13,7 @@ export function StagesItinerary() {
       <div className="max-w-content mx-auto px-5 md:px-10">
         <div className="mb-10 flex flex-col sm:flex-row sm:items-end justify-between gap-4">
           <div>
-            <div className="font-mono text-[11px] font-medium tracking-[0.14em] uppercase text-terra mb-3">
+            <div className="text-[11px] font-medium tracking-[0.14em] uppercase text-terra mb-3">
               Day by Day
             </div>
             <h2 className="font-fraunces text-[clamp(2rem,4vw,2.8rem)] font-bold tracking-tight">
@@ -22,7 +22,7 @@ export function StagesItinerary() {
           </div>
           <button
             onClick={() => setAllOpen((v) => !v)}
-            className="font-mono text-[12px] uppercase tracking-[0.1em] text-ink/50 hover:text-ink border-2 border-divider hover:border-ink/40 px-4 py-2 rounded-lg transition-all bg-transparent cursor-pointer whitespace-nowrap"
+            className="text-[12px] uppercase tracking-[0.1em] text-ink/50 hover:text-ink border-2 border-divider hover:border-ink/40 px-4 py-2 rounded-lg transition-all bg-transparent cursor-pointer whitespace-nowrap"
           >
             {allOpen ? "Close All" : "Open All"}
           </button>
@@ -82,7 +82,7 @@ function PoBItineraryAccordion({ forceOpen }: { forceOpen: boolean }) {
             <div className="px-6 pb-6 pl-[72px]">
               <p className="text-[15px] leading-[1.7] text-ink/68">{day.description}</p>
               {day.accommodation && (
-                <p className="mt-3 text-xs text-ink/40 font-mono">
+                <p className="mt-3 text-xs text-ink/40">
                   Accommodation: {day.accommodation}
                 </p>
               )}

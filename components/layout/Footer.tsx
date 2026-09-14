@@ -75,7 +75,7 @@ export function Footer() {
 
             {/* Col 2 — Explore */}
             <div>
-              <div className="font-mono text-[11px] tracking-[0.12em] uppercase text-white/30 mb-5">Explore</div>
+              <div className="text-[11px] tracking-[0.12em] uppercase text-white/30 mb-5">Explore</div>
               <ul className="list-none flex flex-col gap-2.5">
                 {exploreLinks.map((link) => (
                   <li key={link.href}>
@@ -89,7 +89,7 @@ export function Footer() {
 
             {/* Col 3 — Company */}
             <div>
-              <div className="font-mono text-[11px] tracking-[0.12em] uppercase text-white/30 mb-5">Company</div>
+              <div className="text-[11px] tracking-[0.12em] uppercase text-white/30 mb-5">Company</div>
               <ul className="list-none flex flex-col gap-2.5">
                 {companyLinks.map((link) => (
                   <li key={link.href}>
@@ -103,7 +103,7 @@ export function Footer() {
 
             {/* Col 4 — Get in Touch */}
             <div>
-              <div className="font-mono text-[11px] tracking-[0.12em] uppercase text-white/30 mb-5">Get in Touch</div>
+              <div className="text-[11px] tracking-[0.12em] uppercase text-white/30 mb-5">Get in Touch</div>
               <div className="flex flex-col gap-3.5 mb-5">
                 <div className="flex items-start gap-2.5">
                   <MapPin className="w-4 h-4 text-white/30 mt-0.5 flex-shrink-0" strokeWidth={1.5} />
@@ -132,7 +132,7 @@ export function Footer() {
 
           {/* Bottom bar */}
           <div className="border-t border-white/20 pt-6 flex flex-col sm:flex-row items-center justify-between gap-3">
-            <p className="text-xs text-white/25 font-mono order-2 sm:order-1">
+            <p className="text-xs text-white/25 order-2 sm:order-1">
               © {new Date().getFullYear()} Summit Balkans. All rights reserved. Site by{" "}
               <a
                 href="https://www.eronworks.xyz/"
@@ -144,13 +144,13 @@ export function Footer() {
               </a>
             </p>
             <div className="flex flex-wrap gap-4 order-1 sm:order-2 items-center">
-              <Link href="/legal/booking-terms" className="text-xs text-white/25 no-underline hover:text-white/55 transition-colors font-mono">
+              <Link href="/legal/booking-terms" className="text-xs text-white/25 no-underline hover:text-white/55 transition-colors">
                 Booking Terms
               </Link>
-              <Link href="/legal/privacy-policy" className="text-xs text-white/25 no-underline hover:text-white/55 transition-colors font-mono">
+              <Link href="/legal/privacy-policy" className="text-xs text-white/25 no-underline hover:text-white/55 transition-colors">
                 Privacy Policy
               </Link>
-              <Link href="/legal/cookie-policy" className="text-xs text-white/25 no-underline hover:text-white/55 transition-colors font-mono">
+              <Link href="/legal/cookie-policy" className="text-xs text-white/25 no-underline hover:text-white/55 transition-colors">
                 Cookie Policy
               </Link>
               <CookieSettingsButton />

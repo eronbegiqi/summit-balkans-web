@@ -40,7 +40,7 @@ export function WildlifeStrip() {
     <section className="py-20 md:py-28 bg-bone">
       <div className="max-w-content mx-auto px-5 md:px-10">
         <div className="mb-12">
-          <div className="font-mono text-[11px] font-medium tracking-[0.14em] uppercase text-terra mb-3">
+          <div className="text-[11px] font-medium tracking-[0.14em] uppercase text-terra mb-3">
             Wildlife & Nature
           </div>
           <h2 className="font-fraunces text-[clamp(2rem,4vw,2.8rem)] font-bold tracking-tight">
@@ -57,7 +57,7 @@ export function WildlifeStrip() {
             >
               <div className="text-3xl mb-3">{s.icon}</div>
               <h3 className="font-fraunces text-lg font-bold mb-1">{s.name}</h3>
-              <div className={`font-mono text-[10px] uppercase tracking-[0.1em] mb-3 ${s.statusColor}`}>
+              <div className={`text-[10px] uppercase tracking-[0.1em] mb-3 ${s.statusColor}`}>
                 {s.status}
               </div>
               <p className="text-[13px] leading-[1.65] text-ink/55">{s.desc}</p>
@@ -67,7 +67,7 @@ export function WildlifeStrip() {
 
         {/* National Parks */}
         <div className="border-t-2 border-divider pt-8">
-          <div className="font-mono text-[11px] uppercase tracking-[0.14em] text-ink/40 mb-4">
+          <div className="text-[11px] uppercase tracking-[0.14em] text-ink/40 mb-4">
             Protected Areas Along the Trail
           </div>
           <div className="flex flex-wrap gap-3">
@@ -79,7 +79,7 @@ export function WildlifeStrip() {
                 <div className="w-2 h-2 rounded-full bg-brand flex-shrink-0" />
                 <div>
                   <div className="text-sm font-semibold text-ink">{name}</div>
-                  <div className="font-mono text-[10px] text-ink/40 uppercase tracking-wider">{country}</div>
+                  <div className="text-[10px] text-ink/40 uppercase tracking-wider">{country}</div>
                 </div>
               </div>
             ))}

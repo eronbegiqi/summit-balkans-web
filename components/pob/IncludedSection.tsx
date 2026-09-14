@@ -25,7 +25,7 @@ export function IncludedSection() {
     <section className="py-20 md:py-28 bg-bone">
       <div className="max-w-content mx-auto px-5 md:px-10">
         <div className="mb-10">
-          <div className="font-mono text-[11px] font-medium tracking-[0.14em] uppercase text-terra mb-3">
+          <div className="text-[11px] font-medium tracking-[0.14em] uppercase text-terra mb-3">
             What's Covered
           </div>
           <h2 className="font-fraunces text-[clamp(2rem,4vw,2.8rem)] font-bold tracking-tight">
