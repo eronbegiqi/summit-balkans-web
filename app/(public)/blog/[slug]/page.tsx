@@ -3,6 +3,8 @@ import { notFound } from "next/navigation";
 import Link from "next/link";
 import { getBlogPostBySlug } from "@/lib/db/queries/blog";
 import { ArrowLeft, Clock } from "lucide-react";
+import { JsonLd } from "@/components/seo/JsonLd";
+import { SITE_URL, breadcrumbJsonLd } from "@/lib/seo";
 
 export const dynamic = "force-dynamic";
 
@@ -40,8 +42,32 @@ export default async function BlogPostPage({
   const post = await getBlogPostBySlug(slug);
   if (!post) notFound();
 
+  const postUrl = `${SITE_URL}/blog/${post.slug}`;
+  const blogPostingJsonLd = {
+    "@context": "https://schema.org",
+    "@type": "BlogPosting",
+    headline: post.title,
+    description: post.excerpt ?? undefined,
+    image: post.featuredImageUrl ?? undefined,
+    datePublished: post.publishedAt ?? undefined,
+    dateModified: post.updatedAt ?? post.publishedAt ?? undefined,
+    author: post.author ? { "@type": "Person", name: post.author.name } : { "@id": `${SITE_URL}/#organization` },
+    publisher: { "@id": `${SITE_URL}/#organization` },
+    mainEntityOfPage: postUrl,
+    url: postUrl,
+  };
+
   return (
     <article className="pt-[72px]">
+      <JsonLd data={blogPostingJsonLd} />
+      <JsonLd
+        data={breadcrumbJsonLd([
+          { name: "Home", url: SITE_URL },
+          { name: "Blog", url: `${SITE_URL}/blog` },
+          { name: post.title, url: postUrl },
+        ])}
+      />
+
       {/* Hero */}
       {post.featuredImageUrl && (
         <div className="relative h-[40vh] min-h-[280px] max-h-[500px] overflow-hidden bg-ink">

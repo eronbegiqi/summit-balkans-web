@@ -2,7 +2,7 @@ import { notFound } from "next/navigation";
 import type { Metadata } from "next";
 import Link from "next/link";
 import { db } from "@/lib/db/client";
-import { tours, tourStages, departures, guides } from "@/lib/db/schema";
+import { tours, tourStages, departures, guides, reviews } from "@/lib/db/schema";
 import { asc, eq, and, sql } from "drizzle-orm";
 import { DifficultyDots } from "@/components/ui/DifficultyDots";
 import { SectionLabel } from "@/components/ui/SectionLabel";
@@ -11,6 +11,8 @@ import { EmergencyContactsCompact } from "@/components/sections/EmergencyContact
 import { formatPrice } from "@/lib/utils";
 import { parseJsonField } from "@/lib/db/utils";
 import { Clock, Mountain, Users, ArrowRight, MapPin, CheckCircle2, XCircle, Calendar, Backpack } from "lucide-react";
+import { JsonLd } from "@/components/seo/JsonLd";
+import { SITE_URL, breadcrumbJsonLd, faqJsonLd } from "@/lib/seo";
 
 export const revalidate = 300;
 
@@ -72,7 +74,20 @@ async function getTour(slug: string) {
     highlights: parseJsonField<string[]>(s.highlights, []),
   }));
 
-  return { tour: { ...parsedTour, guide }, stages: parsedStages, departures: tourDepartures };
+  const tourReviews = await db
+    .select({ rating: reviews.rating })
+    .from(reviews)
+    .where(and(eq(reviews.tourId, tour.id), eq(reviews.published, true)));
+
+  const rating =
+    tourReviews.length > 0
+      ? {
+          value: tourReviews.reduce((sum, r) => sum + r.rating, 0) / tourReviews.length,
+          count: tourReviews.length,
+        }
+      : null;
+
+  return { tour: { ...parsedTour, guide }, stages: parsedStages, departures: tourDepartures, rating };
 }
 
 export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }): Promise<Metadata> {
@@ -96,7 +111,7 @@ export default async function TourDetailPage({ params }: { params: Promise<{ slu
   const data = await getTour(slug);
   if (!data) notFound();
 
-  const { tour, stages, departures: deps } = data;
+  const { tour, stages, departures: deps, rating } = data;
   const isGuided = tour.tourType !== "SELF_GUIDED";
   const price = isGuided
     ? Number(tour.pricePerPersonEur)
@@ -111,8 +126,53 @@ export default async function TourDetailPage({ params }: { params: Promise<{ slu
       ? tour.tourVariant.charAt(0) + tour.tourVariant.slice(1).toLowerCase()
       : null;
 
+  const tourUrl = `${SITE_URL}/tours/${tour.slug}`;
+  const offers =
+    deps.length > 0
+      ? deps.map((dep) => ({
+          "@type": "Offer",
+          url: `${SITE_URL}/tours/book?tour=${tour.slug}&departure=${dep.id}`,
+          price: Number(dep.pricePerPersonEur ?? price).toFixed(2),
+          priceCurrency: "EUR",
+          availability:
+            dep.status === "SOLD_OUT" ? "https://schema.org/SoldOut" : "https://schema.org/InStock",
+          validThrough: String(dep.startDate),
+        }))
+      : [
+          {
+            "@type": "Offer",
+            url: `${SITE_URL}/tours/book?tour=${tour.slug}`,
+            price: price.toFixed(2),
+            priceCurrency: "EUR",
+            availability: "https://schema.org/InStock",
+          },
+        ];
+
+  const touristTripJsonLd = {
+    "@context": "https://schema.org",
+    "@type": "TouristTrip",
+    name: tour.title,
+    description: tour.excerpt ?? tour.seoDescription ?? undefined,
+    image: tour.featuredImageUrl ?? undefined,
+    url: tourUrl,
+    touristType: typeLabel,
+    provider: { "@id": `${SITE_URL}/#organization` },
+    offers,
+    ...(rating ? { aggregateRating: { "@type": "AggregateRating", ratingValue: rating.value.toFixed(1), reviewCount: rating.count } } : {}),
+  };
+
   return (
     <>
+      <JsonLd data={touristTripJsonLd} />
+      <JsonLd
+        data={breadcrumbJsonLd([
+          { name: "Home", url: SITE_URL },
+          { name: "Tours", url: `${SITE_URL}/tours` },
+          { name: tour.title, url: tourUrl },
+        ])}
+      />
+      {tour.faq && tour.faq.length > 0 && <JsonLd data={faqJsonLd(tour.faq)} />}
+
       {/* Hero */}
       <section className="relative h-[55vh] min-h-[400px] bg-dark overflow-hidden pt-[72px]">
         {/* eslint-disable-next-line @next/next/no-img-element */}
