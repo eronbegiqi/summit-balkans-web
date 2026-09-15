@@ -38,3 +38,4 @@ lib/gql/
 
 # DB query snapshots (offline cache)
 .cache/
+.env*

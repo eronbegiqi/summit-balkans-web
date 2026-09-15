@@ -52,7 +52,7 @@ const SUBMIT_DRAFT_TOOL = {
       excerpt: { type: "string", description: "1-2 sentence summary, under 160 characters" },
       contentHtml: {
         type: "string",
-        description: "Full post body as semantic HTML using only h2/h3/p/ul/ol/li/strong/em tags, 800-1300 words",
+        description: "Full post body as semantic HTML using only h2/h3/p/ul/ol/li/strong/em/a tags, 800-1300 words",
       },
       category: { type: "string", enum: CATEGORIES },
       tags: { type: "array", items: { type: "string" }, minItems: 2, maxItems: 6 },
@@ -113,6 +113,8 @@ export async function GET(req: NextRequest) {
 
 Find ONE good target keyword/topic for this week's blog post — something real people search for that Summit Balkans could realistically rank for, tied to hiking in Albania, Montenegro, or Kosovo (trail guides, gear, seasons, permits, logistics, comparisons, etc).
 
+Priority: Summit Balkans' flagship product is the Peaks of the Balkans trail (summitbalkans.com/peaks-of-the-balkans), and it's currently trying to build search authority for that exact phrase against established sources like Wikipedia and the trail's official cross-border operators. Strongly prefer a long-tail topic specifically about the Peaks of the Balkans trail this week — permits and border crossings, best season and weather, day-by-day itinerary planning, difficulty and fitness prep, gear needs, guided vs self-guided comparison, village/guesthouse culture along the route, safety and emergency logistics — UNLESS the already-published list below shows recent posts already cover very similar angles, in which case pick the next best non-overlapping hiking topic instead (don't force a repetitive Peaks of the Balkans post just for the sake of it).
+
 Already-published post titles to avoid repeating (do not pick an overlapping topic):
 ${recentPosts.map((p) => `- ${p.title}`).join("\n") || "(none yet)"}
 
@@ -167,7 +169,9 @@ Using this research brief, write a complete blog post draft:
 
 ${researchBrief}
 
-Write in a warm, knowledgeable, non-salesy voice — like a local guide sharing real advice, not marketing copy. Do not invent specific prices, dates, or statistics that weren't in the research brief above.`,
+Write in a warm, knowledgeable, non-salesy voice — like a local guide sharing real advice, not marketing copy. Do not invent specific prices, dates, or statistics that weren't in the research brief above.
+
+If this topic relates to the Peaks of the Balkans trail, include one natural inline link to https://summitbalkans.com/peaks-of-the-balkans using descriptive anchor text (e.g. <a href="https://summitbalkans.com/peaks-of-the-balkans">Peaks of the Balkans</a>) somewhere it genuinely fits the content — this is the page we want the post to support in search. Don't force it if the topic isn't actually about that trail.`,
         },
       ],
     });
