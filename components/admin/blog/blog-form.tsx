@@ -3,10 +3,13 @@
 import { useState, useTransition } from 'react';
 import Link from 'next/link';
 import { toast } from 'sonner';
+import { Wand2, X } from 'lucide-react';
 import { saveBlogPost } from '@/lib/actions/content';
 import { RichTextEditor } from '@/components/admin/rich-text-editor';
 import { ImageUploader } from '@/components/admin/image-uploader';
 import { DeleteBlogPostButton } from '@/components/admin/blog/delete-blog-post-button';
+import { parseJsonField } from '@/lib/db/utils';
+import { estimateReadingMinutes } from '@/lib/utils';
 import type { BlogPostWithAuthor } from '@/lib/db/queries/blog';
 
 type Props = { post: BlogPostWithAuthor | null };
@@ -30,6 +33,15 @@ export function BlogForm({ post }: Props) {
   const [seoDescription, setSeoDescription] = useState(post?.seoDescription ?? '');
   const [featuredImageUrl, setFeaturedImageUrl] = useState<string | null>(post?.featuredImageUrl ?? null);
   const [published, setPublished] = useState(post?.published ?? false);
+  const [tags, setTags] = useState<string[]>(() => parseJsonField<string[]>(post?.tags, []));
+  const [tagInput, setTagInput] = useState('');
+  const [readingTimeMinutes, setReadingTimeMinutes] = useState<number | ''>(post?.readingTimeMinutes ?? '');
+
+  function addTag() {
+    const t = tagInput.trim();
+    if (t && !tags.includes(t)) setTags((prev) => [...prev, t]);
+    setTagInput('');
+  }
 
   const inputCls = 'w-full rounded-lg border border-gray-200 px-3.5 py-2.5 text-sm outline-none focus:ring-2 focus:ring-emerald-500';
   const labelCls = 'mb-1.5 block text-sm font-medium text-gray-700';
@@ -42,6 +54,8 @@ export function BlogForm({ post }: Props) {
         category: category as typeof CATEGORIES[number],
         featuredImageUrl: featuredImageUrl || undefined,
         seoTitle: seoTitle || undefined, seoDescription: seoDescription || undefined,
+        tags: tags.length > 0 ? tags : undefined,
+        readingTimeMinutes: readingTimeMinutes === '' ? undefined : readingTimeMinutes,
         published,
       });
       toast.success('Post saved');
@@ -100,6 +114,49 @@ export function BlogForm({ post }: Props) {
               <select value={category} onChange={(e) => setCategory(e.target.value as typeof CATEGORIES[number])} className={inputCls}>
                 {CATEGORIES.map((c) => <option key={c} value={c}>{CATEGORY_LABELS[c]}</option>)}
               </select>
+            </div>
+            <div>
+              <label className={labelCls}>Tags</label>
+              <div className="flex flex-wrap gap-1.5 mb-2 empty:mb-0">
+                {tags.map((t) => (
+                  <span key={t} className="inline-flex items-center gap-1 rounded-full bg-emerald-50 px-2.5 py-1 text-xs font-medium text-emerald-700">
+                    {t}
+                    <button type="button" onClick={() => setTags((prev) => prev.filter((x) => x !== t))} aria-label={`Remove tag ${t}`}>
+                      <X className="h-3 w-3" />
+                    </button>
+                  </span>
+                ))}
+              </div>
+              <input
+                value={tagInput}
+                onChange={(e) => setTagInput(e.target.value)}
+                onKeyDown={(e) => {
+                  if (e.key === 'Enter' || e.key === ',') { e.preventDefault(); addTag(); }
+                }}
+                onBlur={addTag}
+                placeholder="Type a tag, press Enter"
+                className={inputCls}
+              />
+            </div>
+            <div>
+              <label className={labelCls}>Reading time (minutes)</label>
+              <div className="flex gap-2">
+                <input
+                  type="number"
+                  min={1}
+                  value={readingTimeMinutes}
+                  onChange={(e) => setReadingTimeMinutes(e.target.value === '' ? '' : Number(e.target.value))}
+                  className={inputCls}
+                />
+                <button
+                  type="button"
+                  onClick={() => setReadingTimeMinutes(estimateReadingMinutes(content))}
+                  title="Estimate from content"
+                  className="flex shrink-0 items-center justify-center rounded-lg border border-gray-200 px-3 text-gray-500 hover:bg-gray-50"
+                >
+                  <Wand2 className="h-4 w-4" />
+                </button>
+              </div>
             </div>
             <label className="flex items-center gap-3 cursor-pointer">
               <input type="checkbox" checked={published} onChange={(e) => setPublished(e.target.checked)} className="rounded" />

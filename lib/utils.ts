@@ -36,3 +36,8 @@ export function spotsLabel(left: number, total: number) {
 export function isLowAvailability(left: number) {
   return left > 0 && left <= 3;
 }
+
+export function estimateReadingMinutes(html: string): number {
+  const words = html.replace(/<[^>]+>/g, " ").split(/\s+/).filter(Boolean).length;
+  return Math.max(3, Math.round(words / 200));
+}

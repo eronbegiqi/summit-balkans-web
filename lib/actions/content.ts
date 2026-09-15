@@ -82,15 +82,31 @@ export async function deleteDeparture(id: number) {
 
 export async function saveBlogPost(id: number | null, data: Omit<typeof blogPosts.$inferInsert, 'id' | 'createdAt' | 'updatedAt'>) {
   await requireAdmin();
+
+  // Stamp publishedAt the first time a post goes live, regardless of whether
+  // that happens via this form's checkbox or the separate list-page toggle —
+  // without this, a post published directly here (not via toggleBlogPublished)
+  // never gets a publish date, which breaks its display date and sitemap entry.
+  const payload = { ...data };
+  if (payload.published && !payload.publishedAt) {
+    const alreadyPublishedAt = id
+      ? (await db.select({ publishedAt: blogPosts.publishedAt }).from(blogPosts).where(eq(blogPosts.id, id)))[0]?.publishedAt
+      : null;
+    if (!alreadyPublishedAt) payload.publishedAt = new Date();
+  }
+
   if (id) {
-    await db.update(blogPosts).set(data).where(eq(blogPosts.id, id));
+    await db.update(blogPosts).set(payload).where(eq(blogPosts.id, id));
+    revalidatePath(`/blog/${payload.slug}`);
   } else {
-    const [result] = await db.insert(blogPosts).values(data);
+    const [result] = await db.insert(blogPosts).values(payload);
     const newId = Number((result as unknown as { insertId: number }).insertId);
     revalidatePath('/admin/blog');
+    revalidatePath('/blog');
     redirect(`/admin/blog/${newId}/edit`);
   }
   revalidatePath('/admin/blog');
+  revalidatePath('/blog');
 }
 
 export async function toggleBlogPublished(id: number, published: boolean) {
