@@ -1,3 +1,4 @@
+import Image from "next/image";
 import { Home, UtensilsCrossed, BookOpen } from "lucide-react";
 
 const pillars = [
@@ -25,12 +26,13 @@ export function CulturalSection() {
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-20 items-start">
           {/* Left — image + pull quote */}
           <div>
-            <div className="relative rounded-card-hero overflow-hidden mb-8">
-              {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img
+            <div className="relative h-[420px] rounded-card-hero overflow-hidden mb-8">
+              <Image
                 src="https://images.unsplash.com/photo-1500534314209-a25ddb2bd429?w=900&q=85"
                 alt="Stone kulla tower — traditional Albanian highland architecture"
-                className="w-full h-[420px] object-cover"
+                fill
+                sizes="(min-width: 1024px) 50vw, 100vw"
+                className="object-cover"
               />
             </div>
 

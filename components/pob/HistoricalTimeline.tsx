@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import { useEffect, useRef } from "react";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
@@ -41,11 +42,12 @@ function EraCard({ era, index }: { era: typeof eras[0]; index: number }) {
   return (
     <div className="flex-shrink-0 w-[min(calc(100vw-40px),340px)] md:w-[520px] bg-white/[0.05] border border-white/10 rounded-card-hero overflow-hidden">
       <div className="relative h-52 overflow-hidden">
-        {/* eslint-disable-next-line @next/next/no-img-element */}
-        <img
+        <Image
           src={era.image}
           alt={era.title}
-          className="w-full h-full object-cover opacity-60"
+          fill
+          sizes="(min-width: 768px) 520px, 100vw"
+          className="object-cover opacity-60"
         />
         <div className="absolute inset-0 bg-gradient-to-t from-ink/80 to-transparent" />
         <div className="absolute bottom-4 left-6">

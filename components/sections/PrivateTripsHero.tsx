@@ -1,3 +1,4 @@
+import Image from "next/image";
 import Link from "next/link";
 import { ArrowRight, Users, Calendar, Clock } from "lucide-react";
 
@@ -11,12 +12,13 @@ const miniCards = [
 export function PrivateTripsHero() {
   return (
     <section className="relative min-h-screen flex flex-col justify-center overflow-hidden">
-      {/* eslint-disable-next-line @next/next/no-img-element */}
-      <img
+      <Image
         src="https://images.unsplash.com/photo-1551632811-561732d1e306?w=1920&q=85"
         alt="Private hiking trip in the Balkans"
-        className="absolute inset-0 w-full h-full object-cover object-center"
-        loading="eager"
+        fill
+        priority
+        sizes="100vw"
+        className="object-cover object-center"
       />
       <div className="absolute inset-0 bg-gradient-to-br from-dark/80 via-dark/55 to-dark/75" />
 

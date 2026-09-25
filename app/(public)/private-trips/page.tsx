@@ -1,3 +1,4 @@
+import Image from "next/image";
 import type { Metadata } from "next";
 import { PrivateTripsHero } from "@/components/sections/PrivateTripsHero";
 import { PrivateTripsForm } from "@/components/sections/PrivateTripsForm";
@@ -123,8 +124,9 @@ export default function PrivateTripsPage() {
           <div className="grid md:grid-cols-3 gap-5">
             {examples.map((ex) => (
               <div key={ex.title} className="border-2 border-white/10 rounded-2xl overflow-hidden hover:border-white/30 hover:-translate-y-0.5 transition-all duration-200 cursor-pointer">
-                {/* eslint-disable-next-line @next/next/no-img-element */}
-                <img src={ex.image} alt={ex.title} className="w-full h-[200px] object-cover block brightness-85" loading="lazy" />
+                <div className="relative h-[200px]">
+                  <Image src={ex.image} alt={ex.title} fill sizes="(min-width: 768px) 33vw, 100vw" className="object-cover brightness-85" />
+                </div>
                 <div className="px-[22px] py-5 bg-white/4">
                   <h3 className="font-fraunces text-xl font-bold text-white mb-1.5">{ex.title}</h3>
                   <p className="text-[13px] text-white/50 leading-[1.55] mb-3.5">{ex.desc}</p>

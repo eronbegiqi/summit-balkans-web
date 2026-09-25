@@ -1,3 +1,4 @@
+import Image from "next/image";
 import { notFound } from "next/navigation";
 import type { Metadata } from "next";
 import Link from "next/link";
@@ -181,11 +182,13 @@ export default async function TourDetailPage({ params }: { params: Promise<{ slu
 
       {/* Hero */}
       <section className="relative h-[55vh] min-h-[400px] bg-dark overflow-hidden pt-[72px]">
-        {/* eslint-disable-next-line @next/next/no-img-element */}
-        <img
+        <Image
           src={tour.featuredImageUrl || "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=1400&q=80"}
           alt={tour.title}
-          className="absolute inset-0 w-full h-full object-cover"
+          fill
+          priority
+          sizes="100vw"
+          className="object-cover"
         />
         <div className="absolute inset-0 bg-gradient-to-t from-dark/90 via-dark/30 to-dark/10" />
         <div className="absolute bottom-0 left-0 right-0 max-w-content mx-auto px-6 md:px-10 pb-10">

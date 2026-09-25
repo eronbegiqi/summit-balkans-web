@@ -1,15 +1,17 @@
+import Image from "next/image";
 export function CrossBorderSection() {
   return (
     <section className="py-20 md:py-28" style={{ background: "rgba(212,165,116,0.10)" }}>
       <div className="max-w-content mx-auto px-5 md:px-10">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-20 items-center">
           {/* Image */}
-          <div className="relative rounded-card-hero overflow-hidden">
-            {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img
+          <div className="relative h-[400px] lg:h-[500px] rounded-card-hero overflow-hidden">
+            <Image
               src="https://images.unsplash.com/photo-1454496522488-7a8e488e8606?w=900&q=85"
               alt="Remote mountain pass — border crossing on the Peaks of the Balkans trail"
-              className="w-full h-[400px] lg:h-[500px] object-cover"
+              fill
+              sizes="(min-width: 1024px) 50vw, 100vw"
+              className="object-cover"
             />
             <div className="absolute inset-0 bg-gradient-to-t from-ink/40 to-transparent" />
             <div className="absolute bottom-5 left-5 right-5">
