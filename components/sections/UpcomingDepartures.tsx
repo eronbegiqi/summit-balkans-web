@@ -132,12 +132,13 @@ export function UpcomingDepartures() {
 
       <div
         ref={scrollRef}
-        className="flex gap-4 md:gap-5 overflow-x-auto pb-4 snap-x snap-mandatory scroll-smooth scroll-pl-4 md:scroll-pl-[max(2.5rem,_calc((100vw_-_1320px)_/_2_+_2.5rem))]"
+        // Inset is padding (not a spacer div) so the first card already sits on
+        // its snap point: a load-time snap scroll makes Chrome drop LCP (NO_LCP).
+        className="flex gap-4 md:gap-5 overflow-x-auto pb-4 pl-4 md:pl-[max(2.5rem,_calc((100vw_-_1320px)_/_2_+_2.5rem))] snap-x snap-mandatory scroll-smooth scroll-pl-4 md:scroll-pl-[max(2.5rem,_calc((100vw_-_1320px)_/_2_+_2.5rem))]"
         style={{ scrollbarWidth: "none" }}
         role="list"
         aria-label="Upcoming tour departures"
       >
-        <div className="shrink-0 w-4 md:w-[max(2.5rem,_calc((100vw_-_1320px)_/_2_+_2.5rem))]" aria-hidden="true" />
 
         {loading ? (
           Array.from({ length: 4 }).map((_, i) => (
