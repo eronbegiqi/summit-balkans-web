@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { pageSeo } from "@/lib/seo";
 import { ArrowRight } from "lucide-react";
 import { SectionLabel } from "@/components/ui/SectionLabel";
 import { EmergencyContactsSection } from "@/components/sections/EmergencyContacts";
@@ -7,6 +8,7 @@ export const metadata: Metadata = {
   title: "Before You Visit",
   description:
     "Everything you need to know before hiking in Albania, Montenegro & Kosovo — fitness, visas, what to pack, best seasons.",
+  ...pageSeo("/before-you-visit"),
 };
 
 const difficultyLevels = [

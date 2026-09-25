@@ -1,3 +1,4 @@
+import type { Metadata } from "next";
 import { Suspense } from "react";
 import { HomeHero } from "@/components/sections/HomeHero";
 import { UpcomingDepartures } from "@/components/sections/UpcomingDepartures";
@@ -8,6 +9,10 @@ import { PhotoGallery } from "@/components/sections/PhotoGallery";
 import { TestimonialsAsync } from "@/components/sections/TestimonialsAsync";
 import { CTABand } from "@/components/sections/CTABand";
 import { getPublishedGalleryImages } from "@/lib/db/queries/gallery";
+import { pageSeo } from "@/lib/seo";
+
+// Title/description come from the root layout defaults.
+export const metadata: Metadata = pageSeo("/");
 
 // No DB calls at this level except the gallery teaser (cheap, cached) — the
 // page shell otherwise streams to the browser immediately so the HomeHero

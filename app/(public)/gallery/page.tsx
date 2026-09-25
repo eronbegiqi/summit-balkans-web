@@ -1,10 +1,12 @@
 import type { Metadata } from "next";
+import { pageSeo } from "@/lib/seo";
 import { getPublishedGalleryImages } from "@/lib/db/queries/gallery";
 import { FullGallery } from "@/components/gallery/FullGallery";
 
 export const metadata: Metadata = {
   title: "Gallery",
   description: "Photos from the trail — Albania, Montenegro and Kosovo hiking tours with Summit Balkans.",
+  ...pageSeo("/gallery"),
 };
 
 export default async function GalleryPage() {

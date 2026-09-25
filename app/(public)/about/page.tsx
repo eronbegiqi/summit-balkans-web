@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { pageSeo } from "@/lib/seo";
 import { SectionLabel } from "@/components/ui/SectionLabel";
 import { CTABand } from "@/components/sections/CTABand";
 import { db } from "@/lib/db/client";
@@ -8,8 +9,9 @@ import { CheckCircle2 } from "lucide-react";
 import { parseJsonField } from "@/lib/db/utils";
 
 export const metadata: Metadata = {
-  title: "About Us — Summit Balkans",
+  title: "About Us",
   description: "Summit Balkans is a mountain adventure and trekking organisation based in the heart of the Western Balkans.",
+  ...pageSeo("/about"),
 };
 
 export const revalidate = 300;

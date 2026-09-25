@@ -5,6 +5,7 @@ import "@/styles/globals.css";
 import Script from "next/script";
 import { Analytics } from "@vercel/analytics/next";
 import { Toaster } from "sonner";
+import { SITE_URL, ogBase } from "@/lib/seo";
 
 const fraunces = Fraunces({
   subsets: ["latin"],
@@ -30,25 +31,15 @@ const jetbrainsMono = JetBrains_Mono({
 });
 
 export const metadata: Metadata = {
+  metadataBase: new URL(SITE_URL),
   title: {
     default: "Summit Balkans — Walk the Balkans with people who live here",
     template: "%s — Summit Balkans",
   },
   description:
-    "Small group guided hiking tours in Albania, Montenegro & Kosovo. Local guides, real trails, no hidden costs.",
-  openGraph: {
-    siteName: "Summit Balkans",
-    locale: "en_GB",
-    type: "website",
-    images: [
-      {
-        url: "https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?w=1200&q=85",
-        width: 1200,
-        height: 630,
-        alt: "Summit Balkans hiking in the Balkans",
-      },
-    ],
-  },
+    "Hike Albania, Montenegro & Kosovo with local guides. Small groups, real trails, no hidden costs — book your trek today.",
+  robots: { index: true, follow: true, "max-image-preview": "large" },
+  openGraph: ogBase,
   twitter: {
     card: "summary_large_image",
   },

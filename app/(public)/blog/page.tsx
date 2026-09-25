@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { pageSeo } from "@/lib/seo";
 import Link from "next/link";
 import { SectionLabel } from "@/components/ui/SectionLabel";
 import { getBlogPosts } from "@/lib/db/queries/blog";
@@ -6,6 +7,7 @@ import { getBlogPosts } from "@/lib/db/queries/blog";
 export const metadata: Metadata = {
   title: "Blog — Trail Notes from the Balkans",
   description: "Stories, guides, and trail reports from Summit Balkans guides and travellers.",
+  ...pageSeo("/blog"),
 };
 
 const CATEGORY_LABELS: Record<string, string> = {

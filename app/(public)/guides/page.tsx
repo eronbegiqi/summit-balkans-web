@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { pageSeo } from "@/lib/seo";
 import Link from "next/link";
 import { Users } from "lucide-react";
 import { SectionLabel } from "@/components/ui/SectionLabel";
@@ -6,6 +7,7 @@ import { SectionLabel } from "@/components/ui/SectionLabel";
 export const metadata: Metadata = {
   title: "Our Guides",
   description: "Meet the Summit Balkans guides — local experts born in the mountains they lead.",
+  ...pageSeo("/guides"),
 };
 
 export default function GuidesPage() {

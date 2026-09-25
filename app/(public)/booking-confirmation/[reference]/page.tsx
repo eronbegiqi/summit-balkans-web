@@ -1,5 +1,6 @@
 export const dynamic = 'force-dynamic';
 
+import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 import Link from 'next/link';
 import { db } from '@/lib/db/client';
@@ -8,6 +9,12 @@ import { eq } from 'drizzle-orm';
 import { Mountain, CheckCircle, Calendar, Users, Mail, Phone } from 'lucide-react';
 
 type Props = { params: Promise<{ reference: string }> };
+
+// Personal booking details — keep out of search results.
+export const metadata: Metadata = {
+  title: 'Booking confirmed',
+  robots: { index: false, follow: false },
+};
 
 export default async function BookingConfirmationPage({ params }: Props) {
   const { reference } = await params;
