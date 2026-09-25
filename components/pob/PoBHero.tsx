@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import { useEffect, useRef } from "react";
 import Link from "next/link";
 import { gsap } from "gsap";
@@ -25,12 +26,13 @@ export function PoBHero() {
       className="relative w-full h-screen min-h-[640px] flex flex-col items-center justify-center overflow-hidden"
     >
       {/* Background image */}
-      {/* eslint-disable-next-line @next/next/no-img-element */}
-      <img
+      <Image
         src="https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=2000&q=90"
         alt="Peaks of the Balkans — Accursed Mountains"
-        className="absolute inset-0 w-full h-full object-cover object-center"
-        fetchPriority="high"
+        fill
+        priority
+        sizes="100vw"
+        className="object-cover object-center"
       />
 
       {/* Gradient overlay — dark bottom-up */}

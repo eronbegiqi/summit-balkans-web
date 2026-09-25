@@ -1,3 +1,4 @@
+import Image from "next/image";
 import Link from "next/link";
 import { Clock, ArrowRight } from "lucide-react";
 import { tours } from "@/data/tours";
@@ -26,13 +27,16 @@ export function FeaturedTrips() {
               <div key={tour.slug}>
                 {/* ── Mobile: vertical card ────────────────────────────────── */}
                 <div className="block md:hidden border-2 border-divider rounded-card-hero overflow-hidden bg-white">
-                  {/* eslint-disable-next-line @next/next/no-img-element */}
-                  <img
-                    src={`${tour.coverImage}&w=800`}
-                    alt={tour.name}
-                    className="w-full h-[220px] object-cover block"
-                    loading={i === 0 ? "eager" : "lazy"}
-                  />
+                  <div className="relative h-[220px]">
+                    <Image
+                      src={tour.coverImage}
+                      alt={tour.name}
+                      fill
+                      sizes="100vw"
+                      loading={i === 0 ? "eager" : "lazy"}
+                      className="object-cover"
+                    />
+                  </div>
                   <div className="p-5">
                     <DifficultyIndicator level={tour.difficulty} className="mb-3" animate />
                     <h3 className="font-fraunces text-2xl font-bold tracking-tight mb-2">{tour.name}</h3>
@@ -62,13 +66,14 @@ export function FeaturedTrips() {
                 <div
                   className={`hidden md:grid grid-cols-2 gap-16 items-center ${i % 2 === 1 ? "[direction:rtl]" : ""}`}
                 >
-                  <div className={`rounded-card-hero overflow-hidden border-2 border-divider aspect-[4/3] ${i % 2 === 1 ? "[direction:ltr]" : ""}`}>
-                    {/* eslint-disable-next-line @next/next/no-img-element */}
-                    <img
-                      src={`${tour.coverImage}&w=800`}
+                  <div className={`relative rounded-card-hero overflow-hidden border-2 border-divider aspect-[4/3] ${i % 2 === 1 ? "[direction:ltr]" : ""}`}>
+                    <Image
+                      src={tour.coverImage}
                       alt={tour.name}
-                      className="w-full h-full object-cover block"
+                      fill
+                      sizes="50vw"
                       loading={i === 0 ? "eager" : "lazy"}
+                      className="object-cover"
                     />
                   </div>
                   <div className={i % 2 === 1 ? "[direction:ltr]" : ""}>

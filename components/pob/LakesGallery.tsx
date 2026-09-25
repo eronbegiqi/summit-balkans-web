@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import useEmblaCarousel from "embla-carousel-react";
 import { useCallback } from "react";
 import { ChevronLeft, ChevronRight } from "lucide-react";
@@ -60,13 +61,14 @@ export function LakesGallery() {
           {slides.map((slide) => (
             <div
               key={slide.caption}
-              className="flex-shrink-0 w-[80vw] md:w-[560px] relative rounded-card-hero overflow-hidden"
+              className="flex-shrink-0 w-[80vw] md:w-[560px] h-[380px] md:h-[440px] relative rounded-card-hero overflow-hidden"
             >
-              {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img
+              <Image
                 src={slide.src}
                 alt={slide.caption}
-                className="w-full h-[380px] md:h-[440px] object-cover"
+                fill
+                sizes="(min-width: 768px) 560px, 80vw"
+                className="object-cover"
               />
               <div className="absolute inset-0 bg-gradient-to-t from-ink/60 to-transparent pointer-events-none" />
               <div className="absolute bottom-5 left-5">

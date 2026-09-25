@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import { useState } from "react";
 import { Check, ChevronRight, ChevronLeft } from "lucide-react";
 import Link from "next/link";
@@ -281,8 +282,9 @@ export function PrivateTripsForm() {
                         form.experiences.includes(exp.id) ? "border-forest" : "border-divider hover:border-forest/40"
                       }`}
                     >
-                      {/* eslint-disable-next-line @next/next/no-img-element */}
-                      <img src={exp.image} alt={exp.label} className="w-full h-[140px] object-cover block" loading="lazy" />
+                      <span className="relative block h-[140px]">
+                        <Image src={exp.image} alt={exp.label} fill sizes="(min-width: 1024px) 240px, 50vw" className="object-cover" />
+                      </span>
                       <div className="px-3.5 py-3 bg-white flex items-center justify-between text-sm font-semibold">
                         {exp.label}
                         <div className={`w-5 h-5 rounded-full border-2 flex items-center justify-center transition-[border-color,background-color] flex-shrink-0 ${

@@ -1,3 +1,4 @@
+import Image from "next/image";
 import type { Metadata } from "next";
 import Link from "next/link";
 import { ArrowRight } from "lucide-react";
@@ -61,9 +62,8 @@ export default function DestinationsPage() {
               id={country.id}
               className={`grid md:grid-cols-2 grid-cols-1 md:gap-16 gap-4 items-center ${i % 2 === 1 ? "[direction:rtl]" : ""}`}
             >
-              <div className={`rounded-card-hero overflow-hidden border-2 border-divider aspect-[4/3] ${i % 2 === 1 ? "[direction:ltr]" : ""}`}>
-                {/* eslint-disable-next-line @next/next/no-img-element */}
-                <img src={country.image} alt={country.name} className="w-full h-full object-cover block" loading="lazy" />
+              <div className={`relative rounded-card-hero overflow-hidden border-2 border-divider aspect-[4/3] ${i % 2 === 1 ? "[direction:ltr]" : ""}`}>
+                <Image src={country.image} alt={country.name} fill sizes="(min-width: 768px) 50vw, 100vw" className="object-cover" />
               </div>
               <div className={i % 2 === 1 ? "[direction:ltr]" : ""}>
                 <div className="text-[11px] text-terra tracking-[0.14em] uppercase mb-3">{country.code}</div>

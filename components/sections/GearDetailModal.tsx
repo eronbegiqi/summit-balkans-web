@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import { useState, useEffect, useRef } from "react";
 import { X, ArrowRight, Mountain } from "lucide-react";
 import type { GearItem } from "@/lib/types";
@@ -33,13 +34,13 @@ export function GearDetailModal({ item }: { item: GearItem }) {
         aria-label={`View details for ${item.name}`}
         className="w-full text-left bg-white border-2 border-divider rounded-2xl overflow-hidden cursor-pointer hover:border-terra hover:-translate-y-0.5 transition-[border-color,transform] duration-200 group"
       >
-        <div className="overflow-hidden h-[200px]">
-          {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img
-            src={`${item.image}&w=400`}
+        <div className="relative overflow-hidden h-[200px]">
+          <Image
+            src={item.image}
             alt={item.name}
-            className="w-full h-full object-cover block transition-transform duration-300 group-hover:scale-[1.03]"
-            loading="lazy"
+            fill
+            sizes="(min-width: 768px) 25vw, 100vw"
+            className="object-cover transition-transform duration-300 group-hover:scale-[1.03]"
           />
         </div>
         <div className="px-5 py-[18px]">
@@ -97,12 +98,9 @@ export function GearDetailModal({ item }: { item: GearItem }) {
             <div className="grid grid-cols-1 md:grid-cols-[minmax(0,1fr)_320px]">
               {/* Gallery */}
               <div className="p-5 sm:p-7">
-                {/* eslint-disable-next-line @next/next/no-img-element */}
-                <img
-                  src={`${item.image}&w=700`}
-                  alt={item.name}
-                  className="w-full rounded-xl border-2 border-divider object-cover h-[220px] sm:h-[260px] block mb-2.5"
-                />
+                <div className="relative w-full rounded-xl border-2 border-divider overflow-hidden h-[220px] sm:h-[260px] mb-2.5">
+                  <Image src={item.image} alt={item.name} fill sizes="(min-width: 768px) 600px, 100vw" className="object-cover" />
+                </div>
                 {item.sizes && (
                   <div className="flex gap-2 flex-wrap mt-4">
                     <span className="text-sm text-ink/50 mr-1">Sizes:</span>
