@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import { useState, useEffect } from "react";
 import Link from "next/link";
 import { Clock, Users, ArrowRight, Mountain } from "lucide-react";
@@ -224,13 +225,14 @@ function TourCard({ tour, priority = false }: { tour: Tour; priority?: boolean }
       href={`/tours/${tour.slug}`}
       className="grid grid-cols-1 md:grid-cols-[420px_1fr] border-2 border-divider rounded-card-hero overflow-hidden bg-white no-underline hover:border-brand hover:-translate-y-0.5 transition-all duration-200 group"
     >
-      <div className="relative">
-        {/* eslint-disable-next-line @next/next/no-img-element */}
-        <img
+      <div className="relative aspect-[16/10] md:aspect-auto md:min-h-[260px]">
+        <Image
           src={getTourImage(tour)}
           alt={tour.title}
-          className="w-full h-[100%] object-cover block"
-          loading={priority ? "eager" : "lazy"}
+          fill
+          priority={priority}
+          sizes="(min-width: 768px) 420px, 100vw"
+          className="object-cover"
         />
         {/* Badges */}
         <div className="absolute top-3 left-3 flex gap-1.5">

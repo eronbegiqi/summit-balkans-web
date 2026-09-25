@@ -1,3 +1,4 @@
+import Image from "next/image";
 import type { Metadata } from "next";
 import Link from "next/link";
 import { SectionLabel } from "@/components/ui/SectionLabel";
@@ -64,13 +65,15 @@ export default async function BlogPage() {
                   className="border-2 border-divider rounded-card bg-white overflow-hidden hover:border-terra hover:-translate-y-0.5 transition-all duration-200 group"
                 >
                   {post.featuredImageUrl && (
-                    // eslint-disable-next-line @next/next/no-img-element
-                    <img
-                      src={post.featuredImageUrl}
-                      alt={post.title}
-                      className="w-full h-[220px] object-cover block"
-                      loading="lazy"
-                    />
+                    <div className="relative h-[220px]">
+                      <Image
+                        src={post.featuredImageUrl}
+                        alt={post.title}
+                        fill
+                        sizes="(min-width: 1024px) 33vw, (min-width: 768px) 50vw, 100vw"
+                        className="object-cover"
+                      />
+                    </div>
                   )}
                   <div className="p-6">
                     <div className="flex items-center gap-3 mb-3">

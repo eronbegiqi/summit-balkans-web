@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import Link from "next/link";
 import { ArrowRight } from "lucide-react";
 
@@ -90,12 +91,15 @@ export function MegaMenuPanel({ data, visible }: MegaMenuPanelProps) {
               className="group block no-underline"
             >
               <div className="rounded-card overflow-hidden border-2 border-divider">
-                {/* eslint-disable-next-line @next/next/no-img-element */}
-                <img
-                  src={data.featured.image}
-                  alt={data.featured.title}
-                  className="w-full h-32 object-cover transition-transform duration-300 group-hover:scale-[1.04]"
-                />
+                <div className="relative h-32">
+                  <Image
+                    src={data.featured.image}
+                    alt={data.featured.title}
+                    fill
+                    sizes="260px"
+                    className="object-cover transition-transform duration-300 group-hover:scale-[1.04]"
+                  />
+                </div>
                 <div className="p-3 bg-white">
                   <div className="text-[10px] uppercase tracking-[0.1em] text-terra mb-1">
                     Featured

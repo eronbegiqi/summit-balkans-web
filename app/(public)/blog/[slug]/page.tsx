@@ -1,3 +1,4 @@
+import Image from "next/image";
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import Link from "next/link";
@@ -71,11 +72,13 @@ export default async function BlogPostPage({
       {/* Hero */}
       {post.featuredImageUrl && (
         <div className="relative h-[40vh] min-h-[280px] max-h-[500px] overflow-hidden bg-ink">
-          {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img
+          <Image
             src={post.featuredImageUrl}
             alt={post.title}
-            className="w-full h-full object-cover opacity-75"
+            fill
+            priority
+            sizes="100vw"
+            className="object-cover opacity-75"
           />
           <div className="absolute inset-0 bg-gradient-to-t from-ink/80 via-ink/20 to-transparent" />
         </div>

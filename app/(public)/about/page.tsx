@@ -1,3 +1,5 @@
+import Image from "next/image";
+import aboutUsImg from "@/public/images/about-us-img.webp";
 import type { Metadata } from "next";
 import { SectionLabel } from "@/components/ui/SectionLabel";
 import { CTABand } from "@/components/sections/CTABand";
@@ -158,10 +160,10 @@ style={{ backgroundImage: "url('/images/about-hero.webp')" }}        />
             </div>
 
             <div className="rounded-card-hero overflow-hidden border-2 border-divider">
-              {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img
-                src="/images/about-us-img.webp"
+              <Image
+                src={aboutUsImg}
                 alt="Summit Balkans guides on trail"
+                sizes="(min-width: 1024px) 50vw, 100vw"
                 className="w-full h-full object-cover block"
               />
             </div>
@@ -279,10 +281,11 @@ style={{ backgroundImage: "url('/images/about-hero.webp')" }}        />
               {guideList.map((g) => (
                 <div key={g.id} className="border-2 border-divider rounded-card bg-white p-6">
                   {g.photoUrl ? (
-                    // eslint-disable-next-line @next/next/no-img-element
-                    <img
+                    <Image
                       src={g.photoUrl}
                       alt={g.name}
+                      width={64}
+                      height={64}
                       className="w-16 h-16 rounded-full object-cover mb-4"
                     />
                   ) : (

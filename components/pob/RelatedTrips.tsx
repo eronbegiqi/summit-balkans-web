@@ -1,3 +1,4 @@
+import Image from "next/image";
 import { tours } from "@/data/tours";
 import Link from "next/link";
 import { ArrowRight } from "lucide-react";
@@ -26,11 +27,12 @@ export function RelatedTrips() {
               className="group relative rounded-card-hero overflow-hidden border-2 border-divider no-underline block bg-bone"
             >
               <div className="relative h-52 overflow-hidden">
-                {/* eslint-disable-next-line @next/next/no-img-element */}
-                <img
+                <Image
                   src={tour.coverImage}
                   alt={tour.name}
-                  className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-[1.04]"
+                  fill
+                  sizes="(min-width: 768px) 33vw, 100vw"
+                  className="object-cover transition-transform duration-500 group-hover:scale-[1.04]"
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-ink/60 to-transparent" />
                 <div className="absolute bottom-3 left-4">
