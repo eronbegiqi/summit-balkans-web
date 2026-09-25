@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { pageSeo } from "@/lib/seo";
 import { MapPin, Phone, Mail, MessageCircle, Navigation, Clock } from "lucide-react";
 import { ContactForm } from "@/components/sections/ContactForm";
 import { SectionLabel } from "@/components/ui/SectionLabel";
@@ -8,6 +9,7 @@ export const metadata: Metadata = {
   title: "Contact Us",
   description:
     "Get in touch with Summit Balkans — booking questions, private trip enquiries, or general questions about hiking in the Balkans. We reply within 24 hours.",
+  ...pageSeo("/contact"),
 };
 
 export default function ContactPage() {

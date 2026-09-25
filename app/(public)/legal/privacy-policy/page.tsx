@@ -3,15 +3,16 @@ import path from "path";
 import matter from "gray-matter";
 import { MDXRemote } from "next-mdx-remote/rsc";
 import type { Metadata } from "next";
+import { pageSeo } from "@/lib/seo";
 import { LegalPageLayout } from "@/components/legal/LegalPageLayout";
 import { mdxComponents } from "@/components/legal/mdxComponents";
 import { extractHeadings, formatLegalDate } from "@/lib/legal";
 
 export const metadata: Metadata = {
-  title: "Privacy Policy | Summit Balkans",
+  title: "Privacy Policy",
   description:
     "Learn how Summit Balkans collects, uses, and protects your personal data. GDPR-compliant privacy policy for our guided hiking tours.",
-  robots: { index: true, follow: true },
+  ...pageSeo("/legal/privacy-policy"),
 };
 
 export default function PrivacyPolicyPage() {

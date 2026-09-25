@@ -3,15 +3,16 @@ import path from "path";
 import matter from "gray-matter";
 import { MDXRemote } from "next-mdx-remote/rsc";
 import type { Metadata } from "next";
+import { pageSeo } from "@/lib/seo";
 import { LegalPageLayout } from "@/components/legal/LegalPageLayout";
 import { mdxComponents } from "@/components/legal/mdxComponents";
 import { extractHeadings, formatLegalDate } from "@/lib/legal";
 
 export const metadata: Metadata = {
-  title: "Cookie Policy | Summit Balkans",
+  title: "Cookie Policy",
   description:
     "Understand how Summit Balkans uses cookies on our website, including analytics and marketing cookies, and how to manage your preferences.",
-  robots: { index: true, follow: true },
+  ...pageSeo("/legal/cookie-policy"),
 };
 
 export default function CookiePolicyPage() {

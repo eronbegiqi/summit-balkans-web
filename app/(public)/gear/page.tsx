@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { pageSeo } from "@/lib/seo";
 import Link from "next/link";
 import { Mountain, MessageCircle, ArrowRight, Check } from "lucide-react";
 import { gearItems } from "@/data/gear";
@@ -9,6 +10,7 @@ export const metadata: Metadata = {
   title: "Gear Rental — Quality Kit for the Balkans",
   description:
     "Rent quality hiking gear for your Balkans trek. Tents, sleeping bags, trekking poles, rain shells and more.",
+  ...pageSeo("/gear"),
 };
 
 const howFAQ = [

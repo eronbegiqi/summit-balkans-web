@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { ogBase } from "@/lib/seo";
 import { PoBHero } from "@/components/pob/PoBHero";
 import { PoBMiniNav } from "@/components/pob/PoBMiniNav";
 import { PoBIntro } from "@/components/pob/PoBIntro";
@@ -23,13 +24,23 @@ import { getUpcomingDeparturesByTourSlug } from "@/lib/db/queries/departures";
 import type { Departure } from "@/lib/types";
 
 export const metadata: Metadata = {
-  title: "Peaks of the Balkans — Summit Balkans",
+  title: "Peaks of the Balkans Trek — Kosovo, Albania & Montenegro",
   description:
     "A 192 km cross-border trek through Kosovo, Albania and Montenegro. One of Europe's last great wilderness trails. Small groups, local guides, family-run guesthouses.",
+  alternates: { canonical: "/peaks-of-the-balkans" },
   openGraph: {
+    ...ogBase,
+    url: "/peaks-of-the-balkans",
     title: "Peaks of the Balkans",
     description: "A 192 km cross-border journey through Europe's last wild mountains.",
-    images: ["https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=1200&q=85"],
+    images: [
+      {
+        url: "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=1200&h=630&fit=crop&q=85",
+        width: 1200,
+        height: 630,
+        alt: "Mountain ridges on the Peaks of the Balkans trail",
+      },
+    ],
   },
 };
 

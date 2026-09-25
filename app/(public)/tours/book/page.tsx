@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { pageSeo } from "@/lib/seo";
 import Link from "next/link";
 import { ChevronLeft, Lock } from "lucide-react";
 import { BookingWizard, type BookingWizardServerData } from "@/components/booking/BookingWizard";
@@ -9,6 +10,8 @@ import { and, asc, eq, sql } from "drizzle-orm";
 export const metadata: Metadata = {
   title: "Book — Peaks of the Balkans",
   description: "Book your spot on the Peaks of the Balkans guided trek.",
+  robots: { index: false, follow: false },
+  ...pageSeo("/tours/book"),
 };
 
 async function getBookingServerData(slug: string): Promise<BookingWizardServerData | null> {

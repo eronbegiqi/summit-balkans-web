@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { pageSeo } from "@/lib/seo";
 import { getActiveDiscounts } from "@/lib/db/queries/discounts";
 import { SectionLabel } from "@/components/ui/SectionLabel";
 import {
@@ -10,9 +11,10 @@ import Link from "next/link";
 export const revalidate = 300;
 
 export const metadata: Metadata = {
-  title: "Offers & Discounts — Summit Balkans",
+  title: "Offers & Discounts",
   description:
     "Group discounts, early bird rates, student offers and more. Book your Balkan hiking adventure and save.",
+  ...pageSeo("/offers"),
 };
 
 const ICON_MAP: Record<string, React.ReactNode> = {

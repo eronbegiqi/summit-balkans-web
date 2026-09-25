@@ -1,5 +1,6 @@
 import Image from "next/image";
 import type { Metadata } from "next";
+import { pageSeo } from "@/lib/seo";
 import { PrivateTripsHero } from "@/components/sections/PrivateTripsHero";
 import { PrivateTripsForm } from "@/components/sections/PrivateTripsForm";
 import { CTABand } from "@/components/sections/CTABand";
@@ -9,6 +10,7 @@ export const metadata: Metadata = {
   title: "Private Trips — Custom Balkans Hiking",
   description:
     "Plan a custom guided hiking trip in Albania, Montenegro or Kosovo for your group. We reply within 24 hours.",
+  ...pageSeo("/private-trips"),
 };
 
 const steps = [

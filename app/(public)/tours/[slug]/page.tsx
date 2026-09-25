@@ -13,7 +13,7 @@ import { formatPrice } from "@/lib/utils";
 import { parseJsonField } from "@/lib/db/utils";
 import { Clock, Mountain, Users, ArrowRight, MapPin, CheckCircle2, XCircle, Calendar, Backpack } from "lucide-react";
 import { JsonLd } from "@/components/seo/JsonLd";
-import { SITE_URL, breadcrumbJsonLd, faqJsonLd, toISODate } from "@/lib/seo";
+import { SITE_URL, brandTitle, breadcrumbJsonLd, faqJsonLd, ogBase, toISODate } from "@/lib/seo";
 
 export const revalidate = 300;
 
@@ -96,13 +96,18 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
   const data = await getTour(slug);
   if (!data) return { title: "Tour not found" };
   const { tour } = data;
+  const title = tour.seoTitle ?? tour.title;
+  const description = tour.seoDescription ?? tour.excerpt ?? undefined;
   return {
-    title: tour.seoTitle ?? tour.title,
-    description: tour.seoDescription ?? tour.excerpt ?? undefined,
+    title: brandTitle(title),
+    description,
+    alternates: { canonical: `/tours/${slug}` },
     openGraph: {
-      title: tour.seoTitle ?? tour.title,
-      description: tour.seoDescription ?? tour.excerpt ?? undefined,
-      images: tour.featuredImageUrl ? [{ url: tour.featuredImageUrl }] : [],
+      ...ogBase,
+      url: `/tours/${slug}`,
+      title,
+      description,
+      images: tour.featuredImageUrl ? [{ url: tour.featuredImageUrl, alt: tour.title }] : ogBase.images,
     },
   };
 }

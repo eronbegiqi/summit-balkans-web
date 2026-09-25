@@ -5,7 +5,7 @@ import Link from "next/link";
 import { getBlogPostBySlug } from "@/lib/db/queries/blog";
 import { ArrowLeft, Clock } from "lucide-react";
 import { JsonLd } from "@/components/seo/JsonLd";
-import { SITE_URL, breadcrumbJsonLd } from "@/lib/seo";
+import { SITE_URL, brandTitle, breadcrumbJsonLd, ogBase } from "@/lib/seo";
 
 export const dynamic = "force-dynamic";
 
@@ -25,12 +25,20 @@ export async function generateMetadata({
   const { slug } = await params;
   const post = await getBlogPostBySlug(slug);
   if (!post) return {};
+  const title = post.seoTitle ?? post.title;
+  const description = post.seoDescription ?? post.excerpt ?? undefined;
   return {
-    title: post.seoTitle ?? `${post.title} — Summit Balkans`,
-    description: post.seoDescription ?? post.excerpt ?? undefined,
-    openGraph: post.featuredImageUrl
-      ? { images: [post.featuredImageUrl] }
-      : undefined,
+    title: brandTitle(title),
+    description,
+    alternates: { canonical: `/blog/${slug}` },
+    openGraph: {
+      ...ogBase,
+      type: "article",
+      url: `/blog/${slug}`,
+      title,
+      description,
+      images: post.featuredImageUrl ? [{ url: post.featuredImageUrl, alt: post.title }] : ogBase.images,
+    },
   };
 }
 

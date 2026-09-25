@@ -1,6 +1,34 @@
+import type { Metadata } from "next";
 import { CONTACT } from "@/lib/constants";
 
-export const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL ?? "https://summitbalkans.com";
+export const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || "https://www.summitbalkans.com";
+
+// Next replaces a parent's `openGraph` wholesale when a page sets its own, so
+// every page spreads this back in instead of losing site_name/type/locale.
+// Pages that pass their own `images` replace this default share image.
+export const ogBase = {
+  siteName: "Summit Balkans",
+  locale: "en_GB",
+  type: "website" as const,
+  images: [
+    {
+      url: "/og-image.jpg",
+      width: 1200,
+      height: 630,
+      alt: "Hikers with backpacks walking toward snow-capped peaks in the Accursed Mountains, Albania",
+    },
+  ],
+};
+
+/** Canonical + og:url for a public page path, e.g. pageSeo("/about"). */
+export function pageSeo(path: string): Pick<Metadata, "alternates" | "openGraph"> {
+  return { alternates: { canonical: path }, openGraph: { ...ogBase, url: path } };
+}
+
+/** DB-authored SEO titles often already carry the brand — skip the layout template for those. */
+export function brandTitle(title: string): Metadata["title"] {
+  return title.includes("Summit Balkans") ? { absolute: title } : title;
+}
 
 export function organizationJsonLd() {
   return {
@@ -9,8 +37,9 @@ export function organizationJsonLd() {
     "@id": `${SITE_URL}/#organization`,
     name: "Summit Balkans",
     url: SITE_URL,
-    logo: `${SITE_URL}/logo.svg`,
-    image: `${SITE_URL}/logo.svg`,
+    // Google rejects SVG logos for rich results — use the raster app icon.
+    logo: `${SITE_URL}/icon.png`,
+    image: `${SITE_URL}/og-image.jpg`,
     description:
       "Small group guided hiking tours in Albania, Montenegro & Kosovo. Local guides, real trails, no hidden costs.",
     address: {
@@ -29,6 +58,17 @@ export function organizationJsonLd() {
     email: CONTACT.email,
     priceRange: "€€",
     sameAs: [CONTACT.instagram, CONTACT.facebook, CONTACT.youtube, CONTACT.googleReviewsUrl],
+  };
+}
+
+export function websiteJsonLd() {
+  return {
+    "@context": "https://schema.org",
+    "@type": "WebSite",
+    "@id": `${SITE_URL}/#website`,
+    name: "Summit Balkans",
+    url: SITE_URL,
+    publisher: { "@id": `${SITE_URL}/#organization` },
   };
 }
 

@@ -1,5 +1,6 @@
 import Image from "next/image";
 import type { Metadata } from "next";
+import { pageSeo } from "@/lib/seo";
 import Link from "next/link";
 import { ArrowRight } from "lucide-react";
 import { SectionLabel } from "@/components/ui/SectionLabel";
@@ -7,6 +8,7 @@ import { SectionLabel } from "@/components/ui/SectionLabel";
 export const metadata: Metadata = {
   title: "Destinations — Albania, Montenegro & Kosovo",
   description: "Explore hiking destinations in Albania, Montenegro and Kosovo with Summit Balkans.",
+  ...pageSeo("/destinations"),
 };
 
 const countries = [
