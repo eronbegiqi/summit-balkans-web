@@ -11,6 +11,8 @@ export const metadata: Metadata = {
   ...pageSeo("/blog"),
 };
 
+export const revalidate = 300;
+
 const CATEGORY_LABELS: Record<string, string> = {
   TRAVEL_TIPS: "Travel Tips",
   DESTINATION_GUIDE: "Destination Guide",

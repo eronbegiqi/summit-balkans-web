@@ -2,6 +2,7 @@
 
 import Image from "next/image";
 import { useEffect, useRef } from "react";
+import Image from "next/image";
 import Link from "next/link";
 import { gsap } from "gsap";
 import { ChevronDown } from "lucide-react";
@@ -27,10 +28,11 @@ export function PoBHero() {
     >
       {/* Background image */}
       <Image
-        src="https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=2000&q=90"
+        src="https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=2400&q=90"
         alt="Peaks of the Balkans — Accursed Mountains"
         fill
         priority
+        quality={85}
         sizes="100vw"
         className="object-cover object-center"
       />

@@ -1,5 +1,6 @@
 'use client';
 
+import { useRef, useState } from 'react';
 import { useEditor, EditorContent } from '@tiptap/react';
 import StarterKit from '@tiptap/starter-kit';
 import Image from '@tiptap/extension-image';
@@ -7,7 +8,7 @@ import Link from '@tiptap/extension-link';
 import Placeholder from '@tiptap/extension-placeholder';
 import {
   Bold, Italic, List, ListOrdered, Heading2, Heading3,
-  Link2, Minus, Undo, Redo,
+  Link2, Minus, Undo, Redo, ImageIcon, Loader2,
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
@@ -19,6 +20,8 @@ type Props = {
 };
 
 export function RichTextEditor({ value, onChange, placeholder = 'Start writingâ€¦', className }: Props) {
+  const [uploadingImage, setUploadingImage] = useState(false);
+  const imageInputRef = useRef<HTMLInputElement>(null);
   const editor = useEditor({
     immediatelyRender: false,
     extensions: [
@@ -37,6 +40,26 @@ export function RichTextEditor({ value, onChange, placeholder = 'Start writingâ€
       },
     },
   });
+
+  async function handleImageFile(file: File | undefined) {
+    if (!file || !editor) return;
+    if (!file.type.startsWith('image/')) return;
+
+    setUploadingImage(true);
+    try {
+      const formData = new FormData();
+      formData.append('file', file);
+      formData.append('folder', 'blog');
+      const res = await fetch('/api/upload', { method: 'POST', body: formData });
+      if (!res.ok) throw new Error('Upload failed');
+      const { large } = await res.json();
+      editor.chain().focus().setImage({ src: large }).run();
+    } catch {
+      window.alert('Image upload failed. Please try again.');
+    } finally {
+      setUploadingImage(false);
+    }
+  }
 
   if (!editor) return null;
 
@@ -104,6 +127,19 @@ export function RichTextEditor({ value, onChange, placeholder = 'Start writingâ€
         >
           <Link2 className="h-4 w-4" />
         </ToolbarButton>
+        <ToolbarButton
+          onClick={() => imageInputRef.current?.click()}
+          title="Insert image"
+        >
+          {uploadingImage ? <Loader2 className="h-4 w-4 animate-spin" /> : <ImageIcon className="h-4 w-4" />}
+        </ToolbarButton>
+        <input
+          ref={imageInputRef}
+          type="file"
+          accept="image/*"
+          className="hidden"
+          onChange={(e) => { handleImageFile(e.target.files?.[0]); e.target.value = ''; }}
+        />
         <div className="ml-auto flex gap-0.5">
           <ToolbarButton onClick={() => editor.chain().focus().undo().run()} title="Undo">
             <Undo className="h-4 w-4" />
