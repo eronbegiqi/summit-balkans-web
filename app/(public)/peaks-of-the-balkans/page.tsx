@@ -24,9 +24,9 @@ import { getUpcomingDeparturesByTourSlug } from "@/lib/db/queries/departures";
 import type { Departure } from "@/lib/types";
 
 export const metadata: Metadata = {
-  title: "Peaks of the Balkans Trek — Kosovo, Albania & Montenegro",
+  title: { absolute: "Peaks of the Balkans Trek | Guided & Self-Guided Tours" },
   description:
-    "A 192 km cross-border trek through Kosovo, Albania and Montenegro. One of Europe's last great wilderness trails. Small groups, local guides, family-run guesthouses.",
+    "Hike the 192 km Peaks of the Balkans trail through Kosovo, Albania and Montenegro with local guides. Guided or self-guided, 7 to 16 days. Book your trek.",
   alternates: { canonical: "/peaks-of-the-balkans" },
   openGraph: {
     ...ogBase,

@@ -1,7 +1,7 @@
 import { db } from '@/lib/db/client';
 import { cachedQuery } from '@/lib/db/cache';
 import { tours, guides } from '@/lib/db/schema';
-import { eq, sql } from 'drizzle-orm';
+import { asc, eq, sql } from 'drizzle-orm';
 
 export type TourListItem = {
   id: number;
@@ -51,6 +51,25 @@ export async function getTours(): Promise<TourListItem[]> {
     guideName: r.guide_name ? String(r.guide_name) : null,
   }));
   }, []);
+}
+
+/** Published tours for server-rendered link cards (e.g. the PoB route picker). */
+export async function getPublishedTourCards() {
+  return cachedQuery('tours:published-cards', () =>
+    db
+      .select({
+        slug: tours.slug,
+        title: tours.title,
+        excerpt: tours.excerpt,
+        featuredImageUrl: tours.featuredImageUrl,
+        pricePerPersonEur: tours.pricePerPersonEur,
+        durationDays: tours.durationDays,
+        tourType: tours.tourType,
+      })
+      .from(tours)
+      .where(eq(tours.published, true))
+      .orderBy(asc(tours.displayOrder), asc(tours.durationDays)),
+  [] as never[]);
 }
 
 async function attachGuide(tour: typeof tours.$inferSelect): Promise<TourWithGuide> {

@@ -25,9 +25,23 @@ export function pageSeo(path: string): Pick<Metadata, "alternates" | "openGraph"
   return { alternates: { canonical: path }, openGraph: { ...ogBase, url: path } };
 }
 
-/** DB-authored SEO titles often already carry the brand — skip the layout template for those. */
+const BRAND_SUFFIX = " — Summit Balkans";
+
+/**
+ * DB-authored titles: strip any brand suffix they carry, then add ours only
+ * when the result still fits Google's ~60-char title width.
+ */
 export function brandTitle(title: string): Metadata["title"] {
-  return title.includes("Summit Balkans") ? { absolute: title } : title;
+  const base = title.replace(/\s*[|—–-]\s*Summit Balkans\s*$/i, "").trim();
+  return { absolute: base.length + BRAND_SUFFIX.length <= 60 ? base + BRAND_SUFFIX : base };
+}
+
+/** Trim to `max` chars at a word boundary (meta descriptions: 155). */
+export function clampAtWord(text: string, max = 155): string {
+  if (text.length <= max) return text;
+  const cut = text.slice(0, max - 1);
+  const space = cut.lastIndexOf(" ");
+  return cut.slice(0, space > max * 0.6 ? space : cut.length).replace(/[\s,;:—–-]+$/, "") + "…";
 }
 
 export function organizationJsonLd() {

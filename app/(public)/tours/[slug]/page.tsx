@@ -13,9 +13,17 @@ import { formatPrice } from "@/lib/utils";
 import { parseJsonField } from "@/lib/db/utils";
 import { Clock, Mountain, Users, ArrowRight, MapPin, CheckCircle2, XCircle, Calendar, Backpack } from "lucide-react";
 import { JsonLd } from "@/components/seo/JsonLd";
-import { SITE_URL, brandTitle, breadcrumbJsonLd, faqJsonLd, ogBase, toISODate } from "@/lib/seo";
+import { getPublishedTourCards } from "@/lib/db/queries/tours";
+import { SITE_URL, brandTitle, clampAtWord, breadcrumbJsonLd, faqJsonLd, ogBase, toISODate } from "@/lib/seo";
 
 export const revalidate = 300;
+
+// Prerender every published tour at build time (then ISR every 5 min) instead of
+// rendering on first request. Unknown slugs still render on demand and 404.
+export async function generateStaticParams() {
+  const rows = await getPublishedTourCards();
+  return rows.map((t) => ({ slug: t.slug }));
+}
 
 async function getTour(slug: string) {
   // Explicit selects — avoids the LATERAL JOIN that MariaDB doesn't support
@@ -97,7 +105,8 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
   if (!data) return { title: "Tour not found" };
   const { tour } = data;
   const title = tour.seoTitle ?? tour.title;
-  const description = tour.seoDescription ?? tour.excerpt ?? undefined;
+  const rawDescription = tour.seoDescription ?? tour.excerpt;
+  const description = rawDescription ? clampAtWord(rawDescription) : undefined;
   return {
     title: brandTitle(title),
     description,
