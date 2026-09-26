@@ -1,6 +1,6 @@
 import { MetadataRoute } from 'next';
 import { db } from '@/lib/db/client';
-import { tours, blogPosts } from '@/lib/db/schema';
+import { tours, blogPosts, destinations } from '@/lib/db/schema';
 import { SITE_URL as BASE } from '@/lib/seo';
 import { eq } from 'drizzle-orm';
 
@@ -26,14 +26,15 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     { url: `${BASE}/legal/cookie-policy`, lastModified: new Date(), changeFrequency: 'yearly', priority: 0.2 },
   ];
 
-  // Destination and guide detail pages have no routes yet — add them here once
-  // app/(public)/destinations/[slug] and guides/[slug] exist.
+  // Guide detail pages have no route yet — add them once guides/[slug] exists.
   try {
-    const [tourRows, blogRows] = await Promise.all([
+    const [tourRows, blogRows, destinationRows] = await Promise.all([
       db.select({ slug: tours.slug, updatedAt: tours.updatedAt })
         .from(tours).where(eq(tours.published, true)),
       db.select({ slug: blogPosts.slug, updatedAt: blogPosts.updatedAt })
         .from(blogPosts).where(eq(blogPosts.published, true)),
+      db.select({ slug: destinations.slug, updatedAt: destinations.updatedAt })
+        .from(destinations).where(eq(destinations.published, true)),
     ]);
 
     const tourPages: MetadataRoute.Sitemap = tourRows.map((t) => ({
@@ -50,7 +51,14 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       priority: 0.65,
     }));
 
-    return [...static_pages, ...tourPages, ...blogPages];
+    const destinationPages: MetadataRoute.Sitemap = destinationRows.map((d) => ({
+      url: `${BASE}/destinations/${d.slug}`,
+      lastModified: d.updatedAt,
+      changeFrequency: 'monthly',
+      priority: 0.7,
+    }));
+
+    return [...static_pages, ...tourPages, ...destinationPages, ...blogPages];
   } catch {
     // If DB unavailable, return static pages only
     return static_pages;
