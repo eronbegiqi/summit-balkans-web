@@ -1,4 +1,5 @@
 import Link from "next/link";
+import Script from "next/script";
 import { MapPin, Phone, Mail, Navigation, Instagram, Facebook, Youtube } from "lucide-react";
 import { CONTACT } from "@/lib/constants";
 import { CookieSettingsButton } from "@/components/layout/CookieSettingsButton";
@@ -71,6 +72,28 @@ export function Footer() {
                   <Youtube className="w-4 h-4" strokeWidth={1.5} />
                 </a>
               </div>
+
+              <div id="TA_cdsratingsonlywide404" className="TA_cdsratingsonlywide mt-5">
+                <ul id="6NqiNa" className="TA_links OWXLCRu6AXq">
+                  <li id="K1CpHhTi" className="0DXeXt0">
+                    <a
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      href="https://www.tripadvisor.com/Attraction_Review-g774868-d34446142-Reviews-Summit_Balkans-Mitrovica.html"
+                    >
+                      {/* eslint-disable-next-line @next/next/no-img-element */}
+                      <img
+                        src="https://www.tripadvisor.com/img/cdsi/img2/branding/v2/Tripadvisor_lockup_horizontal_secondary_registered-18034-2.svg"
+                        alt="TripAdvisor"
+                      />
+                    </a>
+                  </li>
+                </ul>
+              </div>
+              <Script
+                src="https://www.jscache.com/wejs?wtype=cdsratingsonlywide&uniq=404&locationId=34446142&lang=en_US&border=true&display_version=2"
+                strategy="lazyOnload"
+              />
             </div>
 
             {/* Col 2 — Explore */}
