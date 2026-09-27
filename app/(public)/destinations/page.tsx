@@ -4,6 +4,9 @@ import { pageSeo } from "@/lib/seo";
 import Link from "next/link";
 import { ArrowRight } from "lucide-react";
 import { SectionLabel } from "@/components/ui/SectionLabel";
+import { getPublishedDestinations } from "@/lib/db/queries/destinations";
+
+export const revalidate = 300;
 
 export const metadata: Metadata = {
   title: "Hiking in Albania, Montenegro & Kosovo",
@@ -42,7 +45,11 @@ const countries = [
   },
 ];
 
-export default function DestinationsPage() {
+export default async function DestinationsPage() {
+  const all = await getPublishedDestinations();
+  const places = all.filter((d) => d.destinationType !== "COUNTRY");
+  const published = new Set(all.map((d) => d.slug));
+
   return (
     <>
       <section className="pt-[72px] bg-bone border-b-2 border-divider">
@@ -81,14 +88,45 @@ export default function DestinationsPage() {
                     </div>
                   ))}
                 </div>
-                <Link href="/tours" className="btn-primary">
-                  View {country.name} Tours
-                </Link>
+                <div className="flex flex-wrap items-center gap-4">
+                  <Link href={published.has(country.id) ? `/destinations/${country.id}` : "/tours"} className="btn-primary">
+                    Hiking in {country.name}
+                  </Link>
+                  <Link href="/tours" className="text-sm font-semibold text-brand no-underline">
+                    View tours →
+                  </Link>
+                </div>
               </div>
             </div>
           ))}
         </div>
       </section>
+
+      {places.length > 0 && (
+        <section className="py-20 bg-bone border-t-2 border-divider">
+          <div className="max-w-content mx-auto px-6 md:px-10">
+            <SectionLabel>Towns & trail stops</SectionLabel>
+            <h2 className="font-fraunces text-4xl font-bold tracking-tight mb-10">Places along the trail</h2>
+            <div className="grid md:grid-cols-3 gap-10">
+              {countries.map((c) => (
+                <div key={c.id}>
+                  <h3 className="font-fraunces text-2xl font-bold mb-4">{c.name}</h3>
+                  <ul className="space-y-2">
+                    {places.filter((p) => p.country === c.name).map((p) => (
+                      <li key={p.slug}>
+                        <Link href={`/destinations/${p.slug}`} className="flex items-center gap-2 text-ink no-underline hover:text-brand transition-colors">
+                          <ArrowRight className="w-3.5 h-3.5 text-terra flex-shrink-0" strokeWidth={2} />
+                          {p.name}
+                        </Link>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              ))}
+            </div>
+          </div>
+        </section>
+      )}
     </>
   );
 }
