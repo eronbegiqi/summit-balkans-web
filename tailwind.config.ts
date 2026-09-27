@@ -42,7 +42,8 @@ const config: Config = {
       fontFamily: {
         fraunces: ["var(--font-fraunces)", "serif"],
         inter: ["var(--font-inter)", "sans-serif"],
-        mono: ["var(--font-mono)", "monospace"],
+        // System monospace stack — no web font to download.
+        mono: ["ui-monospace", "SFMono-Regular", "Menlo", "Monaco", "Consolas", "Liberation Mono", "monospace"],
       },
       fontSize: {
         "display-xl": ["clamp(3rem, 8vw, 6rem)", { lineHeight: "1.0", letterSpacing: "-0.03em" }],

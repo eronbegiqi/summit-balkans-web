@@ -7,7 +7,8 @@ import { getBlogPosts } from "@/lib/db/queries/blog";
 
 export const metadata: Metadata = {
   title: "Blog — Trail Notes from the Balkans",
-  description: "Stories, guides, and trail reports from Summit Balkans guides and travellers.",
+  description:
+    "Trail guides, packing lists and seasonal advice for hiking in Albania, Kosovo and Montenegro, written by the local guides who lead our treks.",
   ...pageSeo("/blog"),
 };
 

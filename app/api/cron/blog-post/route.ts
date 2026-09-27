@@ -4,6 +4,7 @@ import { NextRequest, NextResponse } from "next/server";
 import Anthropic from "@anthropic-ai/sdk";
 import { Resend } from "resend";
 import { render } from "@react-email/render";
+import { clampAtWord } from "@/lib/seo";
 import { db } from "@/lib/db/client";
 import { blogPosts } from "@/lib/db/schema";
 import { desc, eq } from "drizzle-orm";
@@ -194,7 +195,8 @@ If this topic relates to the Peaks of the Balkans trail, include one natural inl
       category: draft.category,
       tags: draft.tags,
       seoTitle: draft.seoTitle,
-      seoDescription: draft.seoDescription,
+      // The model overshoots the 155 asked for in the tool schema often enough.
+      seoDescription: clampAtWord(draft.seoDescription),
       readingTimeMinutes: estimateReadingMinutes(draft.contentHtml),
       published: false,
     });

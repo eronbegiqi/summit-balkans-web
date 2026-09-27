@@ -6,8 +6,9 @@ import { ArrowRight } from "lucide-react";
 import { SectionLabel } from "@/components/ui/SectionLabel";
 
 export const metadata: Metadata = {
-  title: "Destinations — Albania, Montenegro & Kosovo",
-  description: "Explore hiking destinations in Albania, Montenegro and Kosovo with Summit Balkans.",
+  title: "Hiking in Albania, Montenegro & Kosovo",
+  description:
+    "Hiking in Albania, Montenegro and Kosovo: the Accursed Mountains, Theth, Valbona and Rugova. Explore each country and find your guided trek.",
   ...pageSeo("/destinations"),
 };
 

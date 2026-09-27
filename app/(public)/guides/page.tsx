@@ -6,7 +6,8 @@ import { SectionLabel } from "@/components/ui/SectionLabel";
 
 export const metadata: Metadata = {
   title: "Our Guides",
-  description: "Meet the Summit Balkans guides — local experts born in the mountains they lead.",
+  description:
+    "Meet the Summit Balkans guides: locals raised in the Accursed Mountains who lead our Peaks of the Balkans and Albania hiking tours in small groups.",
   ...pageSeo("/guides"),
 };
 

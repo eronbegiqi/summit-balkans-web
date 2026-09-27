@@ -5,7 +5,8 @@ import { FullGallery } from "@/components/gallery/FullGallery";
 
 export const metadata: Metadata = {
   title: "Gallery",
-  description: "Photos from the trail — Albania, Montenegro and Kosovo hiking tours with Summit Balkans.",
+  description:
+    "Photos from our hiking tours in Albania, Montenegro and Kosovo: Peaks of the Balkans stages, Theth and Valbona valleys, and mountain village life.",
   ...pageSeo("/gallery"),
 };
 

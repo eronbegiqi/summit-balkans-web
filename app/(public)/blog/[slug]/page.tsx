@@ -5,7 +5,7 @@ import Link from "next/link";
 import { getBlogPostBySlug } from "@/lib/db/queries/blog";
 import { ArrowLeft, Clock } from "lucide-react";
 import { JsonLd } from "@/components/seo/JsonLd";
-import { SITE_URL, brandTitle, breadcrumbJsonLd, ogBase } from "@/lib/seo";
+import { SITE_URL, brandTitle, clampAtWord, breadcrumbJsonLd, ogBase } from "@/lib/seo";
 
 export const dynamic = "force-dynamic";
 
@@ -26,7 +26,8 @@ export async function generateMetadata({
   const post = await getBlogPostBySlug(slug);
   if (!post) return {};
   const title = post.seoTitle ?? post.title;
-  const description = post.seoDescription ?? post.excerpt ?? undefined;
+  const rawDescription = post.seoDescription ?? post.excerpt;
+  const description = rawDescription ? clampAtWord(rawDescription) : undefined;
   return {
     title: brandTitle(title),
     description,
