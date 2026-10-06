@@ -212,7 +212,7 @@ export function Header() {
     <>
       <header
         className={cn(
-          "fixed top-0 left-0 right-0 z-[100] flex items-center justify-between px-5 md:px-10",
+          "fixed top-9 left-0 right-0 z-[100] flex items-center justify-between px-5 md:px-10",
           "transition-[height,background-color,border-color] duration-300 ease-out",
           // Height collapses on scroll; hero pages start taller (96px → 64px),
           // other pages are a constant 64px. Animated by CSS, not JS.
