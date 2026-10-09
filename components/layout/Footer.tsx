@@ -80,11 +80,13 @@ export function Footer() {
                       target="_blank"
                       rel="noopener noreferrer"
                       href="https://www.tripadvisor.com/Attraction_Review-g774868-d34446142-Reviews-Summit_Balkans-Mitrovica.html"
+                      className="inline-flex items-center rounded-xl bg-white px-4 py-2.5 shadow-sm transition-opacity hover:opacity-90"
                     >
                       {/* eslint-disable-next-line @next/next/no-img-element */}
                       <img
                         src="https://www.tripadvisor.com/img/cdsi/img2/branding/v2/Tripadvisor_lockup_horizontal_secondary_registered-18034-2.svg"
                         alt="TripAdvisor"
+                        className="h-6 w-auto"
                       />
                     </a>
                   </li>
