@@ -35,7 +35,7 @@ export function PaymentReminder({
   totalPrice,
   paidAmount,
   remainingAmount,
-  adminWhatsApp = "38348300155",
+  adminWhatsApp = "38348300120",
 }: PaymentReminderProps) {
   const previewText = `Action required — final payment of €${remainingAmount.toLocaleString()} due in 7 days · ${bookingRef}`;
 

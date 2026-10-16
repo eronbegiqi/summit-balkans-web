@@ -352,7 +352,7 @@ export default async function TourDetailPage({ params }: { params: Promise<{ slu
                 <Calendar className="w-8 h-8 text-ink/25 mx-auto mb-3" strokeWidth={1.5} />
                 <p className="text-ink/55 mb-4">No upcoming departures scheduled yet.</p>
                 <a
-                  href="https://wa.me/38348300155"
+                  href="https://wa.me/38348300120"
                   target="_blank"
                   rel="noopener noreferrer"
                   className="inline-flex items-center gap-2 border-2 border-divider text-ink px-5 py-2.5 rounded-lg text-sm font-medium no-underline hover:border-ink transition-colors"
