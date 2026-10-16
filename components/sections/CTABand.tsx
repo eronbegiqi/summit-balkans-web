@@ -36,7 +36,7 @@ export function CTABand() {
             Request a Private Trip
           </Link>
           <a
-            href="https://wa.me/38348300155"
+            href="https://wa.me/38348300120"
             target="_blank"
             rel="noopener noreferrer"
             className="flex items-center gap-2 text-white border-2 border-white/35 px-7 py-4 rounded-xl font-medium text-[15px] no-underline hover:border-white/65 hover:bg-white/6 transition-[border-color,background-color]"

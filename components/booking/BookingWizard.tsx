@@ -325,7 +325,7 @@ export function BookingWizard({
 
         <div className="flex flex-wrap gap-3">
           <a
-            href="https://wa.me/38348300155"
+            href="https://wa.me/38348300120"
             target="_blank"
             rel="noopener noreferrer"
             className="flex items-center gap-2 px-5 py-3 rounded-xl text-sm font-semibold text-white no-underline transition-opacity hover:opacity-90"

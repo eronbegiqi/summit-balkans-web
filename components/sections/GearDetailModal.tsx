@@ -165,7 +165,7 @@ export function GearDetailModal({ item }: { item: GearItem }) {
                     + {formatPrice(item.deposit)} deposit (refunded)
                   </div>
                   <a
-                    href="https://wa.me/38348300155"
+                    href="https://wa.me/38348300120"
                     target="_blank"
                     rel="noopener noreferrer"
                     className="block w-full bg-brand text-white py-3.5 rounded-xl font-semibold text-sm text-center no-underline hover:opacity-88 transition-opacity mt-3.5"

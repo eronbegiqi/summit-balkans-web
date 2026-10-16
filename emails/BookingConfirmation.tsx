@@ -42,7 +42,7 @@ export function BookingConfirmation({
   totalPrice,
   paymentOption = "deposit",
   paymentAmount,
-  adminWhatsApp = "38348300155",
+  adminWhatsApp = "38348300120",
 }: BookingConfirmationProps) {
   const depositAmt = paymentAmount ?? Math.ceil(totalPrice * 0.2);
   const amountDue = paymentOption === "full" ? totalPrice : depositAmt;
