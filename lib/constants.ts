@@ -16,4 +16,5 @@ export const CONTACT = {
   instagram: "https://instagram.com/summitbalkans",
   facebook: "https://facebook.com/summitbalkans",
   youtube: "https://youtube.com/@summitbalkans",
+  linkedin: "https://www.linkedin.com/company/summit-balkans-guide",
 };
