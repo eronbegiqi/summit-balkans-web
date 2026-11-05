@@ -1,6 +1,6 @@
 import Link from "next/link";
 import Script from "next/script";
-import { MapPin, Phone, Mail, Navigation, Instagram, Facebook, Youtube } from "lucide-react";
+import { MapPin, Phone, Mail, Navigation, Instagram, Facebook, Youtube, Linkedin } from "lucide-react";
 import { CONTACT } from "@/lib/constants";
 import { CookieSettingsButton } from "@/components/layout/CookieSettingsButton";
 
@@ -70,6 +70,10 @@ export function Footer() {
                 <a href={CONTACT.youtube} target="_blank" rel="noopener noreferrer" aria-label="YouTube"
                   className="w-9 h-9 border border-white/15 rounded-lg flex items-center justify-center text-white/40 hover:text-white hover:border-white/35 transition-[color,border-color]">
                   <Youtube className="w-4 h-4" strokeWidth={1.5} />
+                </a>
+                <a href={CONTACT.linkedin} target="_blank" rel="noopener noreferrer" aria-label="LinkedIn"
+                  className="w-9 h-9 border border-white/15 rounded-lg flex items-center justify-center text-white/40 hover:text-white hover:border-white/35 transition-[color,border-color]">
+                  <Linkedin className="w-4 h-4" strokeWidth={1.5} />
                 </a>
               </div>
 

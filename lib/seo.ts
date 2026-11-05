@@ -71,7 +71,7 @@ export function organizationJsonLd() {
     telephone: CONTACT.phone,
     email: CONTACT.email,
     priceRange: "€€",
-    sameAs: [CONTACT.instagram, CONTACT.facebook, CONTACT.youtube, CONTACT.googleReviewsUrl],
+    sameAs: [CONTACT.instagram, CONTACT.facebook, CONTACT.youtube, CONTACT.linkedin, CONTACT.googleReviewsUrl],
   };
 }
 

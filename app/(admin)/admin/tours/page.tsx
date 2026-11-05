@@ -37,8 +37,8 @@ export default async function ToursPage() {
           action={<Link href="/admin/tours/new" className="rounded-lg px-4 py-2 text-sm font-semibold text-white" style={{ backgroundColor: '#2e8a57' }}>New tour</Link>}
         />
       ) : (
-        <div className="overflow-hidden rounded-xl border border-gray-200 bg-white">
-          <table className="w-full text-sm">
+        <div className="overflow-x-auto rounded-xl border border-gray-200 bg-white">
+          <table className="w-full min-w-[640px] text-sm">
             <thead>
               <tr className="border-b border-gray-100 bg-gray-50">
                 {['Tour', 'Country', 'Duration', 'Difficulty', 'Price', 'Departures', 'Status', ''].map((h) => (

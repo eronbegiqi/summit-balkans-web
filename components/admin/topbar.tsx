@@ -17,7 +17,7 @@ export async function AdminTopbar({ breadcrumbs = [] }: Props) {
     .slice(0, 2);
 
   return (
-    <header className="fixed inset-x-0 top-0 z-30 ml-[250px] flex h-[60px] items-center justify-between border-b border-gray-100 bg-white px-8">
+    <header className="fixed inset-x-0 top-0 z-30 flex h-[60px] items-center justify-between border-b border-gray-100 bg-white pl-16 pr-4 lg:ml-[250px] lg:px-8">
       {/* Breadcrumbs */}
       <nav className="flex items-center gap-2 text-sm">
         <span className="text-gray-400">Admin</span>

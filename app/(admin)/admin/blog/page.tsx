@@ -30,8 +30,8 @@ export default async function BlogPage() {
       {posts.length === 0 ? (
         <EmptyState icon={FileText} title="No blog posts" description="Write your first post." />
       ) : (
-        <div className="overflow-hidden rounded-xl border border-gray-200 bg-white">
-          <table className="w-full text-sm">
+        <div className="overflow-x-auto rounded-xl border border-gray-200 bg-white">
+          <table className="w-full min-w-[640px] text-sm">
             <thead>
               <tr className="border-b border-gray-100 bg-gray-50">
                 {['Title', 'Category', 'Author', 'Published', 'Status', ''].map((h) => (

@@ -29,8 +29,8 @@ export default async function GearCatalogPage() {
       {items.length === 0 ? (
         <EmptyState icon={Backpack} title="No gear items" description="Add rental equipment to your catalog." />
       ) : (
-        <div className="overflow-hidden rounded-xl border border-gray-200 bg-white">
-          <table className="w-full text-sm">
+        <div className="overflow-x-auto rounded-xl border border-gray-200 bg-white">
+          <table className="w-full min-w-[640px] text-sm">
             <thead>
               <tr className="border-b border-gray-100 bg-gray-50">
                 {['Item', 'Category', 'Day Rate', 'Total Units', 'Available', 'Rented', 'Status', ''].map((h) => (

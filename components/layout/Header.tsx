@@ -3,7 +3,7 @@
 import { useRef, useState, useEffect, useCallback } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { Menu, X, ArrowRight, Phone, Mail, ChevronDown, Instagram, Facebook } from "lucide-react";
+import { Menu, X, ArrowRight, Phone, Mail, ChevronDown, Instagram, Facebook, Linkedin } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { CONTACT } from "@/lib/constants";
 import { MegaMenuPanel } from "@/components/layout/MegaMenuPanel";
@@ -462,6 +462,9 @@ export function Header() {
             </a>
             <a href={CONTACT.facebook} target="_blank" rel="noopener noreferrer" aria-label="Facebook" className="text-white/30 hover:text-white transition-colors">
               <Facebook className="w-5 h-5" strokeWidth={1.5} />
+            </a>
+            <a href={CONTACT.linkedin} target="_blank" rel="noopener noreferrer" aria-label="LinkedIn" className="text-white/30 hover:text-white transition-colors">
+              <Linkedin className="w-5 h-5" strokeWidth={1.5} />
             </a>
           </div>
         </div>

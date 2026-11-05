@@ -22,7 +22,7 @@ export default async function AdminLayout({ children }: { children: React.ReactN
         newBookingsCount={newBookingsCount}
         newInquiriesCount={newInquiriesCount}
       />
-      <div className="ml-[250px]">
+      <div className="lg:ml-[250px]">
         <AdminTopbar />
         {offline && (
           <div className="fixed right-4 top-[72px] z-40 flex items-center gap-2 rounded-lg border border-amber-200 bg-amber-50 px-3.5 py-2 text-sm text-amber-800 shadow-sm">
@@ -30,7 +30,7 @@ export default async function AdminLayout({ children }: { children: React.ReactN
             Offline — showing the last data loaded while connected
           </div>
         )}
-        <main className="min-h-[calc(100vh-60px)] p-8 pt-[calc(60px+32px)]">
+        <main className="min-h-[calc(100vh-60px)] p-4 pt-[calc(60px+20px)] lg:p-8 lg:pt-[calc(60px+32px)]">
           {children}
         </main>
       </div>

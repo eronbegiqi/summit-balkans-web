@@ -30,6 +30,7 @@ export function GuideForm({ guide }: Props) {
   const [contactPhone, setContactPhone] = useState(guide?.contactPhone ?? '');
   const [languages, setLanguages] = useState(parseJsonField<string[]>(guide?.languages, []).join(', '));
   const [specialties, setSpecialties] = useState(parseJsonField<string[]>(guide?.specialties, []).join(', '));
+  const [certifications, setCertifications] = useState(parseJsonField<string[]>(guide?.certifications, []).join(', '));
   const [photoUrl, setPhotoUrl] = useState<string | null>(guide?.photoUrl ?? null);
   const [published, setPublished] = useState(guide?.published ?? false);
 
@@ -59,6 +60,8 @@ export function GuideForm({ guide }: Props) {
         contactPhone: contactPhone || undefined,
         languages: parsedLanguages.length ? parsedLanguages : undefined,
         specialties: parsedSpecialties.length ? parsedSpecialties : undefined,
+        // always sent (even empty) so removing every certification actually clears it
+        certifications: certifications.split(',').map((s) => s.trim()).filter(Boolean),
         photoUrl: photoUrl || undefined,
         published: guide ? published : false,
         displayOrder: guide?.displayOrder ?? 0,
@@ -149,6 +152,16 @@ export function GuideForm({ guide }: Props) {
             value={languages}
             onChange={(e) => setLanguages(e.target.value)}
             placeholder="English, Albanian, Shqip"
+            className={inputCls}
+          />
+        </div>
+
+        <div>
+          <label className={labelCls}>Certifications (comma-separated)</label>
+          <input
+            value={certifications}
+            onChange={(e) => setCertifications(e.target.value)}
+            placeholder="Wilderness First Responder, UIAA Mountain Leader"
             className={inputCls}
           />
         </div>

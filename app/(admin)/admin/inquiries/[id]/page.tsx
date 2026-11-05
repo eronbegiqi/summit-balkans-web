@@ -33,6 +33,14 @@ export default async function InquiryDetailPage({ params }: Props) {
 
   if (!inquiry) notFound();
 
+  // MariaDB returns JSON columns as raw strings (typeCast only matches MySQL's JSON type).
+  const rawCountries: unknown = inquiry.countriesOfInterest;
+  let countries: string[] = [];
+  if (Array.isArray(rawCountries)) countries = rawCountries;
+  else if (typeof rawCountries === 'string') {
+    try { const p = JSON.parse(rawCountries); countries = Array.isArray(p) ? p : []; } catch { countries = [rawCountries]; }
+  }
+
   const fields: Array<[string, string | number | null | undefined]> = [
     ['Type', TYPE_LABELS[inquiry.type] ?? inquiry.type],
     ['Name', inquiry.name],
@@ -40,7 +48,7 @@ export default async function InquiryDetailPage({ params }: Props) {
     ...(inquiry.phone ? [['Phone', inquiry.phone] as [string, string]] : []),
     ...(inquiry.groupSize ? [['Group Size', inquiry.groupSize] as [string, number]] : []),
     ...(inquiry.preferredDatesStart ? [['Preferred Dates', `${inquiry.preferredDatesStart}${inquiry.preferredDatesEnd ? ` → ${inquiry.preferredDatesEnd}` : ''}`] as [string, string]] : []),
-    ...((inquiry.countriesOfInterest as string[] | null)?.length ? [['Countries of Interest', (inquiry.countriesOfInterest as string[]).join(', ')] as [string, string]] : []),
+    ...(countries.length ? [['Countries of Interest', countries.join(', ')] as [string, string]] : []),
     ...(inquiry.budgetEur ? [['Budget', `€${parseFloat(inquiry.budgetEur).toLocaleString()}`] as [string, string]] : []),
     ...(inquiry.sourcePage ? [['Source Page', inquiry.sourcePage] as [string, string]] : []),
     ['Submitted', new Date(inquiry.createdAt).toLocaleString('en-GB')],
