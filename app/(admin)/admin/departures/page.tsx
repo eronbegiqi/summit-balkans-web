@@ -28,8 +28,8 @@ export default async function DeparturesPage() {
       {departures.length === 0 ? (
         <EmptyState icon={CalendarDays} title="No departures" description="Schedule your first tour departure." />
       ) : (
-        <div className="overflow-hidden rounded-xl border border-gray-200 bg-white">
-          <table className="w-full text-sm">
+        <div className="overflow-x-auto rounded-xl border border-gray-200 bg-white">
+          <table className="w-full min-w-[640px] text-sm">
             <thead>
               <tr className="border-b border-gray-100 bg-gray-50">
                 {['Tour', 'Dates', 'Capacity', 'Booked', 'Spots left', 'Guide', 'Status', ''].map((h) => (
