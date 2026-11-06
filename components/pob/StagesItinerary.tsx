@@ -3,9 +3,10 @@
 import { useState } from "react";
 import { ItineraryAccordion } from "@/components/tour/ItineraryAccordion";
 // PoBItineraryAccordion delegates to ItineraryAccordion (single-open) or expands all
-import { itinerary } from "@/data/tours";
+import type { PoBStage } from "@/lib/db/queries/tours";
 
-export function StagesItinerary() {
+export function StagesItinerary({ days, heading }: { days: PoBStage[]; heading: string }) {
+  const itinerary = days;
   const [allOpen, setAllOpen] = useState(false);
 
   return (
@@ -17,7 +18,7 @@ export function StagesItinerary() {
               Day by Day
             </div>
             <h2 className="font-fraunces text-[clamp(2rem,4vw,2.8rem)] font-bold tracking-tight">
-              10 stages, 10 stories
+              {heading}
             </h2>
           </div>
           <button
@@ -48,13 +49,13 @@ export function StagesItinerary() {
           </div>
         </div> */}
 
-        <PoBItineraryAccordion forceOpen={allOpen} />
+        <PoBItineraryAccordion forceOpen={allOpen} itinerary={itinerary} />
       </div>
     </section>
   );
 }
 
-function PoBItineraryAccordion({ forceOpen }: { forceOpen: boolean }) {
+function PoBItineraryAccordion({ forceOpen, itinerary }: { forceOpen: boolean; itinerary: PoBStage[] }) {
   if (forceOpen) {
     return (
       <div className="flex flex-col gap-0">

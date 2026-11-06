@@ -169,7 +169,7 @@ export function RouteMap() {
           </div>
           <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4">
             <h2 className="font-fraunces text-[clamp(2rem,4vw,2.8rem)] font-bold tracking-tight leading-tight">
-              192 km through three countries
+              Three countries, one trail
             </h2>
             {/* Filter controls */}
             <div className="flex items-center gap-1.5 flex-wrap">

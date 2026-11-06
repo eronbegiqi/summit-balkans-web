@@ -1,13 +1,15 @@
-const stats = [
-  { label: "Total Distance", value: "192 km" },
-  { label: "Highest Point", value: "2,694 m" },
-  { label: "Countries", value: "Kosovo · Albania · Montenegro" },
-  { label: "Duration", value: "10–13 days" },
-  { label: "Difficulty", value: "Moderate to Challenging" },
-  { label: "Best Season", value: "June – October" },
-];
+import type { PoBFacts } from "@/lib/db/queries/tours";
 
-export function PoBIntro() {
+export function PoBIntro({ facts }: { facts: PoBFacts }) {
+  const stats = [
+    { label: "Distance", value: `${facts.minKm}–${facts.maxKm} km` },
+    { label: "Highest Point", value: `${facts.maxElevationM.toLocaleString("en-US")} m` },
+    { label: "Countries", value: "Kosovo · Albania · Montenegro" },
+    { label: "Duration", value: `${facts.minDays}–${facts.maxDays} days` },
+    { label: "Difficulty", value: "Moderate to Challenging" },
+    { label: "Best Season", value: "June – October" },
+  ];
+
   return (
     <section id="overview-intro" className="py-20 md:py-28 bg-bone">
       <div className="max-w-content mx-auto px-5 md:px-10">
@@ -21,8 +23,8 @@ export function PoBIntro() {
               <p className="first-letter:text-[4.5rem] first-letter:font-fraunces first-letter:font-bold first-letter:float-left first-letter:leading-[0.8] first-letter:mr-2 first-letter:mt-1.5 first-letter:text-ink">
                 The Peaks of the Balkans is a world-class long-distance trekking
                 route that weaves through the remote and dramatic landscapes of
-                Kosovo, Albania, and Montenegro. Stretching approximately 192
-                kilometres, the trail traverses the heart of the wild and rugged
+                Kosovo, Albania, and Montenegro. Our routes cover {facts.minKm} to {facts.maxKm}
+                kilometres of it, traversing the heart of the wild and rugged
                 Accursed Mountains — a region known for its steep limestone peaks,
                 deep glacial valleys, and preserved traditional way of life.
               </p>

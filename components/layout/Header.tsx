@@ -43,7 +43,7 @@ const navItems: NavItem[] = [
       ],
       featured: {
         title: "Peaks of the Balkans",
-        tagline: "192 km · 3 countries · 10–13 days",
+        tagline: "3 countries · 7, 11 or 16 days",
         href: "/peaks-of-the-balkans",
         image: "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=600&q=80",
       },

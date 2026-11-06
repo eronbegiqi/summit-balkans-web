@@ -18,7 +18,7 @@ interface DepartureRow {
   guidedPriceEur: string | null;
 }
 
-export function PoBDepartures() {
+export function PoBDepartures({ fromPriceEur }: { fromPriceEur: number }) {
   const [departures, setDepartures] = useState<DepartureRow[]>([]);
   const [loading, setLoading] = useState(true);
 
@@ -31,7 +31,7 @@ export function PoBDepartures() {
       .then((data) => {
         const rows = Array.isArray(data) ? data : (data.departures ?? []);
         const pobDeps = rows.filter(
-          (dep: DepartureRow) => dep.tourSlug === "peaks-of-the-balkans" && dep.startDate >= today
+          (dep: DepartureRow) => dep.tourSlug.startsWith("peaks-of-the-balkans") && dep.startDate >= today
         );
 
         if (mounted) {
@@ -55,10 +55,10 @@ export function PoBDepartures() {
   }, []);
 
   const lowestPrice = useMemo(() => {
-    if (departures.length === 0) return 1290;
+    if (departures.length === 0) return fromPriceEur;
     const prices = departures.map((dep) => Number(dep.pricePerPersonEur ?? dep.guidedPriceEur ?? 0));
     return Math.min(...prices);
-  }, [departures]);
+  }, [departures, fromPriceEur]);
 
   return (
     <section id="dates" className="py-20 md:py-28 bg-white">

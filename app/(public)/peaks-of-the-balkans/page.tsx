@@ -21,32 +21,40 @@ import { RouteMapClient } from "@/components/pob/RouteMapClient";
 import { TourStickyBar } from "@/components/tour/TourStickyBar";
 import { getTourBySlug } from "@/data/tours";
 import { getUpcomingDeparturesByTourSlug } from "@/lib/db/queries/departures";
+import { getPoBFacts, getTourStagesBySlug } from "@/lib/db/queries/tours";
 import type { Departure } from "@/lib/types";
 
-export const metadata: Metadata = {
-  title: { absolute: "Peaks of the Balkans Trek | Guided & Self-Guided Tours" },
-  description:
-    "Hike the 192 km Peaks of the Balkans trail through Kosovo, Albania and Montenegro with local guides. Guided or self-guided, 7 to 16 days. Book your trek.",
-  alternates: { canonical: "/peaks-of-the-balkans" },
-  openGraph: {
-    ...ogBase,
-    url: "/peaks-of-the-balkans",
-    title: "Peaks of the Balkans",
-    description: "A 192 km cross-border journey through Europe's last wild mountains.",
-    images: [
-      {
-        url: "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=1200&h=630&fit=crop&q=85",
-        width: 1200,
-        height: 630,
-        alt: "Mountain ridges on the Peaks of the Balkans trail",
-      },
-    ],
-  },
-};
+export async function generateMetadata(): Promise<Metadata> {
+  const f = await getPoBFacts();
+  return {
+    title: { absolute: "Peaks of the Balkans Trek | Guided & Self-Guided Tours" },
+    description: `Hike the Peaks of the Balkans through Kosovo, Albania and Montenegro with local guides. Guided or self-guided, ${f.minDays} to ${f.maxDays} days, from €${f.fromPriceEur}. Book your trek.`,
+    alternates: { canonical: "/peaks-of-the-balkans" },
+    openGraph: {
+      ...ogBase,
+      url: "/peaks-of-the-balkans",
+      title: "Peaks of the Balkans",
+      description: `A cross-border journey through Europe's last wild mountains. ${f.minDays}, 11 or ${f.maxDays} days, guided or self-guided.`,
+      images: [
+        {
+          url: "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=1200&h=630&fit=crop&q=85",
+          width: 1200,
+          height: 630,
+          alt: "Mountain ridges on the Peaks of the Balkans trail",
+        },
+      ],
+    },
+  };
+}
 
 export default async function PeaksOfTheBalkansPage() {
   const tour = getTourBySlug("peaks-of-the-balkans");
-  const deps = await getUpcomingDeparturesByTourSlug("peaks-of-the-balkans");
+  const facts = await getPoBFacts();
+  // Departures belong to the individual route tours (quick / regular / classic).
+  const deps = (await Promise.all(facts.slugs.map((slug) => getUpcomingDeparturesByTourSlug(slug))))
+    .flat()
+    .sort((a, b) => String(a.startDate).localeCompare(String(b.startDate)));
+  const stages = facts.longestSlug ? await getTourStagesBySlug(facts.longestSlug) : [];
   const nextDep: Departure | null = deps[0]
     ? {
         id: String(deps[0].id),
@@ -64,18 +72,20 @@ export default async function PeaksOfTheBalkansPage() {
 
   return (
     <>
-      <PoBHero />
+      <PoBHero facts={facts} />
       <PoBMiniNav />
-      <PoBIntro />
+      <PoBIntro facts={facts} />
       <RouteMapClient />
       <HistoricalTimeline />
       <PeaksShowcase />
       <LakesGallery />
-      <StagesItinerary />
+      {stages.length > 0 && (
+        <StagesItinerary days={stages} heading={`Day by day: the ${facts.maxDays}-day Classic route`} />
+      )}
       <CrossBorderSection />
       <CulturalSection />
       <WildlifeStrip />
-      <PoBDepartures />
+      <PoBDepartures fromPriceEur={facts.fromPriceEur} />
       <IncludedSection />
       <section className="py-10 md:py-16 bg-bone">
         <div className="max-w-content mx-auto px-5 md:px-10">
@@ -86,7 +96,12 @@ export default async function PeaksOfTheBalkansPage() {
       <PoBReviews />
       <RelatedTrips />
       <PoBCTABand />
-      {tour && <TourStickyBar tour={tour} nextDep={nextDep} />}
+      {tour && (
+        <TourStickyBar
+          tour={{ ...tour, priceFrom: nextDep?.price ?? facts.fromPriceEur, duration: facts.maxDays }}
+          nextDep={nextDep}
+        />
+      )}
     </>
   );
 }

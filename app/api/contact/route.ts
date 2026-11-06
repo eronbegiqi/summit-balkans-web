@@ -6,6 +6,7 @@ import { render } from "@react-email/render";
 import { contactSchema } from "@/lib/schemas";
 import { db } from "@/lib/db/client";
 import { inquiries } from "@/lib/db/schema";
+import { recordNewsletterOptIn } from "@/lib/newsletter";
 import { ContactAutoReply } from "@/emails/ContactAutoReply";
 import { AdminContactAlert } from "@/emails/AdminContactAlert";
 
@@ -21,7 +22,7 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: "Invalid data", issues: result.error.issues }, { status: 400 });
     }
 
-    const { name, email, phone, subject, message } = result.data;
+    const { name, email, phone, subject, message, newsletter } = result.data;
 
     await Promise.all([
       // Save to DB
@@ -51,6 +52,10 @@ export async function POST(req: NextRequest) {
         html: await render(AdminContactAlert({ name, email, phone, subject, message })),
       }),
     ]);
+
+    if (newsletter) {
+      await recordNewsletterOptIn({ email, name, source: "contact form" }).catch((e) => console.error("[api/contact] newsletter", e));
+    }
 
     return NextResponse.json({ ok: true });
   } catch (err) {

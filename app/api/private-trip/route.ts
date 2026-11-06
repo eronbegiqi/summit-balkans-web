@@ -6,6 +6,7 @@ import { render } from "@react-email/render";
 import { z } from "zod";
 import { db } from "@/lib/db/client";
 import { inquiries } from "@/lib/db/schema";
+import { recordNewsletterOptIn } from "@/lib/newsletter";
 import { PrivateTripAutoReply } from "@/emails/PrivateTripAutoReply";
 import { AdminPrivateTripAlert } from "@/emails/AdminPrivateTripAlert";
 
@@ -14,6 +15,7 @@ const privateTripSchema = z.object({
   email: z.string().email(),
   phone: z.string().optional(),
   notes: z.string().optional(),
+  newsletter: z.boolean().optional(),
   destinations: z.array(z.string()).min(1),
   groupSize: z.number().min(2).max(12),
   experiences: z.array(z.string()),
@@ -95,6 +97,10 @@ export async function POST(req: NextRequest) {
         })),
       }),
     ]);
+
+    if (data.newsletter) {
+      await recordNewsletterOptIn({ email: data.email, name: data.name, source: "private trip form" }).catch((e) => console.error("[api/private-trip] newsletter", e));
+    }
 
     return NextResponse.json({ ok: true });
   } catch (err) {

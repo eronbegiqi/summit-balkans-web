@@ -5,6 +5,7 @@ import { useState } from "react";
 import { Check, ChevronRight, ChevronLeft } from "lucide-react";
 import Link from "next/link";
 import { SectionLabel } from "@/components/ui/SectionLabel";
+import { NewsletterOptIn } from "@/components/ui/NewsletterOptIn";
 
 const destinations = ["Albania", "Montenegro", "Kosovo", "Flexible"];
 const experienceTypes = [
@@ -26,6 +27,7 @@ interface FormState {
   phone: string;
   notes: string;
   agreePrivacy: boolean;
+  newsletter: boolean;
 }
 
 function validateStep(step: number, form: FormState): string | null {
@@ -62,6 +64,7 @@ export function PrivateTripsForm() {
     phone: "",
     notes: "",
     agreePrivacy: false,
+    newsletter: false,
   });
 
   const toggleDest = (d: string) => {
@@ -355,6 +358,9 @@ export function PrivateTripsForm() {
                     {" "}and consent to Summit Balkans contacting me about my inquiry.
                   </span>
                 </label>
+                <div className="mt-3">
+                  <NewsletterOptIn checked={form.newsletter} onChange={(v) => setForm((p) => ({ ...p, newsletter: v }))} />
+                </div>
               </div>
             )}
 

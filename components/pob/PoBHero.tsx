@@ -6,7 +6,9 @@ import Link from "next/link";
 import { gsap } from "gsap";
 import { ChevronDown } from "lucide-react";
 
-export function PoBHero() {
+import type { PoBFacts } from "@/lib/db/queries/tours";
+
+export function PoBHero({ facts }: { facts: PoBFacts }) {
   const chevronRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -55,14 +57,14 @@ export function PoBHero() {
 
         {/* Subhead */}
         <p className="text-white/75 text-lg md:text-xl max-w-xl leading-relaxed mb-8">
-          A 192 km cross-border journey through Europe's last wild mountains.
+          A cross-border journey through Europe's last wild mountains.
         </p>
 
         {/* Stat pills */}
         <div className="flex flex-wrap items-center justify-center gap-3 mb-10">
           {[
-            { value: "192 KM", label: "total distance" },
-            { value: "10–13 DAYS", label: "duration" },
+            { value: `${facts.minKm}–${facts.maxKm} KM`, label: "by route" },
+            { value: `${facts.minDays}–${facts.maxDays} DAYS`, label: "choose your route" },
             { value: "3 COUNTRIES", label: "Kosovo · Albania · Montenegro" },
           ].map(({ value, label }) => (
             <div

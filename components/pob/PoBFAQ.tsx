@@ -36,7 +36,7 @@ const items = [
   },
   {
     q: "What about altitude?",
-    a: "The highest point is around 2,694m — above the threshold for mild altitude effects (headaches, fatigue). The trail is not a high-altitude expedition, but acclimatise slowly on Day 1 and stay well hydrated throughout.",
+    a: "The highest point is around 2,656m (the Gjeravica summit) — above the threshold for mild altitude effects (headaches, fatigue). The trail is not a high-altitude expedition, but acclimatise slowly on Day 1 and stay well hydrated throughout.",
   },
 ];
 
