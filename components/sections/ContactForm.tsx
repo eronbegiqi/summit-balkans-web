@@ -6,6 +6,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { Check } from "lucide-react";
 import Link from "next/link";
 import { contactSchema, type ContactFormData } from "@/lib/schemas";
+import { NewsletterOptIn } from "@/components/ui/NewsletterOptIn";
 
 const subjects = [
   { value: "booking", label: "Tour booking question" },
@@ -18,6 +19,7 @@ export function ContactForm() {
   const [submitted, setSubmitted] = useState(false);
   const [serverError, setServerError] = useState(false);
   const [agreePrivacy, setAgreePrivacy] = useState(false);
+  const [newsletter, setNewsletter] = useState(false);
 
   const {
     register,
@@ -32,7 +34,7 @@ export function ContactForm() {
     const res = await fetch("/api/contact", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(data),
+      body: JSON.stringify({ ...data, newsletter }),
     });
     if (res.ok) {
       setSubmitted(true);
@@ -135,6 +137,8 @@ export function ContactForm() {
           {" "}and consent to Summit Balkans contacting me about my inquiry.
         </span>
       </label>
+
+      <NewsletterOptIn checked={newsletter} onChange={setNewsletter} />
 
       {serverError && (
         <p className="text-sm text-red-600 bg-red-50 border border-red-200 rounded-lg px-4 py-3">

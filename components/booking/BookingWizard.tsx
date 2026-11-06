@@ -5,6 +5,7 @@ import Link from "next/link";
 import { Check, ChevronLeft, ChevronRight, Lock, Copy, CheckCheck, Building2 } from "lucide-react";
 import { bookingAddOns } from "@/data/gear";
 import { BANK, DEPOSIT_PERCENT } from "@/lib/bank-details";
+import { NewsletterOptIn } from "@/components/ui/NewsletterOptIn";
 
 // "Add-ons" step is temporarily disabled — see notes near the `AddOnId` type below.
 const STEP_LABELS = ["Select Departure", "Travellers", "Your Details", "Review & Pay"];
@@ -100,6 +101,7 @@ interface BookingState {
   paymentOption: "deposit" | "full";
   agreeTerms: boolean;
   agreeHealth: boolean;
+  newsletter: boolean;
 }
 
 function formatShortDate(d: string) {
@@ -166,6 +168,7 @@ export function BookingWizard({
     paymentOption: "deposit",
     agreeTerms: false,
     agreeHealth: false,
+    newsletter: false,
   });
 
   const selectedDep = availableDates.find((d) => d.id === state.departureId) ?? null;
@@ -235,6 +238,7 @@ export function BookingWizard({
           fitness: state.fitness,
           emergencyName: state.emergencyName,
           emergencyPhone: state.emergencyPhone,
+          newsletter: state.newsletter,
         }),
       });
       const data = await res.json();
@@ -658,6 +662,8 @@ export function BookingWizard({
                   relevant medical conditions or dietary requirements.
                 </span>
               </label>
+
+              <NewsletterOptIn checked={state.newsletter} onChange={(v) => setState((p) => ({ ...p, newsletter: v }))} />
             </div>
 
             {/* Payment option toggle */}

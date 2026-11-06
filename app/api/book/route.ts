@@ -7,6 +7,7 @@ import { z } from "zod";
 import { db } from "@/lib/db/client";
 import { bookings, customers } from "@/lib/db/schema";
 import { eq } from "drizzle-orm";
+import { recordNewsletterOptIn } from "@/lib/newsletter";
 import { BookingConfirmation } from "@/emails/BookingConfirmation";
 import { AdminBookingAlert } from "@/emails/AdminBookingAlert";
 
@@ -30,6 +31,7 @@ const bookingSchema = z.object({
   fitness: z.string().optional(),
   emergencyName: z.string().optional(),
   emergencyPhone: z.string().optional(),
+  newsletter: z.boolean().optional(),
 });
 
 function generateRef(): string {
@@ -138,6 +140,10 @@ export async function POST(req: NextRequest) {
         })),
       }),
     ]);
+
+    if (data.newsletter) {
+      await recordNewsletterOptIn({ email: data.email, name: fullName, source: "booking form" }).catch((e) => console.error("[api/book] newsletter", e));
+    }
 
     return NextResponse.json({ ok: true, bookingRef });
   } catch (err) {

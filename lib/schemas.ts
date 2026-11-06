@@ -8,6 +8,7 @@ export const contactSchema = z.object({
     required_error: "Please select a subject",
   }),
   message: z.string().min(20, "Message must be at least 20 characters"),
+  newsletter: z.boolean().optional(),
 });
 
 export type ContactFormData = z.infer<typeof contactSchema>;
