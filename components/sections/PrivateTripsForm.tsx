@@ -446,15 +446,15 @@ export function PrivateTripsForm() {
               <div className="flex flex-col gap-2 text-sm text-white/50">
                 <div className="flex justify-between">
                   <span>Day hike (2 pax)</span>
-                  <span className="font-mono text-white/70">from €120/person</span>
+                  <span className="font-mono text-white/70">Contact for price</span>
                 </div>
                 <div className="flex justify-between">
                   <span>3-day trek</span>
-                  <span className="font-mono text-white/70">from €350/person</span>
+                  <span className="font-mono text-white/70">Contact for price</span>
                 </div>
                 <div className="flex justify-between">
                   <span>10-day expedition</span>
-                  <span className="font-mono text-white/70">from €990/person</span>
+                  <span className="font-mono text-white/70">Contact for price</span>
                 </div>
               </div>
             </div>

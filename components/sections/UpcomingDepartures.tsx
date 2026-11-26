@@ -1,10 +1,10 @@
 "use client";
 
+import { PRICE_ON_REQUEST } from "@/lib/constants";
 import Image from "next/image";
 import { useRef, useState, useEffect, useCallback } from "react";
 import Link from "next/link";
 import { ChevronLeft, ChevronRight, ArrowRight } from "lucide-react";
-import { formatPrice } from "@/lib/utils";
 import { cn } from "@/lib/utils";
 
 const countryFlags: Record<string, string> = {
@@ -211,8 +211,7 @@ export function UpcomingDepartures() {
 
                   <div className="flex items-center justify-between gap-2">
                     <div className="font-fraunces text-lg md:text-[22px] font-bold leading-none">
-                      {formatPrice(Number(price))}{" "}
-                      <span className="font-inter text-xs font-normal text-ink/45">/ person</span>
+                      {PRICE_ON_REQUEST}
                     </div>
                     <Link
                       href={`/tours/${dep.tourSlug}`}

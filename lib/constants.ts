@@ -18,3 +18,7 @@ export const CONTACT = {
   youtube: "https://youtube.com/@summitbalkans",
   linkedin: "https://www.linkedin.com/company/summit-balkans-guide",
 };
+
+// Shown wherever a tour price used to appear, until final prices are set.
+// Change this one string to update every public price label.
+export const PRICE_ON_REQUEST = "Contact for price";

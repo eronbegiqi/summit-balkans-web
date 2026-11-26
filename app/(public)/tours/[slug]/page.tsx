@@ -1,4 +1,5 @@
 import Image from "next/image";
+import { PRICE_ON_REQUEST } from "@/lib/constants";
 import { notFound } from "next/navigation";
 import type { Metadata } from "next";
 import Link from "next/link";
@@ -9,7 +10,6 @@ import { DifficultyDots } from "@/components/ui/DifficultyDots";
 import { SectionLabel } from "@/components/ui/SectionLabel";
 import { StagesAccordion } from "@/components/tour/StagesAccordion";
 import { EmergencyContactsCompact } from "@/components/sections/EmergencyContacts";
-import { formatPrice } from "@/lib/utils";
 import { parseJsonField } from "@/lib/db/utils";
 import { Clock, Mountain, Users, ArrowRight, MapPin, CheckCircle2, XCircle, Calendar, Backpack } from "lucide-react";
 import { JsonLd } from "@/components/seo/JsonLd";
@@ -153,8 +153,6 @@ export default async function TourDetailPage({ params }: { params: Promise<{ slu
       ? deps.map((dep) => ({
           "@type": "Offer",
           url: `${SITE_URL}/tours/book?tour=${tour.slug}&departure=${dep.id}`,
-          price: Number(dep.pricePerPersonEur ?? price).toFixed(2),
-          priceCurrency: "EUR",
           availability:
             dep.status === "SOLD_OUT" ? "https://schema.org/SoldOut" : "https://schema.org/InStock",
           validThrough: toISODate(dep.startDate),
@@ -163,8 +161,6 @@ export default async function TourDetailPage({ params }: { params: Promise<{ slu
           {
             "@type": "Offer",
             url: `${SITE_URL}/tours/book?tour=${tour.slug}`,
-            price: price.toFixed(2),
-            priceCurrency: "EUR",
             availability: "https://schema.org/InStock",
           },
         ];
@@ -328,8 +324,7 @@ export default async function TourDetailPage({ params }: { params: Promise<{ slu
                             )}
                           </td>
                           <td className="py-4 pr-0 text-right whitespace-nowrap">
-                            <span className="font-fraunces text-lg font-bold">{formatPrice(depPrice)}</span>
-                            <span className="font-inter text-xs text-ink/45"> /pp</span>
+                            <span className="font-fraunces text-base font-bold">{PRICE_ON_REQUEST}</span>
                           </td>
                           <td className="py-4 pl-6 text-right whitespace-nowrap">
                             {soldOut ? null : (
@@ -472,12 +467,9 @@ export default async function TourDetailPage({ params }: { params: Promise<{ slu
         <aside className="space-y-6">
           <div className="bg-white border-2 border-divider rounded-2xl p-6 sticky top-24">
             <div className="font-fraunces text-3xl font-bold mb-1">
-              {formatPrice(price)}
-              <span className="font-inter text-sm font-normal text-ink/45"> / person</span>
+              {PRICE_ON_REQUEST}
             </div>
-            {tour.selfGuidedPriceEur && isGuided && (
-              <p className="text-xs text-ink/50 mb-4">Self-guided from {formatPrice(Number(tour.selfGuidedPriceEur))}</p>
-            )}
+            <p className="text-xs text-ink/50 mb-4">Get in touch and we&apos;ll send you a tailored quote.</p>
             <Link
               href="#departures"
               className="block w-full text-center border-2 border-divider text-ink py-2.5 rounded-xl font-medium text-sm no-underline hover:border-ink transition-colors mb-3"

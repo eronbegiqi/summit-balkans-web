@@ -1,10 +1,11 @@
 "use client";
 
+import { PRICE_ON_REQUEST } from "@/lib/constants";
 import { useState, useEffect } from "react";
 import Link from "next/link";
 import { Check, ChevronLeft, ChevronRight, Lock, Copy, CheckCheck, Building2 } from "lucide-react";
 import { bookingAddOns } from "@/data/gear";
-import { BANK, DEPOSIT_PERCENT } from "@/lib/bank-details";
+import { BANK } from "@/lib/bank-details";
 import { NewsletterOptIn } from "@/components/ui/NewsletterOptIn";
 
 // "Add-ons" step is temporarily disabled — see notes near the `AddOnId` type below.
@@ -53,7 +54,6 @@ function BookingSteps({ step }: { step: number }) {
     </div>
   );
 }
-import { formatPrice } from "@/lib/utils";
 import { BookingPolicySummary } from "./BookingPolicySummary";
 import { CancellationTimeline } from "./CancellationTimeline";
 
@@ -172,9 +172,6 @@ export function BookingWizard({
   });
 
   const selectedDep = availableDates.find((d) => d.id === state.departureId) ?? null;
-  const basePrice = selectedDep?.price ?? serverData?.basePrice ?? 1290;
-  const adultTotal = basePrice * state.adults;
-  const childTotal = Math.round(basePrice * 0.85) * state.children;
   // Add-ons disabled — see notes near the `AddOnId` type above.
   // const GEAR_RENTAL_DAYS = 10; // matches the standard itinerary length
   // const addOnsTotal = bookingAddOns
@@ -184,10 +181,7 @@ export function BookingWizard({
   //     if (addon.priceType === "per-person") return sum + addon.price * (state.adults + state.children);
   //     return sum + addon.price; // flat
   //   }, 0);
-  const addOnsTotal = 0;
-  const grandTotal = adultTotal + childTotal + addOnsTotal;
-  const depositAmount = Math.ceil(grandTotal * (DEPOSIT_PERCENT / 100));
-  const amountDue = state.paymentOption === "deposit" ? depositAmount : grandTotal;
+  // Prices are hidden for now: bookings are sent with a 0 total and priced manually by the team.
 
   // Add-ons disabled — see notes near the `AddOnId` type above.
   // const toggleAddOn = (id: AddOnId) => {
@@ -227,9 +221,9 @@ export function BookingWizard({
           adults: state.adults,
           children: state.children,
           addOns: Array.from(state.addOns).map((id) => bookingAddOns.find((a) => a.id === id)?.name ?? id),
-          totalPrice: grandTotal,
+          totalPrice: 0,
           paymentOption: state.paymentOption,
-          paymentAmount: amountDue,
+          paymentAmount: 0,
           firstName: state.firstName,
           lastName: state.lastName,
           email: state.email,
@@ -256,9 +250,6 @@ export function BookingWizard({
   };
 
   if (confirmed) {
-    const confirmedPaymentLabel = state.paymentOption === "deposit"
-      ? `${DEPOSIT_PERCENT}% deposit`
-      : "full payment";
     return (
       <div className="max-w-2xl mx-auto py-8">
         {/* Status badge */}
@@ -268,7 +259,7 @@ export function BookingWizard({
           </div>
           <div>
             <div className="text-xs text-terra tracking-[0.12em] uppercase mb-0.5">Spot Reserved</div>
-            <h1 className="font-fraunces text-3xl font-bold tracking-tight">Almost there — send your transfer</h1>
+            <h1 className="font-fraunces text-3xl font-bold tracking-tight">Almost there — we'll confirm your price</h1>
           </div>
         </div>
 
@@ -285,7 +276,7 @@ export function BookingWizard({
             <Building2 className="w-5 h-5 text-brand" strokeWidth={1.5} />
             <div>
               <div className="font-semibold text-[15px]">Bank Transfer Details</div>
-              <div className="text-xs text-ink/45 mt-0.5">Please transfer your {confirmedPaymentLabel} to secure your spot</div>
+              <div className="text-xs text-ink/45 mt-0.5">Please wait for our price confirmation before transferring</div>
             </div>
           </div>
           <BankRow label="Account holder" value={BANK.accountHolder} />
@@ -296,13 +287,8 @@ export function BookingWizard({
           <BankRow label="Reference" value={BANK.referenceTemplate(bookingRef)} copyable highlight />
           <div className="px-6 py-4 bg-amber-50 border-t border-amber-200">
             <p className="text-sm text-amber-800 font-medium">
-              Amount due:{" "}
-              <span className="font-fraunces text-lg font-bold">
-                {formatPrice(amountDue)}
-              </span>
-              {state.paymentOption === "deposit" && (
-                <span className="text-amber-700 font-normal ml-1">(remaining {formatPrice(grandTotal - amountDue)} due 30 days before departure)</span>
-              )}
+              {PRICE_ON_REQUEST}
+              <span className="text-amber-700 font-normal ml-1">— we&apos;ll email you the final price and the amount to transfer.</span>
             </p>
           </div>
         </div>
@@ -312,7 +298,7 @@ export function BookingWizard({
           <div className="text-[11px] text-terra tracking-[0.12em] uppercase mb-4">What happens next</div>
           <ol className="space-y-3">
             {[
-              "Transfer your payment using the details above — include your booking reference.",
+              "We'll email you the final price. Then transfer your payment using the details above — include your booking reference.",
               "We'll confirm your booking within 24 hours of receiving payment.",
               "You'll receive your full pre-trip info pack once payment is verified.",
               "Your guide will message you on WhatsApp to introduce themselves.",
@@ -382,7 +368,7 @@ export function BookingWizard({
                       {dep.low && (
                         <span className="text-[10px] bg-gold text-ink px-2 py-0.5 rounded font-medium">Low</span>
                       )}
-                      <div className="font-fraunces text-xl font-bold">{formatPrice(dep.price)}</div>
+                      <div className="font-fraunces text-base font-bold">{PRICE_ON_REQUEST}</div>
                     </div>
                   </div>
                 </button>
@@ -431,21 +417,9 @@ export function BookingWizard({
             </div>
 
             <div className="bg-white border-2 border-divider rounded-xl p-6 mt-2">
-              {state.adults > 0 && (
-                <div className="flex justify-between text-sm py-1.5 border-b border-divider">
-                  <span>{state.adults}× Adult @ {formatPrice(basePrice)}</span>
-                  <span>{formatPrice(adultTotal)}</span>
-                </div>
-              )}
-              {state.children > 0 && (
-                <div className="flex justify-between text-sm py-1.5 border-b border-divider">
-                  <span>{state.children}× Child @ {formatPrice(Math.round(basePrice * 0.85))}</span>
-                  <span>{formatPrice(childTotal)}</span>
-                </div>
-              )}
-              <div className="flex justify-between font-fraunces text-xl font-bold pt-3">
-                <span>Total (so far)</span>
-                <span>{formatPrice(adultTotal + childTotal)}</span>
+              <div className="flex justify-between font-fraunces text-xl font-bold">
+                <span>Price</span>
+                <span>{PRICE_ON_REQUEST}</span>
               </div>
             </div>
           </div>
@@ -596,16 +570,6 @@ export function BookingWizard({
                 </div>
               </div>
               <div className="px-6 py-4">
-                <div className="flex justify-between text-sm py-2 border-b border-divider">
-                  <span>Adults ({state.adults}× {formatPrice(basePrice)})</span>
-                  <span>{formatPrice(adultTotal)}</span>
-                </div>
-                {state.children > 0 && (
-                  <div className="flex justify-between text-sm py-2 border-b border-divider">
-                    <span>Children ({state.children}×)</span>
-                    <span>{formatPrice(childTotal)}</span>
-                  </div>
-                )}
                 {/* Add-ons line items disabled — see notes near the `AddOnId` type above.
                 {bookingAddOns.filter((addon) => state.addOns.has(addon.id)).map((addon) => (
                   <div key={addon.id} className="flex justify-between text-sm py-2 border-b border-divider">
@@ -620,8 +584,8 @@ export function BookingWizard({
                   </div>
                 ))} */}
                 <div className="flex justify-between font-fraunces text-2xl font-bold pt-4">
-                  <span>Total</span>
-                  <span>{formatPrice(grandTotal)}</span>
+                  <span>Price</span>
+                  <span>{PRICE_ON_REQUEST}</span>
                 </div>
               </div>
             </div>
@@ -666,60 +630,13 @@ export function BookingWizard({
               <NewsletterOptIn checked={state.newsletter} onChange={(v) => setState((p) => ({ ...p, newsletter: v }))} />
             </div>
 
-            {/* Payment option toggle */}
-            <div className="mb-6">
-              <div className="text-sm font-semibold mb-3">How much would you like to pay now?</div>
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                <button
-                  type="button"
-                  onClick={() => setState((p) => ({ ...p, paymentOption: "deposit" }))}
-                  className={`p-4 rounded-xl border-2 text-left cursor-pointer transition-all bg-transparent ${
-                    state.paymentOption === "deposit" ? "border-brand bg-brand/5" : "border-divider bg-white hover:border-ink/30"
-                  }`}
-                >
-                  <div className="flex items-center justify-between mb-1.5">
-                    <div className="text-xs font-mono font-semibold uppercase tracking-wider text-terra">
-                      {DEPOSIT_PERCENT}% Deposit
-                    </div>
-                    {state.paymentOption === "deposit" && (
-                      <div className="w-4 h-4 rounded-full bg-brand flex items-center justify-center">
-                        <Check className="w-2.5 h-2.5 text-white" strokeWidth={3} />
-                      </div>
-                    )}
-                  </div>
-                  <div className="font-fraunces text-2xl font-bold">{formatPrice(depositAmount)}</div>
-                  <div className="text-xs text-ink/45 mt-1">Remaining {formatPrice(grandTotal - depositAmount)} due 30 days before departure</div>
-                </button>
-                <button
-                  type="button"
-                  onClick={() => setState((p) => ({ ...p, paymentOption: "full" }))}
-                  className={`p-4 rounded-xl border-2 text-left cursor-pointer transition-all bg-transparent ${
-                    state.paymentOption === "full" ? "border-brand bg-brand/5" : "border-divider bg-white hover:border-ink/30"
-                  }`}
-                >
-                  <div className="flex items-center justify-between mb-1.5">
-                    <div className="text-xs font-semibold uppercase tracking-wider text-terra">
-                      Full Payment
-                    </div>
-                    {state.paymentOption === "full" && (
-                      <div className="w-4 h-4 rounded-full bg-brand flex items-center justify-center">
-                        <Check className="w-2.5 h-2.5 text-white" strokeWidth={3} />
-                      </div>
-                    )}
-                  </div>
-                  <div className="font-fraunces text-2xl font-bold">{formatPrice(grandTotal)}</div>
-                  <div className="text-xs text-ink/45 mt-1">Pay everything now, nothing more to worry about</div>
-                </button>
-              </div>
-            </div>
-
             {/* Bank transfer notice */}
             <div className="bg-bone border-2 border-divider rounded-xl p-5 mb-6 flex items-start gap-3">
               <Building2 className="w-5 h-5 text-brand shrink-0 mt-0.5" strokeWidth={1.5} />
               <div className="text-sm">
                 <p className="font-semibold text-ink mb-0.5">Payment by bank transfer only</p>
                 <p className="text-ink/55 leading-relaxed">
-                  After you confirm, we&apos;ll send you the bank transfer details. Your spot is reserved for <strong>48 hours</strong> while your payment is processed. We&apos;ll confirm your booking within 24 hours of receiving it.
+                  After you confirm, we&apos;ll email you the final price and the bank transfer details. Your spot is reserved for <strong>48 hours</strong> while we confirm everything with you.
                 </p>
               </div>
             </div>
@@ -740,11 +657,11 @@ export function BookingWizard({
             >
               {isSubmitting
                 ? "Reserving your spot…"
-                : `Reserve Spot · Pay ${formatPrice(amountDue)} by Transfer`}
+                : "Reserve Spot"}
             </button>
             <div className="flex items-center justify-center gap-1.5 mt-3 text-xs text-ink/35">
               <Lock className="w-3 h-3" strokeWidth={1.5} />
-              Booking confirmed within 24 hours of receiving payment
+              We'll confirm your price and booking by email
             </div>
           </div>
         )}
@@ -802,16 +719,10 @@ export function BookingWizard({
           )} */}
         </div>
         <div className="px-6 py-4 bg-ink/[0.02] border-t border-divider">
-          <div className="flex justify-between font-fraunces text-2xl font-bold">
-            <span>Total</span>
-            <span>{formatPrice(grandTotal)}</span>
+          <div className="flex justify-between font-fraunces text-xl font-bold">
+            <span>Price</span>
+            <span>{PRICE_ON_REQUEST}</span>
           </div>
-          {step === 3 && grandTotal > 0 && (
-            <div className="flex justify-between text-sm text-brand font-semibold mt-1.5">
-              <span>Due now ({state.paymentOption === "deposit" ? `${DEPOSIT_PERCENT}% deposit` : "full"})</span>
-              <span>{formatPrice(amountDue)}</span>
-            </div>
-          )}
           <div className="text-[12px] text-ink/35 mt-1">Incl. all taxes &amp; fees</div>
         </div>
       </div>

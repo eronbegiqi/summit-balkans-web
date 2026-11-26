@@ -1,10 +1,10 @@
 "use client";
 
+import { PRICE_ON_REQUEST } from "@/lib/constants";
 import Image from "next/image";
 import { useState, useEffect } from "react";
 import Link from "next/link";
 import { Clock, Users, ArrowRight, Mountain } from "lucide-react";
-import { formatPrice } from "@/lib/utils";
 import { DifficultyDots } from "@/components/ui/DifficultyDots";
 import { SectionLabel } from "@/components/ui/SectionLabel";
 import { cn } from "@/lib/utils";
@@ -286,19 +286,9 @@ function TourCard({ tour, priority = false }: { tour: Tour; priority?: boolean }
           )}
         </div>
 
-        {/* Guided vs self-guided price comparison */}
-        {tour.selfGuidedPriceEur && tour.tourType === "GUIDED" && (
-          <div className="flex gap-3 mb-4 text-xs text-ink/50">
-            <span className="text-ink font-semibold">Guided from {formatPrice(Number(tour.pricePerPersonEur))}</span>
-            <span>·</span>
-            <span>Self-guided from {formatPrice(Number(tour.selfGuidedPriceEur))}</span>
-          </div>
-        )}
-
         <div className="flex flex-wrap items-center justify-between gap-4 mt-auto">
           <div className="font-fraunces text-2xl md:text-3xl font-bold">
-            {formatPrice(Number(price))}
-            <span className="font-inter text-xs md:text-sm font-normal text-ink/45"> from / person</span>
+            {PRICE_ON_REQUEST}
           </div>
           <span className="inline-flex items-center gap-1.5 text-brand font-semibold text-sm group-hover:gap-2.5 transition-all">
             View Tour <ArrowRight className="w-3.5 h-3.5" strokeWidth={2} />
