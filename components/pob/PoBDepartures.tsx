@@ -1,9 +1,10 @@
 "use client";
 
+import { PRICE_ON_REQUEST } from "@/lib/constants";
 import { useEffect, useMemo, useState } from "react";
 import { BookingPolicySummary } from "@/components/booking/BookingPolicySummary";
 import { SpotsBadge } from "@/components/ui/SpotsBadge";
-import { formatDateRange, formatPrice } from "@/lib/utils";
+import { formatDateRange } from "@/lib/utils";
 import Link from "next/link";
 
 interface DepartureRow {
@@ -72,9 +73,7 @@ export function PoBDepartures({ fromPriceEur }: { fromPriceEur: number }) {
               Upcoming Departures
             </h2>
             <div className="font-mono text-[13px] text-ink/45">
-              From{" "}
-              <span className="font-fraunces font-semibold text-ink text-base">{formatPrice(lowestPrice)}</span>
-              {" "}per person
+              <span className="font-fraunces font-semibold text-ink text-base">{PRICE_ON_REQUEST}</span>
             </div>
           </div>
         </div>
@@ -130,7 +129,7 @@ export function PoBDepartures({ fromPriceEur }: { fromPriceEur: number }) {
                   <div>
                     <SpotsBadge spotsLeft={spotsLeft} spotsTotal={dep.capacity} />
                   </div>
-                  <div className="font-fraunces text-sm font-semibold">{formatPrice(price)}</div>
+                  <div className="font-fraunces text-sm font-semibold">{PRICE_ON_REQUEST}</div>
                   <div>
                     {soldOut ? (
                       <span className="text-[11px] text-ink/35 uppercase tracking-wider">Sold Out</span>

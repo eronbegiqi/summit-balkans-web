@@ -47,6 +47,8 @@ export function BookingConfirmation({
   const depositAmt = paymentAmount ?? Math.ceil(totalPrice * 0.2);
   const amountDue = paymentOption === "full" ? totalPrice : depositAmt;
   const paymentLabel = paymentOption === "full" ? "Full payment" : "20% deposit";
+  const priceTbc = totalPrice <= 0; // prices are hidden: team confirms the amount by email
+  const amountText = priceTbc ? "To be confirmed" : `€${amountDue.toLocaleString()}`;
   const bankRef = BANK.referenceTemplate(bookingRef);
   const previewText = `Spot reserved — ${tourName} · Send your bank transfer · Ref ${bookingRef}`;
 
@@ -141,10 +143,10 @@ export function BookingConfirmation({
               <div style={{ display: "flex", justifyContent: "space-between", alignItems: "baseline", marginBottom: "8px" }}>
                 <Text style={{ color: brand.ink, fontSize: "15px", fontWeight: "700", margin: 0 }}>{paymentLabel} due now</Text>
                 <Text style={{ color: brand.terra, fontSize: "28px", fontWeight: "700", fontFamily: "Georgia, serif", letterSpacing: "-0.02em", margin: 0 }}>
-                  €{amountDue.toLocaleString()}
+                  {amountText}
                 </Text>
               </div>
-              {paymentOption === "deposit" && (
+              {paymentOption === "deposit" && !priceTbc && (
                 <Text style={{ color: `${brand.ink}66`, fontSize: "13px", margin: 0 }}>
                   Remaining €{(totalPrice - amountDue).toLocaleString()} due 30 days before departure.
                 </Text>
@@ -167,7 +169,7 @@ export function BookingConfirmation({
                 ["BIC / SWIFT", BANK.bic],
                 ["Currency", BANK.currency],
                 ["Reference", bankRef],
-                ["Amount", `€${amountDue.toLocaleString()}`],
+                ["Amount", priceTbc ? "We'll confirm by email" : `€${amountDue.toLocaleString()}`],
               ].map(([label, value], i, arr) => (
                 <Row key={label} style={{ borderBottom: i < arr.length - 1 ? `1px solid ${brand.divider}` : "none", backgroundColor: label === "Reference" ? "#EFF6FF" : "transparent" }}>
                   <Column style={{ padding: "12px 20px", width: "140px" }}>

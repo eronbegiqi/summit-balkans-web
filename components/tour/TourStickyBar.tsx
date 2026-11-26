@@ -1,8 +1,9 @@
 "use client";
 
+import { PRICE_ON_REQUEST } from "@/lib/constants";
 import { useEffect, useState } from "react";
 import Link from "next/link";
-import { formatPrice, formatDateRange } from "@/lib/utils";
+import { formatDateRange } from "@/lib/utils";
 import type { Tour, Departure } from "@/lib/types";
 
 interface TourStickyBarProps {
@@ -44,8 +45,7 @@ export function TourStickyBar({ tour, nextDep }: TourStickyBarProps) {
       </div>
 
       <div className="font-fraunces text-[28px] font-bold text-white whitespace-nowrap">
-        {formatPrice(tour.priceFrom)}{" "}
-        <small className="font-inter text-sm font-normal text-white/40">/ person</small>
+        {PRICE_ON_REQUEST}
       </div>
 
       <div className="flex gap-2.5">

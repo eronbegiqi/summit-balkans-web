@@ -1,11 +1,11 @@
 import Image from "next/image";
+import { PRICE_ON_REQUEST } from "@/lib/constants";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import type { Metadata } from "next";
 import { ArrowRight, MapPin, CalendarDays, Mountain } from "lucide-react";
 import { SectionLabel } from "@/components/ui/SectionLabel";
 import { JsonLd } from "@/components/seo/JsonLd";
-import { formatPrice } from "@/lib/utils";
 import {
   getPublishedDestinations,
   getPublishedDestinationsForPages,
@@ -252,7 +252,7 @@ export default async function DestinationPage({ params }: { params: Promise<{ sl
                   <div className="font-semibold text-ink group-hover:text-brand transition-colors leading-snug">{t.title}</div>
                   <div className="mt-1 flex items-center justify-between text-sm text-ink/60">
                     <span className="flex items-center gap-1"><CalendarDays className="w-3.5 h-3.5" strokeWidth={1.5} />{t.durationDays} days</span>
-                    <span className="font-mono text-ink">From {formatPrice(Number(t.pricePerPersonEur))}</span>
+                    <span className="font-mono text-ink">{PRICE_ON_REQUEST}</span>
                   </div>
                 </Link>
               ))}

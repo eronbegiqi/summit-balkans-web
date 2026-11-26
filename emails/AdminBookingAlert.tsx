@@ -43,9 +43,9 @@ export function AdminBookingAlert({ bookingRef, firstName, email, phone, tourNam
               ["Guide assigned", guide],
               ["Adults", String(adults)],
               ["Children", String(children)],
-              ["Total booking", `€${totalPrice.toLocaleString()}`],
+              ["Total booking", totalPrice > 0 ? `€${totalPrice.toLocaleString()}` : "Not priced — contact customer with a quote"],
               ["Payment type", paymentLabel],
-              ["Amount due now", `€${amountDue.toLocaleString()} — AWAITING BANK TRANSFER`],
+              ["Amount due now", totalPrice > 0 ? `€${amountDue.toLocaleString()} — AWAITING BANK TRANSFER` : "To be quoted"],
             ].map(([k, v], i, arr) => (
               <Row key={k} style={{ borderBottom: i < arr.length - 1 ? `1px solid ${brand.divider}` : "none" }}>
                 <Column style={{ width: "150px", padding: "10px 0" }}>

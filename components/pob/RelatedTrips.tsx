@@ -1,7 +1,7 @@
+import { PRICE_ON_REQUEST } from "@/lib/constants";
 import Image from "next/image";
 import Link from "next/link";
 import { ArrowRight } from "lucide-react";
-import { formatPrice } from "@/lib/utils";
 import { getPublishedTourCards } from "@/lib/db/queries/tours";
 
 const FALLBACK_IMAGE = "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=1200&q=85";
@@ -52,7 +52,7 @@ export async function RelatedTrips() {
                 {tour.excerpt && <p className="text-[13px] text-ink/55 mb-4 line-clamp-2">{tour.excerpt}</p>}
                 <div className="flex items-center justify-between">
                   <span className="font-mono text-sm font-semibold text-ink">
-                    From {formatPrice(Number(tour.pricePerPersonEur))}
+                    {PRICE_ON_REQUEST}
                   </span>
                   <ArrowRight className="w-4 h-4 text-ink/30 group-hover:text-brand group-hover:translate-x-1 transition-all" strokeWidth={1.5} />
                 </div>

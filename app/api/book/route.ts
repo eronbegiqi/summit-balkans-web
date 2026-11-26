@@ -22,7 +22,7 @@ const bookingSchema = z.object({
   addOns: z.array(z.string()),
   totalPrice: z.number(),
   paymentOption: z.enum(["deposit", "full"]).default("deposit"),
-  paymentAmount: z.number().positive(),
+  paymentAmount: z.number().nonnegative(),
   firstName: z.string().min(1),
   lastName: z.string().min(1),
   email: z.string().email(),

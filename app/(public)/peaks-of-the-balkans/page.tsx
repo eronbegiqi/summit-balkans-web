@@ -28,7 +28,7 @@ export async function generateMetadata(): Promise<Metadata> {
   const f = await getPoBFacts();
   return {
     title: { absolute: "Peaks of the Balkans Trek | Guided & Self-Guided Tours" },
-    description: `Hike the Peaks of the Balkans through Kosovo, Albania and Montenegro with local guides. Guided or self-guided, ${f.minDays} to ${f.maxDays} days, from €${f.fromPriceEur}. Book your trek.`,
+    description: `Hike the Peaks of the Balkans through Kosovo, Albania and Montenegro with local guides. Guided or self-guided, ${f.minDays} to ${f.maxDays} days. Contact us for prices and book your trek.`,
     alternates: { canonical: "/peaks-of-the-balkans" },
     openGraph: {
       ...ogBase,
